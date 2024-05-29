@@ -3990,8 +3990,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1231823, y: 2.0579433, z: 1}
-  m_Center: {x: 0.011179924, y: 1.0197227, z: 0}
+  m_Size: {x: 0.34570122, y: 2.0579433, z: 1}
+  m_Center: {x: 0.122439384, y: 1.0197227, z: 0}
 --- !u!114 &979081665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4006,6 +4006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 979081666}
   _prompt: 
+  m_ObjectCollider: {fileID: 979081664}
   soundEffectDoor: {fileID: 8300000, guid: 5278e8ac9dbad074aa3457fa869818fd, type: 3}
 --- !u!95 &979081666
 Animator:
@@ -4489,6 +4490,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1205994435 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8279580489093001056, guid: 82ccfc432acc73a48b938d7521e6052a,
+    type: 3}
+  m_PrefabInstance: {fileID: 979081662}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1205994437
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205994435}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.1, y: 1.0402586, z: 2.1092453}
+  m_Center: {x: 0.050583925, y: -0.5203725, z: 0.24488819}
 --- !u!1 &1214558295
 GameObject:
   m_ObjectHideFlags: 3
