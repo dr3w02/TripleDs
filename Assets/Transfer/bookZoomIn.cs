@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -16,6 +17,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
     public bool interactable;
 
+    public CinemachineVirtualCamera BookCam;
 
     public bool Interact(Interactor interactor)
     {
@@ -26,6 +28,8 @@ public class bookZoomIn : MonoBehaviour, IInteractable
         {
             //cameraManager.SwitchCamera(cameraManager.BookCam);
 
+            BookCam.Priority = 11;
+
             characterMove.TurnOffMovement(); Debug.Log("MovementDisabled");
 
             interactable = true;
@@ -33,7 +37,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
         else
         {
             //cameraManager.SwitchCamera(cameraManager.mainCam);
-
+            BookCam.Priority = 0;
             characterMove.Enabled(); Debug.Log("Movementenabled");
 
             interactable = false;
