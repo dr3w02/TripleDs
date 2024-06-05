@@ -13,13 +13,17 @@ public class ClemFirstLook : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
+
         Debug.Log("in trigger");
         if (other.CompareTag("Player"))
         {
-            Grone.Play();
+
             Clem.SetActive(true);
             DoorClose.SetActive(true);
             myAnimationController.SetBool("ClemMove", true);
+
+            Grone.Play();
 
             StartCoroutine(Waiting());
 
@@ -36,8 +40,7 @@ public class ClemFirstLook : MonoBehaviour
 
     public void EndClem()
     {
-      
-
+        Grone.Stop();
 
         Clem.SetActive(false);
         Debug.Log("ByeClem");
