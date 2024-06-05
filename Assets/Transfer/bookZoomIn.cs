@@ -24,7 +24,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
         if (interactable == false)
         {
-            cameraManager.SwitchCamera(cameraManager.BookCam);
+            //cameraManager.SwitchCamera(cameraManager.BookCam);
 
             characterMove.TurnOffMovement(); Debug.Log("MovementDisabled");
 
@@ -32,7 +32,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
         }
         else
         {
-            cameraManager.SwitchCamera(cameraManager.mainCam);
+            //cameraManager.SwitchCamera(cameraManager.mainCam);
 
             characterMove.Enabled(); Debug.Log("Movementenabled");
 

@@ -5,49 +5,43 @@ using Cinemachine;
 
 public class CameraManager : MonoBehaviour
 { 
-    public CinemachineVirtualCamera[] cameras;
+    static  List <CinemachineVirtualCamera> cameras = new List<CinemachineVirtualCamera> ();
 
-    public CinemachineVirtualCamera mainCam;
-    public CinemachineVirtualCamera BookCam;
-
-    public CinemachineVirtualCamera startCamera;
-    private CinemachineVirtualCamera currentCam;
-
-
-
-    private void Start()
+    public static CinemachineVirtualCamera  ActiveCamera = null;
+    
+    public static bool IsActiveCamera(CinemachineVirtualCamera camera)
     {
-        currentCam = mainCam;
+        return camera == ActiveCamera;
 
-        for (int i = 0; i < cameras.Length; i++)
+    }
+
+    public static void SwitchCamera(CinemachineVirtualCamera camera)
+    {
+        camera.Priority = 10;
+        ActiveCamera = camera;
+
+        foreach(CinemachineVirtualCamera c in cameras)
         {
-            if (cameras[i] == currentCam)
+            if(c != camera && c.Priority != 0)
             {
-                cameras[i].Priority = 20;
-            }
-            else
-            {
-                cameras[i].Priority = 10;
+                c.Priority = 0;
             }
         }
     }
 
-
-    public void SwitchCamera(CinemachineVirtualCamera newCam)
+    public static void Register(CinemachineVirtualCamera camera)
     {
-        currentCam = newCam;
+        cameras.Add(camera);
+        Debug.Log("Camera Registered:" + camera);
+    }
 
-        currentCam.Priority = 20;
-
-        for (int i = 0; i < cameras.Length; i++)
-        {
-            if (cameras[i] != currentCam)
-            {
-                cameras[i].Priority = 10;
-            }
-        }
+    public static void UnRegister(CinemachineVirtualCamera camera)
+    {
+        cameras.Remove(camera);
+        Debug.Log("Camera Unregistered:" + camera);
     }
 }
+
 
 
 
