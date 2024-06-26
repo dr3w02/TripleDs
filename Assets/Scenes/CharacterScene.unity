@@ -152,12 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd15843c2f335b44bb1c922410110c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameras:
-  - {fileID: 756232730}
-  - {fileID: 1472338446}
-  mainCam: {fileID: 756232730}
-  BookCam: {fileID: 1472338446}
-  startCamera: {fileID: 756232730}
 --- !u!4 &25397214
 Transform:
   m_ObjectHideFlags: 0
@@ -1264,6 +1258,7 @@ MonoBehaviour:
   cameraManager: {fileID: 25397213}
   characterMove: {fileID: 110876763}
   interactable: 0
+  BookCam: {fileID: 0}
 --- !u!4 &309632472 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 009b9f48a477a2a4ab577cb2c1cf61fe,
@@ -5575,7 +5570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1472338445
 Transform:
   m_ObjectHideFlags: 0
