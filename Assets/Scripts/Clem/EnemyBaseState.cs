@@ -4,29 +4,37 @@ using UnityEngine;
 namespace Platformer
 {
 
-    public abstract class EnemyBaseState : IState
+    public abstract partial class EnemyBaseState : IState
     {
-        protected readonly characterMovement player;
+        protected readonly NurseCodeOffice enemy;
         protected readonly Animator animator;
 
+        //put all the animations here 
+        protected static readonly int IdelHash = Animator.StringToHash(name: "");
 
+        protected static readonly int RunHash = Animator.StringToHash(name: "");
 
-        protected static readonly int LocomotionHash = Animator.StringToHash(name:"Locomotion");
-        protected static readonly int JumpHash = Animator.StringToHash(name: "Jump");
+        protected static readonly int WalkHash = Animator.StringToHash(name: "");
+
+        protected static readonly int AttackHash = Animator.StringToHash(name: "");
+
+        protected static readonly int DieHash = Animator.StringToHash(name: "");
+
+        //finish animations here 
 
 
         protected const float crossFadeDuration = 0.1f;
 
-        protected EnemyBaseState(characterMovement player, Animator animator)
+        protected EnemyBaseState(NurseCodeOffice enemy, Animator animator)
         {
-            this.player = player;
+            this.enemy = enemy;
             this.animator = animator;
             
         }
 
             
 
-        protected readonly EnemyBaseState enemy;
+        
 
         public virtual void OnEnter()
         {
@@ -47,6 +55,6 @@ namespace Platformer
     }
 
 
-    
+    //9.40SEC Easyunity enemy AI using a stateMachine
 }
 

@@ -1,7 +1,4 @@
 using KBCore.Refs;
-using System;
-using System.Xml;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,7 +7,7 @@ namespace Platformer
 {
     [RequireComponent(typeof(NavMeshAgent))]
 
-    public class NurseCodeOffice : MonoBehaviour
+    public class NurseCodeOffice : MonoBehaviour///find out what this is meant to be called
     {
 
         [SerializeField, Self] NavMeshAgent agent;
@@ -23,6 +20,13 @@ namespace Platformer
         void Start()
         {
             stateMachine = new StateMachine();
+
+            var wanderState = new EnemyWanderState(this, animator, agent, 5f); //this is enemy, 5f is wander radius 
+
+            Any(wanderState, new FuncPredicate (() => true)); // for testing PURPOSES setting it to always true!!!!!!!!!!!!!!!
+
+            stateMachine.SetState(wanderState);
+
         }
 
 
