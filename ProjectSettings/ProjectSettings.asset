@@ -884,11 +884,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: 19fbc162-c312-45f3-a952-f079aabf447c
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: TripleDs
+  organizationId: drewboo02
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

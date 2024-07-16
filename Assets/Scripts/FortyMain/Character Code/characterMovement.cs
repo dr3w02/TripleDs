@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
 
 public class characterMovement : MonoBehaviour
 {
+    public Transform cam;
+
     public Animator animator;
     public CharacterController characterController;
     CustomInputs input; // calls to the input manager
@@ -209,12 +212,42 @@ public class characterMovement : MonoBehaviour
     {
 
         currentMovementInput = context.ReadValue<Vector2>();
-        currentMovement.x = currentMovementInput.x;
-        currentMovement.z = currentMovementInput.y;
-        currentRunMovement.x = currentMovementInput.x * runMultiplier;
-        currentRunMovement.z = currentMovementInput.y * runMultiplier;
+        Vector3 moveDirection = CameraForward() + CameraRight();
+
+        currentMovement.x = moveDirection.x * currentMovementInput.x;
+        currentMovement.z = moveDirection.z * currentMovementInput.y;
+        //currentMovement.x = currentMovementInput.x;
+        //currentMovement.z = currentMovementInput.y;
+
+        currentRunMovement.x = moveDirection.x * currentMovementInput.x;
+        currentRunMovement.z = moveDirection.z * currentMovementInput.y;
+        //currentRunMovement.x = currentMovementInput.x * runMultiplier;
+        //currentRunMovement.z = currentMovementInput.y * runMultiplier;
         isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
 
+    }
+
+    public Vector3 CameraForward()
+    {
+        Vector3 camPos = cam.position;
+        Vector3 camForward = cam.position + cam.forward;
+        camPos.y = 0;
+        camForward.y = 0;
+
+        Vector3 direction = (camPos - camForward).normalized;
+
+        return direction;
+    }
+    public Vector3 CameraRight()
+    {
+        Vector3 camPos = cam.position;
+        Vector3 camRight = cam.position + cam.right;
+        camPos.y = 0;
+        camRight.y = 0;
+
+        Vector3 direction = (camPos - camRight).normalized;
+
+        return direction;
     }
 
     void handleAnimation()
@@ -400,7 +433,6 @@ public class characterMovement : MonoBehaviour
         {
             characterController.Move(currentMovement * Time.deltaTime);
         }
-
 
         handleGravity();
         handleJump();
