@@ -3,8 +3,7 @@ using UnityEngine.AI;
 
 namespace Platformer
 {
-
-   public class EnemyWanderState : EnemyBaseState
+    public class EnemyWanderState : EnemyBaseState
    {
         readonly NavMeshAgent agent;
         readonly Vector3 startpoint;
@@ -15,6 +14,8 @@ namespace Platformer
             this.agent = agent;
             this.startpoint = enemy.transform.position;
             this.wanderRadius = wanderRadius;
+
+            Debug.Log("enemie wander stre plays");
 
         }
 

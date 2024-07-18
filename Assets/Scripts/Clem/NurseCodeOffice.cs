@@ -7,13 +7,13 @@ namespace Platformer
 {
     [RequireComponent(typeof(NavMeshAgent))]
 
-    public class NurseCodeOffice : MonoBehaviour///find out what this is meant to be called
+    public partial class NurseCodeOffice : MonoBehaviour///find out what this is meant to be called
     {
-
         [SerializeField, Self] NavMeshAgent agent;
         [SerializeField, Child] Animator animator;
 
         StateMachine stateMachine;
+        [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 
         void OnValidate() => this.ValidateRefs();
 
@@ -21,7 +21,9 @@ namespace Platformer
         {
             stateMachine = new StateMachine();
 
-            var wanderState = new EnemyWanderState(this, animator, agent, 5f); //this is enemy, 5f is wander radius 
+            var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);//this is enemy, 5f is wander radius
+                                                                                        //
+            var chaseState = new EnemyChaseState(this, animator, agent, player);
 
             Any(wanderState, new FuncPredicate (() => true)); // for testing PURPOSES setting it to always true!!!!!!!!!!!!!!!
 
