@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "com.kylewbanks.scenerefattribute": {
-      "version": "file:C:/Users/qbh8346/Documents/GitHub/scene-ref-attribute-main/scene-ref-attribute-main",
+      "version": "file:scene-ref-attribute-main",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {}
     },
     "com.unity.ai.navigation": {
