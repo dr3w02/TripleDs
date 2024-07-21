@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 namespace Platformer
 {
-    public abstract class Timer : MonoBehaviour
+    public abstract class Timer 
     {
 
         protected float initialTime;
@@ -32,7 +33,7 @@ namespace Platformer
             if (!IsRunning)
             {
                 IsRunning = true;
-                OnTimerStart.Involke();
+                OnTimerStart.Invoke();
 
             }
         }
@@ -42,7 +43,7 @@ namespace Platformer
             if (IsRunning)
             {
                 IsRunning = false;
-                OnTimerStop.Involke();
+                OnTimerStop.Invoke();
             }
         }
 

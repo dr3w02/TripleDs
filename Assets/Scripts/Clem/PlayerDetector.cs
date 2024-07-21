@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 
 namespace Platformer
@@ -12,13 +13,34 @@ namespace Platformer
 
         public Transform Player { get; private set; }
         // CountDownTimer ditectionTimer;
+        CountdownTimer detectionTimer;
+
+        IDetectionStrategy detectionStrategy;
 
 
-        IDetectionStrategy detectionStratery;
+        void Start()
+        {
+            detectionTimer = new CountdownTimer(detectionCooldown);
+            Player = GameObject.FindGameObjectWithTag("Player").transform; //make sure to TAG the player
+            detectionStrategy = new ConeDetectionStratagy(detectionAngle, detectionRadius, innerDetectionRadius);
+
+        }
+
+
+        private void Update() => detectionTimer.Tick(Time.deltaTime);
+
+        public bool CanDetectPlayer()
+        {
+            Debug.Log("DetectingPlayer");
+            return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
+            
+        }
+
+
+        public void SetDetectionStrategy(IDetectionStrategy detectionStrategy) => this.detectionStrategy = detectionStrategy;
 
     }
-
-
-
 }
+
+
 
