@@ -66,7 +66,7 @@ namespace Platformer
 
         }
 
-        public void AddAnyTranstion(IState to, IPredicate condition)
+        public void AddAnyTransition(IState to, IPredicate condition)
         {
             anyTransitions.Add(item: new Transition(GetOrAddNode(to).State, condition));
 

@@ -7,13 +7,14 @@ namespace Platformer
     {
 
         readonly NavMeshAgent agent;
-
+      
         readonly Transform player;
 
         public EnemyChaseState( NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player): base(enemy, animator)
         {
             this.agent = agent;
             this.player = player;
+           
 
         }
 
@@ -21,7 +22,7 @@ namespace Platformer
         public override void OnEnter() 
         {
             Debug.Log("Chase");
-            animator.CrossFade(RunHash, crossFadeDuration);
+            //animator.CrossFade(RunHash, crossFadeDuration);
         }
 
         public override void Update() 

@@ -8,14 +8,17 @@ namespace Platformer
         readonly NavMeshAgent agent;
         readonly Vector3 startpoint;
         readonly float wanderRadius;
+        PlayerDetector playerDetector;
 
-        public EnemyWanderState(NurseCodeOffice enemy,Animator animator, NavMeshAgent agent, float wanderRadius): base(enemy, animator)
+
+        public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
             this.agent = agent;
             this.startpoint = enemy.transform.position;
             this.wanderRadius = wanderRadius;
 
             Debug.Log("enemie wander stre plays");
+        
 
         }
 
@@ -41,7 +44,13 @@ namespace Platformer
                 var finalPosition = hit.position;
 
                 agent.SetDestination(finalPosition); /// all of these start pos and final pos maybe ad more for route 
+
+
             }
+
+            
+
+            //check for player detection
         }
 
         bool HasReachedDestination()

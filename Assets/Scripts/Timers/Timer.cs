@@ -47,6 +47,8 @@ namespace Platformer
             }
         }
 
+        public void Resume() => IsRunning = true;
+        public void Pause() => IsRunning = false;
 
         public abstract void Tick(float deltaTime);
 
@@ -77,9 +79,13 @@ namespace Platformer
         public bool IsFinished => Time <= 0;
 
         public void Reset() => Time = initialTime;
-        
-           
-       
 
+        public void Reset(float newTime)
+        {
+            initialTime = newTime;
+            Reset();
+        }
+        
+          
     }
 }

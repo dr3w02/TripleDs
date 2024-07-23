@@ -12,28 +12,29 @@ namespace Platformer
         [SerializeField] float detectionCooldown = 1f; // ives the player a break between attacks 
 
         public Transform Player { get; private set; }
-        // CountDownTimer ditectionTimer;
+
         CountdownTimer detectionTimer;
 
         IDetectionStrategy detectionStrategy;
+        
 
 
         void Start()
         {
             detectionTimer = new CountdownTimer(detectionCooldown);
-            Player = GameObject.FindGameObjectWithTag("Player").transform; //make sure to TAG the player
-            detectionStrategy = new ConeDetectionStratagy(detectionAngle, detectionRadius, innerDetectionRadius);
-
+            Player = GameObject.FindGameObjectWithTag("Player").transform;  //make sure to TAG the player
+            detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
+            Debug.Log("detector");
         }
 
 
         private void Update() => detectionTimer.Tick(Time.deltaTime);
 
+
         public bool CanDetectPlayer()
         {
             Debug.Log("DetectingPlayer");
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
-            
         }
 
 

@@ -219,8 +219,8 @@ public class characterMovement : MonoBehaviour
         //currentMovement.x = currentMovementInput.x;
         //currentMovement.z = currentMovementInput.y;
 
-        currentRunMovement.x = moveDirection.x * currentMovementInput.x;
-        currentRunMovement.z = moveDirection.z * currentMovementInput.y;
+        currentRunMovement.x = moveDirection.x * currentMovementInput.x * runMultiplier;
+        currentRunMovement.z = moveDirection.z * currentMovementInput.y * runMultiplier;
         //currentRunMovement.x = currentMovementInput.x * runMultiplier;
         //currentRunMovement.z = currentMovementInput.y * runMultiplier;
         isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;

@@ -11062,6 +11062,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7418193128212628043, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: -7385271885275441734, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_Layer
@@ -40395,8 +40400,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1501340693}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2012891, y: -0, z: -0, w: 0.9795319}
-  m_LocalPosition: {x: -26.67384, y: 16.08, z: -51.423843}
+  m_LocalRotation: {x: 0.14911637, y: -0, z: -0, w: 0.98881966}
+  m_LocalPosition: {x: -27.513836, y: 1.6599998, z: -50.288986}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40521,7 +40526,7 @@ Camera:
     height: 1
   near clip plane: 0.42
   far clip plane: 1000
-  field of view: 60.497555
+  field of view: 62.78125
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -57835,7 +57840,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 1
+  m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 368831199}
   m_Follow: {fileID: 368831199}
