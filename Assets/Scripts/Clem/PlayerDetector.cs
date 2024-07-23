@@ -11,7 +11,7 @@ namespace Platformer
         [SerializeField] float innerDetectionRadius = 5f; // small circle around enemy ot know if player is behind 
         [SerializeField] float detectionCooldown = 1f; // ives the player a break between attacks 
 
-        public Transform Player { get; private set; }
+        public Transform Player { get; private set;  }
 
         CountdownTimer detectionTimer;
 
