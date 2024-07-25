@@ -10,8 +10,10 @@ namespace Platformer
         [SerializeField] float detectionRadius = 10f; // cone distance from enemy
         [SerializeField] float innerDetectionRadius = 5f; // small circle around enemy ot know if player is behind 
         [SerializeField] float detectionCooldown = 1f; // ives the player a break between attacks 
+        [SerializeField] float attackRange = 2f; // Distance from enemy to player attack 
 
-        public Transform Player { get; private set;  }
+
+        public Transform Player { get; private set; }
 
         CountdownTimer detectionTimer;
 
@@ -19,14 +21,20 @@ namespace Platformer
         
 
 
+        void Awake()
+        {
+           
+            Player = GameObject.FindGameObjectWithTag("Player").transform;  //make sure to TAG the player
+       
+            Debug.Log("detector");
+
+        }
+
         void Start()
         {
             detectionTimer = new CountdownTimer(detectionCooldown);
-            Player = GameObject.FindGameObjectWithTag("Player").transform;  //make sure to TAG the player
             detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
-            Debug.Log("detector");
         }
-
 
         private void Update() => detectionTimer.Tick(Time.deltaTime);
 
@@ -37,9 +45,33 @@ namespace Platformer
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
         }
 
+        public bool CanAttackPlayer()
+        {
+            var directionToPlayer = Player.position - transform.position;
+            return directionToPlayer.magnitude <= attackRange;
+        }
+
 
         public void SetDetectionStrategy(IDetectionStrategy detectionStrategy) => this.detectionStrategy = detectionStrategy;
 
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+
+            Gizmos.DrawWireSphere(transform.position, detectionRadius);
+            Gizmos.DrawWireSphere(transform.position, innerDetectionRadius);
+
+            Vector3 fowardConeDirection = Quaternion.Euler(0, detectionAngle / 2, 0) * transform.forward * detectionRadius;
+            Vector3 backwardConeDirection = Quaternion.Euler(0, detectionAngle / 2, 0) * transform.forward * detectionRadius;
+
+            //Drawlines represent the cone
+
+            Gizmos.DrawLine(transform.position, transform.position + fowardConeDirection);
+            Gizmos.DrawLine(transform.position, transform.position + backwardConeDirection);
+
+
+        }
     }
 }
 

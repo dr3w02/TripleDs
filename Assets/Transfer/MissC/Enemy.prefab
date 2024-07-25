@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 6868180086358217091}
   - component: {fileID: 691961093586439220}
   - component: {fileID: 2938335222723745214}
+  - component: {fileID: 760296463519925559}
+  - component: {fileID: 7774652911722668136}
+  - component: {fileID: 9055647972969206693}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -44,7 +47,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.27
-  m_Speed: 3.5
+  m_Speed: 4.1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -76,9 +79,64 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.1227083
-  m_Height: 8.05684
+  m_Height: 8.281607
   m_Direction: 1
-  m_Center: {x: 0, y: 4.01, z: 0}
+  m_Center: {x: 0, y: 4.04, z: 0}
+--- !u!114 &760296463519925559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903661138965682316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136a4f728f7ef334ba77150d35561f7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 691961093586439220}
+  playerDetector: {fileID: 7774652911722668136}
+  animator: {fileID: 9055647972969206693}
+  wanderRadius: 10
+  timeBetweenAttacks: 1
+--- !u!114 &7774652911722668136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903661138965682316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20dc982a14630124b956f5797ef66abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionAngle: 60
+  detectionRadius: 10
+  innerDetectionRadius: 5
+  detectionCooldown: 1
+  attackRange: 2
+--- !u!95 &9055647972969206693
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903661138965682316}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 87630c544835aa947a2412ca6ab68264, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &3340858515093795104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105,12 +163,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 791d24ea2a827a3419d4ce786d41b238,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.050268173
+      value: -0.07
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 791d24ea2a827a3419d4ce786d41b238,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.22
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 791d24ea2a827a3419d4ce786d41b238,
         type: 3}
@@ -157,7 +215,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sad Walk
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: 791d24ea2a827a3419d4ce786d41b238, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -6,20 +6,15 @@ using System;
 
 namespace Platformer
 {
-    public abstract class Timer 
+    public abstract class Timer
     {
-
         protected float initialTime;
-
         protected float Time { get; set; }
-
-
-        public bool IsRunning {get; protected set;}
+        public bool IsRunning { get; protected set; }
 
         public float Progress => Time / initialTime;
 
         public Action OnTimerStart = delegate { };
-
         public Action OnTimerStop = delegate { };
 
         protected Timer(float value)
@@ -30,11 +25,11 @@ namespace Platformer
 
         public void Start()
         {
+            Time = initialTime;
             if (!IsRunning)
             {
                 IsRunning = true;
                 OnTimerStart.Invoke();
-
             }
         }
 
@@ -51,21 +46,15 @@ namespace Platformer
         public void Pause() => IsRunning = false;
 
         public abstract void Tick(float deltaTime);
-
     }
 
-    //countdown Cooldown Timer
-
-
-    public class CountdownTimer: Timer
+    public class CountdownTimer : Timer
     {
-        public CountdownTimer(float value) : base(value)
-        {
+        public CountdownTimer(float value) : base(value) { }
 
-        }
         public override void Tick(float deltaTime)
         {
-            if(IsRunning && Time > 0)
+            if (IsRunning && Time > 0)
             {
                 Time -= deltaTime;
             }
@@ -85,7 +74,27 @@ namespace Platformer
             initialTime = newTime;
             Reset();
         }
-        
-          
+    }
+
+    public class StopwatchTimer : Timer
+    {
+        public StopwatchTimer() : base(0) { }
+
+        public override void Tick(float deltaTime)
+        {
+            if (IsRunning)
+            {
+                Time += deltaTime;
+            }
+        }
+
+        public void Reset() => Time = 0;
+
+        public float GetTime() => Time;
     }
 }
+
+
+
+
+

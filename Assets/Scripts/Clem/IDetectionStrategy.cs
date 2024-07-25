@@ -1,17 +1,11 @@
-﻿using System.Net.Http.Headers;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 
 namespace Platformer
 {
-    public interface IDetectionStrategy 
+    public interface IDetectionStrategy
     {
-        bool Execute (Transform player, Transform detector, CountdownTimer timer);
-
+        bool Execute(Transform player, Transform detector, CountdownTimer timer);
     }
-
-
-
 }
 

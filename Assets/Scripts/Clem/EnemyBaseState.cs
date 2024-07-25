@@ -10,15 +10,15 @@ namespace Platformer
         protected readonly Animator animator;
 
         //put all the animations here 
-        protected static readonly int IdelHash = Animator.StringToHash(name: "");
+        protected static readonly int IdelHash = Animator.StringToHash(name: "IdelNormal");
 
-        protected static readonly int RunHash = Animator.StringToHash(name: "");
+        protected static readonly int RunHash = Animator.StringToHash(name: "RunFWD");
 
-        protected static readonly int WalkHash = Animator.StringToHash(name: "");
+        protected static readonly int WalkHash = Animator.StringToHash(name: "WalkFWD");
 
-        protected static readonly int AttackHash = Animator.StringToHash(name: "");
+        protected static readonly int AttackHash = Animator.StringToHash(name: "Attack");
 
-        protected static readonly int DieHash = Animator.StringToHash(name: "");
+        protected static readonly int DieHash = Animator.StringToHash(name: "Die");
 
         //finish animations here 
 

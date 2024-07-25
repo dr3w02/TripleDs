@@ -29,9 +29,11 @@ namespace Platformer
 
             //if the player is not within the direction angle + outerradius, or is within the inner radius, return false
             if((!(angleToPlayer < detectionAngle / 2f ) || !(directionToPlayer.magnitude < detectionRadius)) 
-                && !(directionToPlayer.magnitude < innerDetectionRadius))  return false;
+                && !(directionToPlayer.magnitude < innerDetectionRadius)) 
+                return false;
 
             timer.Start ();
+            Debug.Log("TimerStarted");
             return true;
         }
 

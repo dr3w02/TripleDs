@@ -9,7 +9,7 @@ public class NurseAttack : MonoBehaviour
 
     public Transform player;
 
-    public LayerMask whatIsGround, whatIsPlayer;
+    public LayerMask whatIsPlayer;
 
 
     //Attacking 
