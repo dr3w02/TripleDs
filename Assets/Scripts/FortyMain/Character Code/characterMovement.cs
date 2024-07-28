@@ -34,7 +34,7 @@ public class characterMovement : MonoBehaviour
     bool isRunPressed;
     bool isCrouchPressed = false;
     bool isPullPressed = false;
-   
+
     //change these to is 
 
     //[SerializeField] float speed = 5; // might've lost this dont forget to add back
@@ -47,7 +47,7 @@ public class characterMovement : MonoBehaviour
     //9.8
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
-
+ 
     //Jumping Varibles
 
     bool isJumpPressed = false;
@@ -57,7 +57,7 @@ public class characterMovement : MonoBehaviour
     bool isJumping = false;
     int isJumpingHash;
     bool isJumpAnimating = false;
-   
+
 
     /// <summary>
     // For Couch Up and Down
@@ -67,6 +67,7 @@ public class characterMovement : MonoBehaviour
     public float crouchHeight = 0.5f;
     public Vector3 offset;
 
+    
     //Selected
 
     public bool isSelectPressed;
@@ -82,7 +83,7 @@ public class characterMovement : MonoBehaviour
     void Awake()
     {
         input = new CustomInputs();
-
+      
         characterController = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
 
@@ -141,6 +142,7 @@ public class characterMovement : MonoBehaviour
         if (!isJumping && characterController.isGrounded && isJumpPressed)
         {
             animator.SetBool(isJumpingHash, true);
+          
             isJumpAnimating = true;
             isJumping = true;
             currentMovement.y = initialJumpVelocity * .9f;
@@ -150,9 +152,11 @@ public class characterMovement : MonoBehaviour
         else if (!isJumpPressed && isJumping && characterController.isGrounded)
         {
             isJumping = false;
-            //animator.SetBool(isJumpingHash, false);
+          
+            animator.SetBool(isJumpingHash, false);
         }
     }
+
 
     void onRun(InputAction.CallbackContext context)
     {
@@ -216,17 +220,27 @@ public class characterMovement : MonoBehaviour
         float ladderGrabDistance = .4f;
 
 
-        if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, currentMovementInput, out RaycastHit raycastHit, ladderGrabDistance ))  // local position is the position the player is facing 
+        if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, currentMovementInput, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
         {
-             if(raycastHit.transform.TryGetComponent(out Ladder ladder))
-              {
+
+
+            if (raycastHit.transform.TryGetComponent(out Ladder ladder))
+            {
+                Debug.Log("Climbing ladder: " + raycastHit.transform);
                 currentMovement.x = 0f; // stops him from sliding left and right can remove if wanted (design pref)
                 currentMovement.y = currentMovement.z;
                 currentMovement.z = 0f;
-                characterController.isGrounded = true;
+            
+                gravity = 0f;
+                characterController.Move(Vector3.up * currentMovementInput.y * Time.deltaTime);
             }
-        
         }
+        
+                
+
+                
+        
+        
           
         currentMovementInput = context.ReadValue<Vector2>();
         Vector3 moveDirection = CameraForward() + CameraRight();
@@ -333,14 +347,16 @@ public class characterMovement : MonoBehaviour
         //larger the multiplier the steeper the fall 
         float fallMultiplier = 2.0f;
 
-        if (characterController.isGrounded)
+        if (characterController.isGrounded  )
         {
 
             if (isJumpAnimating)
             {
+     
                 animator.SetBool(isJumpingHash, false);
                 isJumpAnimating = false;
                // Debug.Log("Jumpfalse");
+              
             }
 
             animator.SetBool("isJumping", false);
@@ -355,6 +371,10 @@ public class characterMovement : MonoBehaviour
             float nextYVelocity = Mathf.Max((previousYVelocity + newYVelocity) * .5f, -20.0f); //adding a max stops the character from fall too fast from high distances
             currentMovement.y = nextYVelocity;
             currentRunMovement.y = nextYVelocity;
+
+            animator.SetBool(isJumpingHash, false);
+
+
         }
         else
         {
@@ -363,6 +383,10 @@ public class characterMovement : MonoBehaviour
             float nextYVelocity = (previousYVelocity + newYVlecocity) * .5f;
             currentMovement.y = nextYVelocity;
             currentRunMovement.y = nextYVelocity;
+
+            animator.SetBool(isJumpingHash, false);
+
+
         }
 
     }
@@ -437,7 +461,7 @@ public class characterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         handleRotation();
         handleAnimation();
       
@@ -455,6 +479,7 @@ public class characterMovement : MonoBehaviour
         handleJump();
         handleCrouch();
 
+    
     }
 
 
