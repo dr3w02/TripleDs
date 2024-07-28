@@ -63,7 +63,7 @@ namespace Platformer
 
         void Update()
         {
-            Debug.Log("LOOP");
+        
             stateMachine.Update();
 
             attackTimer = new CountdownTimer(timeBetweenAttacks);

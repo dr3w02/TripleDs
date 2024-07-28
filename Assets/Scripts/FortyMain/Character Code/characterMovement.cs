@@ -1,10 +1,12 @@
 using Microsoft.Win32.SafeHandles;
+using Platformer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
@@ -16,7 +18,7 @@ public class characterMovement : MonoBehaviour
     public Animator animator;
     public CharacterController characterController;
     CustomInputs input; // calls to the input manager
-
+   
   
 
     int isWalkingHash;
@@ -210,7 +212,22 @@ public class characterMovement : MonoBehaviour
 
     void OnMovementInput(InputAction.CallbackContext context)
     {
+        float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
+        float ladderGrabDistance = .4f;
 
+
+        if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, currentMovementInput, out RaycastHit raycastHit, ladderGrabDistance ))  // local position is the position the player is facing 
+        {
+             if(raycastHit.transform.TryGetComponent(out Ladder ladder))
+              {
+                currentMovement.x = 0f; // stops him from sliding left and right can remove if wanted (design pref)
+                currentMovement.y = currentMovement.z;
+                currentMovement.z = 0f;
+                characterController.isGrounded = true;
+            }
+        
+        }
+          
         currentMovementInput = context.ReadValue<Vector2>();
         Vector3 moveDirection = CameraForward() + CameraRight();
 

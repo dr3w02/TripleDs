@@ -26,8 +26,7 @@ namespace Platformer
            
             Player = GameObject.FindGameObjectWithTag("Player").transform;  //make sure to TAG the player
        
-            Debug.Log("detector");
-
+       
         }
 
         void Start()
@@ -41,7 +40,7 @@ namespace Platformer
 
         public bool CanDetectPlayer()
         {
-            Debug.Log("DetectingPlayer");
+       
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
         }
 
