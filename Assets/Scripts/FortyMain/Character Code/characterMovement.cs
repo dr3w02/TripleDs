@@ -4,12 +4,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
+using UnityEngine.UIElements;
+
+
 
 public class characterMovement : MonoBehaviour
 {
@@ -18,8 +20,8 @@ public class characterMovement : MonoBehaviour
     public Animator animator;
     public CharacterController characterController;
     CustomInputs input; // calls to the input manager
-   
-  
+
+    public Ladder ladder;
 
     int isWalkingHash;
     int isRunningHash;  
@@ -35,6 +37,13 @@ public class characterMovement : MonoBehaviour
     bool isCrouchPressed = false;
     bool isPullPressed = false;
 
+    //Things for ground check
+    public float distToGround = 1f;
+
+    //things for climb 
+    private bool isClimbingLadder;
+
+ 
     //change these to is 
 
     //[SerializeField] float speed = 5; // might've lost this dont forget to add back
@@ -47,6 +56,8 @@ public class characterMovement : MonoBehaviour
     //9.8
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
+
+
  
     //Jumping Varibles
 
@@ -128,6 +139,11 @@ public class characterMovement : MonoBehaviour
 
         setupJumpVaribles();
     }
+
+
+  
+
+
     //Setting Up Jumping Physics 
     void setupJumpVaribles()
     {
@@ -139,7 +155,7 @@ public class characterMovement : MonoBehaviour
 
     void handleJump()
     {
-        if (!isJumping && characterController.isGrounded && isJumpPressed)
+        if (!isJumping && characterController.isGrounded && isGrounded && isJumpPressed)
         {
             animator.SetBool(isJumpingHash, true);
           
@@ -149,7 +165,7 @@ public class characterMovement : MonoBehaviour
             currentRunMovement.y = initialJumpVelocity * .5f;
             //Debug.Log("JumpAnimationPlayed");
         }
-        else if (!isJumpPressed && isJumping && characterController.isGrounded)
+        else if (!isJumpPressed && isJumping && characterController.isGrounded && isGrounded)
         {
             isJumping = false;
           
@@ -157,7 +173,7 @@ public class characterMovement : MonoBehaviour
         }
     }
 
-
+  
     void onRun(InputAction.CallbackContext context)
     {
         isRunPressed = context.ReadValueAsButton();
@@ -192,6 +208,11 @@ public class characterMovement : MonoBehaviour
 
     void handleRotation()
     {
+        // not climbing the ladder
+        float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
+        float ladderGrabDistance = .4f;
+
+
         Vector3 positionToLookAt;
         positionToLookAt.x = currentMovement.x;
         positionToLookAt.y = zero;
@@ -210,38 +231,68 @@ public class characterMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
         }
 
+        if (!isClimbingLadder)
+        {
+            
+            if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, positionToLookAt, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
+            {
 
+                if (raycastHit.transform.TryGetComponent(out Ladder ladder))
+                {
+                    GrabLadder();
+
+                }
+            }
+
+        }
+        else
+        {
+            //Climbing the ladder
+
+            if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, positionToLookAt, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
+            {
+
+                if (!raycastHit.transform.TryGetComponent(out Ladder ladder))
+                {
+
+                    DropLadder();
+                }
+            }
+
+            else
+            {
+                DropLadder();
+            }
+        }
+
+       
+
+        if (isClimbingLadder)
+        {
+            positionToLookAt.x = 0f;
+            positionToLookAt.y = positionToLookAt.z;
+            positionToLookAt.z = 0f;
+            currentMovement.y = 1f;
+            //gravity = 0f; // this is wrong idk what else tho
+            isGrounded = true;
+        }
 
     }
 
+
+
+    private void GrabLadder()
+    {
+        isClimbingLadder = true;
+    }
+
+    private void DropLadder()
+    {
+        isClimbingLadder = false;
+    }
     void OnMovementInput(InputAction.CallbackContext context)
     {
-        float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
-        float ladderGrabDistance = .4f;
-
-
-        if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, currentMovementInput, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
-        {
-
-
-            if (raycastHit.transform.TryGetComponent(out Ladder ladder))
-            {
-                Debug.Log("Climbing ladder: " + raycastHit.transform);
-                currentMovement.x = 0f; // stops him from sliding left and right can remove if wanted (design pref)
-                currentMovement.y = currentMovement.z;
-                currentMovement.z = 0f;
-            
-                gravity = 0f;
-                characterController.Move(Vector3.up * currentMovementInput.y * Time.deltaTime);
-            }
-        }
-        
-                
-
-                
-        
-        
-          
+      
         currentMovementInput = context.ReadValue<Vector2>();
         Vector3 moveDirection = CameraForward() + CameraRight();
 
@@ -256,6 +307,14 @@ public class characterMovement : MonoBehaviour
         //currentRunMovement.z = currentMovementInput.y * runMultiplier;
         isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
 
+
+
+     
+
+
+     
+
+      
     }
 
     public Vector3 CameraForward()
@@ -287,9 +346,7 @@ public class characterMovement : MonoBehaviour
         bool isRunning = animator.GetBool(isRunningHash);
         bool isPulling = animator.GetBool(isPullingHash);
 
-       
-
-
+      
     
         //Walking Controls-------------------------------
         if (isMovementPressed && !isWalking)
@@ -459,7 +516,7 @@ public class characterMovement : MonoBehaviour
 
    
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
 
         handleRotation();
@@ -475,11 +532,31 @@ public class characterMovement : MonoBehaviour
             characterController.Move(currentMovement * Time.deltaTime);
         }
 
+        GroundCheck();
         handleGravity();
         handleJump();
         handleCrouch();
 
     
+    }
+
+   
+    public bool isGrounded = false;
+
+    void GroundCheck()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, distToGround + 0.1f))
+        {
+            Debug.Log("Grounded");
+            isGrounded = true; 
+        }
+
+        else
+        {
+            Debug.Log("NotGrounded");
+            isGrounded = false;
+        }
+     
     }
 
 
