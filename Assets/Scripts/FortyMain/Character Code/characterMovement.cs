@@ -21,6 +21,8 @@ public class characterMovement : MonoBehaviour
     public CharacterController characterController;
     CustomInputs input; // calls to the input manager
 
+    public Transform orientation;
+
     Rigidbody rb;
     public Ladder ladder;
 
@@ -250,61 +252,47 @@ public class characterMovement : MonoBehaviour
 
 
         // Ladder code
-        Vector3 moveDirection = Quaternion.Euler(0.0f, currentMovement.y, 0.0f) * Vector3.forward;
- 
-            if (!isClimbingLadder)
-            {
+        //Vector3 moveDirection = Quaternion.Euler(0.0f, currentMovement.y, 0.0f) * Vector3.forward;
+
+                Debug.DrawRay(orientation.position, orientation.forward * 0.4f, Color.red);
                 //not climbing the ladder
                 float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
                 float ladderGrabDistance = .4f;
 
-                if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, moveDirection, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
+                if (Physics.Raycast(orientation.position, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, LayerMask.NameToLayer("Climbable"))) // local position is the position the player is facing 
                 {
-
-                    if (raycastHit.transform.TryGetComponent(out Ladder ladder))
+                    if (!isClimbingLadder)
                     {
-                        GrabLadder(targetDirection);
+                        if (raycastHit.collider != null)
+                        {
+                            Debug.Log("Raycast hitting " + raycastHit.collider.name);
+                            GrabLadder(targetDirection);
+                        }
+                    }
+                    else
+                    {
+                        if (raycastHit.collider == null)
+                            DropLadder();
                     }
                 }
-            }
-
-
-            else
-            {
-                //climbing ladder
-                float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
-                float ladderGrabDistance = .4f;
-                if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, lastGrabLadderDirection, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
-                {
-
-                    if (!raycastHit.transform.TryGetComponent(out Ladder ladder))
-                    {
-                        DropLadder();
-                        initialJumpVelocity = 4f;
-                    }
-                }
-                else
-                {
-                    DropLadder();
-                    initialJumpVelocity = 4f;
-                }
-            }
-            
-
 
             if (isClimbingLadder)
             {
+            //currentMovement.z = moveDirection.y * currentMovementInput.y;
+            //currentMovement.x = moveDirection.x = currentMovementInput.x;
 
-                
-                currentMovement.z = moveDirection.y * currentMovementInput.y;
-
-                currentMovement.x = moveDirection.x = currentMovementInput.x;
-         
-                
-                Debug.Log("Climing ladder");
-             
-             
-                gravity = 0f; // this is wrong idk what else tho
+                if (currentMovementInput.y == -1)
+                {
+                    Debug.Log("uppies!");
+                    characterController.enabled = false;
+                    //transform.Translate(Vector3.up * Time.deltaTime * 2f);
+                    rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
+                }
+                    else if (currentMovementInput.y == 0)
+                {
+                    rb.velocity = Vector3.zero;
+                }
+                //gravity = 0f; // this is wrong idk what else tho
                 isGrounded = true;
             }
 
@@ -388,7 +376,10 @@ public class characterMovement : MonoBehaviour
     {
         isClimbingLadder = false;
         //rb.isKinematic = true;
-     
+
+        characterController.enabled = true;
+        rb.velocity = Vector3.zero;
+
     }
 
 
@@ -499,12 +490,11 @@ public class characterMovement : MonoBehaviour
         //larger the multiplier the steeper the fall 
         float fallMultiplier = 2.0f;
 
-        if (characterController.isGrounded  )
+        if (characterController.isGrounded)
         {
 
             if (isJumpAnimating)
             {
-     
                 animator.SetBool(isJumpingHash, false);
                 isJumpAnimating = false;
                // Debug.Log("Jumpfalse");
@@ -646,13 +636,13 @@ public class characterMovement : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, Vector3.down, distToGround + 0.1f))
         {
-            Debug.Log("Grounded");
+            //Debug.Log("Grounded");
             isGrounded = true; 
         }
 
         else
         {
-            Debug.Log("NotGrounded");
+            //Debug.Log("NotGrounded");
             isGrounded = false;
         }
      

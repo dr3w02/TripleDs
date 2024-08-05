@@ -31,7 +31,7 @@ public class CameraChange : MonoBehaviour
         {
             Rigidbody playerRb = other.GetComponent<Rigidbody>();
 
-            playerRb.isKinematic = true;
+            //playerRb.isKinematic = true;
 
             if (playerRb != null)
             {
