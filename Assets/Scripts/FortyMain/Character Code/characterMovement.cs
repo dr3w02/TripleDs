@@ -49,9 +49,10 @@ public class characterMovement : MonoBehaviour
     public Vector3 vineVelocityWhenGrabbed;
     public float climbSpeed = 2f;
 
-    public Vector3 ClimbLadder;
+    public Vector3 targetDirection;
     bool swinging = false;
 
+    private Vector3 lastGrabLadderDirection;
  
     //change these to is 
 
@@ -246,45 +247,72 @@ public class characterMovement : MonoBehaviour
 
     private void Climables()
     {
-        Vector3 positionToLookAt;
-        positionToLookAt.x = currentMovement.x;
-        positionToLookAt.y = zero;
-        positionToLookAt.z = currentMovement.z;
+
 
         // Ladder code
-
-        //if (!isClimbingLadder)
-        {
-            // not climbing the ladder
-            //float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
-            // float ladderGrabDistance = .4f;
-
-
-
-            //}
-
-
-            /*if (isClimbingLadder)
-            {
-           
-                currentMovement.x = 0f;
-                currentMovement.z = currentMovement.y * climbSpeed;
-                //GetComponent<Rigidbody>().velocity = 0f;
-              
-                isGrounded = true;
-
-
-                currentRunMovement = Vector3.zero;
-            }
-
+        Vector3 moveDirection = Quaternion.Euler(0.0f, currentMovement.y, 0.0f) * Vector3.forward;
+ 
             if (!isClimbingLadder)
             {
+                //not climbing the ladder
+                float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
+                float ladderGrabDistance = .4f;
 
-            }*/
+                if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, moveDirection, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
+                {
 
-                if (swinging == true)
+                    if (raycastHit.transform.TryGetComponent(out Ladder ladder))
+                    {
+                        GrabLadder(targetDirection);
+                    }
+                }
+            }
+
+
+            else
             {
-                transform.position = currentSwingable.position;
+                //climbing ladder
+                float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
+                float ladderGrabDistance = .4f;
+                if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, lastGrabLadderDirection, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
+                {
+
+                    if (!raycastHit.transform.TryGetComponent(out Ladder ladder))
+                    {
+                        DropLadder();
+                        initialJumpVelocity = 4f;
+                    }
+                }
+                else
+                {
+                    DropLadder();
+                    initialJumpVelocity = 4f;
+                }
+            }
+            
+
+
+            if (isClimbingLadder)
+            {
+
+                
+                currentMovement.z = moveDirection.y * currentMovementInput.y;
+
+                currentMovement.x = moveDirection.x = currentMovementInput.x;
+         
+                
+                Debug.Log("Climing ladder");
+             
+             
+                gravity = 0f; // this is wrong idk what else tho
+                isGrounded = true;
+            }
+
+            
+
+            if (swinging == true)
+            {
+              transform.position = currentSwingable.position;
 
                 if (!isPullPressed)
                 {
@@ -298,16 +326,20 @@ public class characterMovement : MonoBehaviour
                 }
             }
 
-        }
+        
         
 
     }
 
-
+    /*
         void OnTriggerEnter(Collider other)
         {
         if (other.gameObject.tag == "Ladder")
         {
+            float avoidFloorDistance = 0.1f;
+            float ladderGrabDistance = 0.4f;
+
+          
             GrabLadder();
             Debug.Log("FoundTAG"); 
 
@@ -330,33 +362,33 @@ public class characterMovement : MonoBehaviour
                 DropLadder();
             }
         }
+    */
 
 
 
-
-    private void GrabLadder()
+    private void GrabLadder(Vector3 lastGrabLadderDirection)
     {
 
-        rb.isKinematic = false;
+        //rb.isKinematic = false;
         isClimbingLadder = true;
-
-        currentMovement.x = 0f;
-        currentMovement.y = climbSpeed;
-        currentMovement.z = 0f;
-
+        this.lastGrabLadderDirection = lastGrabLadderDirection;
+        //currentMovement.x = 0f;
+        //currentMovement.y = climbSpeed;
+        //currentMovement.z = 0f;
        
-        isGrounded = true;
+
+       //isGrounded = true;
 
 
-        currentRunMovement = Vector3.zero;
+   
 
     }
 
     private void DropLadder()
     {
         isClimbingLadder = false;
-        rb.isKinematic = true;
-        currentMovement.y = 0f;
+        //rb.isKinematic = true;
+     
     }
 
 
@@ -586,7 +618,7 @@ public class characterMovement : MonoBehaviour
 
         handleRotation();
         handleAnimation();
-      
+        Climables();
 
         if (isRunPressed)
         {
@@ -601,7 +633,7 @@ public class characterMovement : MonoBehaviour
         handleGravity();
         handleJump();
         handleCrouch();
-        Climables();
+
 
 
 
