@@ -20,6 +20,7 @@ public class MenuManager : MonoBehaviour
     [Header("Player Scripts to deactivate on Pause")]
 
     [SerializeField] private characterMovement _player;
+    //[SerializeField] private CharacterController _player;
 
     [Header("First Selected Options")]
     [SerializeField] private GameObject _mainMenuFirst;

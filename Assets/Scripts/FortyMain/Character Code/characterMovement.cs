@@ -21,6 +21,7 @@ public class characterMovement : MonoBehaviour
     public CharacterController characterController;
     CustomInputs input; // calls to the input manager
 
+    Rigidbody rb;
     public Ladder ladder;
 
     int isWalkingHash;
@@ -40,8 +41,16 @@ public class characterMovement : MonoBehaviour
     //Things for ground check
     public float distToGround = 1f;
 
-    //things for climb 
+    //things for climb and swing 
     private bool isClimbingLadder;
+
+    Transform currentSwingable;
+    ConstantForce myConstantForce;
+    public Vector3 vineVelocityWhenGrabbed;
+    public float climbSpeed = 2f;
+
+    public Vector3 ClimbLadder;
+    bool swinging = false;
 
  
     //change these to is 
@@ -98,6 +107,10 @@ public class characterMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
 
+        myConstantForce = GetComponent<ConstantForce>();
+
+        rb = GetComponent<Rigidbody>();
+
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
         isJumpingHash = Animator.StringToHash("isJumping");
@@ -134,6 +147,8 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Select.started += onSelect;
         input.CharacterControls.Select.performed += onSelect;
         input.CharacterControls.Select.canceled += onSelect;
+
+     
 
         input.Enable();
 
@@ -208,10 +223,6 @@ public class characterMovement : MonoBehaviour
 
     void handleRotation()
     {
-        // not climbing the ladder
-        float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
-        float ladderGrabDistance = .4f;
-
 
         Vector3 positionToLookAt;
         positionToLookAt.x = currentMovement.x;
@@ -231,65 +242,124 @@ public class characterMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
         }
 
-        if (!isClimbingLadder)
+    }
+
+    private void Climables()
+    {
+        Vector3 positionToLookAt;
+        positionToLookAt.x = currentMovement.x;
+        positionToLookAt.y = zero;
+        positionToLookAt.z = currentMovement.z;
+
+        // Ladder code
+
+        //if (!isClimbingLadder)
         {
-            
-            if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, positionToLookAt, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
+            // not climbing the ladder
+            //float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
+            // float ladderGrabDistance = .4f;
+
+
+
+            //}
+
+
+            /*if (isClimbingLadder)
+            {
+           
+                currentMovement.x = 0f;
+                currentMovement.z = currentMovement.y * climbSpeed;
+                //GetComponent<Rigidbody>().velocity = 0f;
+              
+                isGrounded = true;
+
+
+                currentRunMovement = Vector3.zero;
+            }
+
+            if (!isClimbingLadder)
             {
 
-                if (raycastHit.transform.TryGetComponent(out Ladder ladder))
-                {
-                    GrabLadder();
+            }*/
 
+                if (swinging == true)
+            {
+                transform.position = currentSwingable.position;
+
+                if (!isPullPressed)
+                {
+                    swinging = false;
+
+                    rb.velocity = new Vector3(currentSwingable.GetComponent<Rigidbody>().velocity.x,
+                        currentSwingable.GetComponent<Rigidbody>().velocity.y + 0.5f,
+                        currentSwingable.GetComponent<Rigidbody>().velocity.z);
+
+                    rb.useGravity = true;
                 }
             }
 
         }
-        else
+        
+
+    }
+
+
+        void OnTriggerEnter(Collider other)
         {
-            //Climbing the ladder
+        if (other.gameObject.tag == "Ladder")
+        {
+            GrabLadder();
+            Debug.Log("FoundTAG"); 
 
-            if (Physics.Raycast(transform.position + Vector3.up * avoidFloorDistance, positionToLookAt, out RaycastHit raycastHit, ladderGrabDistance)) // local position is the position the player is facing 
-            {
 
-                if (!raycastHit.transform.TryGetComponent(out Ladder ladder))
-                {
+        }
 
-                    DropLadder();
-                }
-            }
+        if (other.gameObject.tag == "Vine" && isPullPressed)
+        {
+            other.GetComponent<Rigidbody>().velocity = vineVelocityWhenGrabbed;
+            swinging = true;
+            currentSwingable = other.transform;
+        }
 
-            else
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.tag == "Ladder" && !isPullPressed)
             {
                 DropLadder();
             }
         }
 
-       
-
-        if (isClimbingLadder)
-        {
-            positionToLookAt.x = 0f;
-            positionToLookAt.y = positionToLookAt.z;
-            positionToLookAt.z = 0f;
-            currentMovement.y = 1f;
-            //gravity = 0f; // this is wrong idk what else tho
-            isGrounded = true;
-        }
-
-    }
 
 
 
     private void GrabLadder()
     {
+
+        rb.isKinematic = false;
         isClimbingLadder = true;
+
+        currentMovement.x = 0f;
+        currentMovement.y = climbSpeed;
+        currentMovement.z = 0f;
+
+       
+        isGrounded = true;
+
+
+        currentRunMovement = Vector3.zero;
+
     }
 
     private void DropLadder()
     {
         isClimbingLadder = false;
+        rb.isKinematic = true;
+        currentMovement.y = 0f;
     }
+
+
     void OnMovementInput(InputAction.CallbackContext context)
     {
       
@@ -306,13 +376,6 @@ public class characterMovement : MonoBehaviour
         //currentRunMovement.x = currentMovementInput.x * runMultiplier;
         //currentRunMovement.z = currentMovementInput.y * runMultiplier;
         isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
-
-
-
-     
-
-
-     
 
       
     }
@@ -511,7 +574,9 @@ public class characterMovement : MonoBehaviour
         
         Debug.Log("start");
         //Set ID References
-       
+
+
+
     }
 
    
@@ -536,8 +601,10 @@ public class characterMovement : MonoBehaviour
         handleGravity();
         handleJump();
         handleCrouch();
+        Climables();
 
-    
+
+
     }
 
    
