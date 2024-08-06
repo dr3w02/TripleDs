@@ -22,8 +22,10 @@ public class CameraManager : MonoBehaviour
 
         foreach(CinemachineVirtualCamera c in cameras)
         {
+            
             if(c != camera && c.Priority != 0)
             {
+              
                 c.Priority = 0;
             }
         }
@@ -35,11 +37,7 @@ public class CameraManager : MonoBehaviour
         Debug.Log("Camera Registered:" + camera);
     }
 
-    public static void UnRegister(CinemachineVirtualCamera camera)
-    {
-        cameras.Remove(camera);
-        Debug.Log("Camera Unregistered:" + camera);
-    }
+   
 }
 
 

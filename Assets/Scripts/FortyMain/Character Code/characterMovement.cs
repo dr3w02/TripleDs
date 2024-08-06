@@ -254,70 +254,131 @@ public class characterMovement : MonoBehaviour
         // Ladder code
         //Vector3 moveDirection = Quaternion.Euler(0.0f, currentMovement.y, 0.0f) * Vector3.forward;
 
-                Debug.DrawRay(orientation.position, orientation.forward * 0.4f, Color.red);
-                //not climbing the ladder
-                float avoidFloorDistance = 0.1f; //so the climb doesnt even hit the ground 
-                float ladderGrabDistance = .4f;
+        Debug.DrawRay(orientation.position, orientation.forward * 0.4f, Color.red);
+        //not climbing the ladder
 
-                if (Physics.Raycast(orientation.position, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, LayerMask.NameToLayer("Climbable"))) // local position is the position the player is facing 
-                {
-                    if (!isClimbingLadder)
-                    {
-                        if (raycastHit.collider != null)
-                        {
-                            Debug.Log("Raycast hitting " + raycastHit.collider.name);
-                            GrabLadder(targetDirection);
-                        }
-                    }
-                    else
-                    {
-                        if (raycastHit.collider == null)
-                            DropLadder();
-                    }
-                }
 
-            if (isClimbingLadder)
-            {
+        if (isClimbingLadder)
+        {
             //currentMovement.z = moveDirection.y * currentMovementInput.y;
             //currentMovement.x = moveDirection.x = currentMovementInput.x;
-
-                if (currentMovementInput.y == -1)
-                {
-                    Debug.Log("uppies!");
-                    characterController.enabled = false;
-                    //transform.Translate(Vector3.up * Time.deltaTime * 2f);
-                    rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
-                }
-                    else if (currentMovementInput.y == 0)
-                {
-                    rb.velocity = Vector3.zero;
-                }
-                //gravity = 0f; // this is wrong idk what else tho
-                isGrounded = true;
-            }
-
-            
-
-            if (swinging == true)
+            isClimbingLadder = true;
+            if (currentMovementInput.y == -1)
             {
-              transform.position = currentSwingable.position;
+                currentMovementInput.x = 0;
+                Debug.Log("uppies!");
+                characterController.enabled = false;
+                //transform.Translate(Vector3.up * Time.deltaTime * 2f);
+                rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
+            }
+            else if (currentMovementInput.y == 0)
+            {
+                rb.velocity = Vector3.zero;
 
-                if (!isPullPressed)
-                {
-                    swinging = false;
+            }
+            //gravity = 0f; // this is wrong idk what else tho
 
-                    rb.velocity = new Vector3(currentSwingable.GetComponent<Rigidbody>().velocity.x,
-                        currentSwingable.GetComponent<Rigidbody>().velocity.y + 0.5f,
-                        currentSwingable.GetComponent<Rigidbody>().velocity.z);
+            isGrounded = true;
 
-                    rb.useGravity = true;
-                }
+            if (currentMovementInput.y == 1)
+            {
+                Debug.Log("uppies!");
+                currentMovementInput.x = 0;
+                characterController.enabled = false;
+                //transform.Translate(Vector3.up * Time.deltaTime * 2f);
+                rb.MovePosition(transform.position + Vector3.down * 2 * Time.deltaTime);
+            }
+            else if (currentMovementInput.y == 0)
+            {
+                rb.velocity = Vector3.zero;
+
             }
 
-        
-        
+
+
+
+        }
+
+
+
+
+        if (swinging == true)
+        {
+            myConstantForce.enabled = false;
+            transform.position = currentSwingable.position;
+
+            if (!isPullPressed)
+            {
+
+                swinging = false;
+
+                rb.velocity = new Vector3(currentSwingable.GetComponent<Rigidbody>().velocity.x,
+                    currentSwingable.GetComponent<Rigidbody>().velocity.y + 0.5f,
+                    currentSwingable.GetComponent<Rigidbody>().velocity.z);
+
+                rb.useGravity = true;
+
+            }
+        }
+    }
+
+
+
+    void OnTriggerEnter(Collider other)
+    {
+
+        float ladderGrabDistance = .4f;
+        if (Physics.Raycast(orientation.position, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, LayerMask.NameToLayer("Climbable"))) // local position is the position the player is facing 
+        {
+            if (!isClimbingLadder)
+            {
+                isClimbingLadder = false;
+                if (raycastHit.collider != null && isPullPressed)
+                {
+                    Debug.Log("Raycast hitting " + raycastHit.collider.name);
+                    GrabLadder(targetDirection);
+                }
+            }
+            else
+            {
+                if (!isPullPressed)
+                    DropLadder();
+            }
+        }
+
+        if (other.gameObject.tag == "Vine" && isPullPressed)
+        {
+            currentSwingable = other.transform;
+           other.GetComponent<Rigidbody>().velocity = vineVelocityWhenGrabbed;
+            Debug.Log("Vine");
+            swinging = true;
+  
+        }
+
 
     }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (!isPullPressed)
+            DropLadder();
+
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        float ladderGrabDistance = .4f;
+        if (Physics.Raycast(orientation.position, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, LayerMask.NameToLayer("Climbable")))
+        {
+            if (!isPullPressed || raycastHit.collider != null)
+                DropLadder();
+        }
+
+    }
+
+
+
+
 
     /*
         void OnTriggerEnter(Collider other)
@@ -327,7 +388,7 @@ public class characterMovement : MonoBehaviour
             float avoidFloorDistance = 0.1f;
             float ladderGrabDistance = 0.4f;
 
-          
+
             GrabLadder();
             Debug.Log("FoundTAG"); 
 
@@ -376,7 +437,7 @@ public class characterMovement : MonoBehaviour
     {
         isClimbingLadder = false;
         //rb.isKinematic = true;
-
+        Debug.Log("Falling off");
         characterController.enabled = true;
         rb.velocity = Vector3.zero;
 
@@ -414,6 +475,7 @@ public class characterMovement : MonoBehaviour
 
         return direction;
     }
+
     public Vector3 CameraRight()
     {
         Vector3 camPos = cam.position;

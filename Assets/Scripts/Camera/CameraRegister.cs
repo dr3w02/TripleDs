@@ -12,8 +12,4 @@ public class CameraRegister : MonoBehaviour
 
     }
 
-    private void OnDisabled()
-    {
-        CameraManager.UnRegister(GetComponent<CinemachineVirtualCamera>());
-    }
 }

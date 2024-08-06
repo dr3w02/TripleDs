@@ -25,28 +25,28 @@ public class CameraChange : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other )
+    private void OnTriggerEnter(Collider other)
     {
+
         if (other.gameObject.CompareTag("Player"))
         {
             Rigidbody playerRb = other.GetComponent<Rigidbody>();
 
-            //playerRb.isKinematic = true;
-
+            // playerRb.isKinematic = true;
+           
             if (playerRb != null)
             {
                 if (CameraManager.ActiveCamera != cam)
                 {
-
+                    Debug.Log("ActiveCamera" + cam);
                     CameraManager.SwitchCamera(cam);
+
                 }
             }
 
-         
-
         }
-     
-
-
     }
+
+
+
 }
