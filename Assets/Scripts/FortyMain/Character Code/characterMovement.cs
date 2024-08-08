@@ -3,7 +3,9 @@ using Platformer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -54,6 +56,8 @@ public class characterMovement : MonoBehaviour
     public Vector3 targetDirection;
     bool swinging = false;
 
+    Vector3 raycastOffset = new Vector3(0, 0.5f, 0);
+
     private Vector3 lastGrabLadderDirection;
  
     //change these to is 
@@ -62,6 +66,7 @@ public class characterMovement : MonoBehaviour
 
     //Constants
     public float rotationFactorPerFrame = 15.0f;
+    
     public float runMultiplier = 3.0f;
     int zero = 0;
     //fancy jump
@@ -97,6 +102,8 @@ public class characterMovement : MonoBehaviour
     //int isSelectedHash;
     bool selectPressed;
 
+    //roation bool
+    public bool isRotating;
 
     public Transform player;
 
@@ -226,17 +233,19 @@ public class characterMovement : MonoBehaviour
 
     void handleRotation()
     {
-
+        
         Vector3 positionToLookAt;
+     
         positionToLookAt.x = currentMovement.x;
         positionToLookAt.y = zero;
         positionToLookAt.z = currentMovement.z;
-
+        
         // the current rotation of our character
         Quaternion currentRotation = transform.rotation;
 
         if (isMovementPressed)
         {
+          
             //creates a new rotation based on where player is looking
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             //Debug.Log("MovementHasBeenPressed");
@@ -245,47 +254,54 @@ public class characterMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
         }
 
+
     }
 
     private void Climables()
     {
 
 
-        // Ladder code
-        //Vector3 moveDirection = Quaternion.Euler(0.0f, currentMovement.y, 0.0f) * Vector3.forward;
+     
+        Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * 1f, Color.magenta);
 
-        Debug.DrawRay(orientation.position, orientation.forward * 0.4f, Color.red);
         //not climbing the ladder
 
 
         if (isClimbingLadder)
         {
-            //currentMovement.z = moveDirection.y * currentMovementInput.y;
-            //currentMovement.x = moveDirection.x = currentMovementInput.x;
+
+          
             isClimbingLadder = true;
+
             if (currentMovementInput.y == -1)
             {
+                ///myConstantForce.enabled = false;
+                //transform.position = currentSwingable.position;
                 currentMovementInput.x = 0;
+        
                 Debug.Log("uppies!");
                 characterController.enabled = false;
                 //transform.Translate(Vector3.up * Time.deltaTime * 2f);
                 rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
+            
             }
             else if (currentMovementInput.y == 0)
             {
                 rb.velocity = Vector3.zero;
 
             }
-            //gravity = 0f; // this is wrong idk what else tho
+    
 
             isGrounded = true;
 
             if (currentMovementInput.y == 1)
             {
+              
+
                 Debug.Log("uppies!");
                 currentMovementInput.x = 0;
                 characterController.enabled = false;
-                //transform.Translate(Vector3.up * Time.deltaTime * 2f);
+   
                 rb.MovePosition(transform.position + Vector3.down * 2 * Time.deltaTime);
             }
             else if (currentMovementInput.y == 0)
@@ -326,30 +342,35 @@ public class characterMovement : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+       
 
         float ladderGrabDistance = .4f;
-        if (Physics.Raycast(orientation.position, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, LayerMask.NameToLayer("Climbable"))) // local position is the position the player is facing 
+
+        int climbableLayer = LayerMask.GetMask("Climbable"); 
+        if (Physics.Raycast(orientation.position + raycastOffset, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, climbableLayer)) // local position is the position the player is facing 
         {
             if (!isClimbingLadder)
             {
                 isClimbingLadder = false;
                 if (raycastHit.collider != null && isPullPressed)
                 {
+               
                     Debug.Log("Raycast hitting " + raycastHit.collider.name);
                     GrabLadder(targetDirection);
                 }
             }
             else
             {
-                if (!isPullPressed)
+                if (!isPullPressed || raycastHit.collider == null)
                     DropLadder();
+                Debug.Log("Raycast hitting " + raycastHit.collider.name);
             }
         }
 
         if (other.gameObject.tag == "Vine" && isPullPressed)
         {
-            currentSwingable = other.transform;
-           other.GetComponent<Rigidbody>().velocity = vineVelocityWhenGrabbed;
+     
+            other.GetComponent<Rigidbody>().velocity = vineVelocityWhenGrabbed;
             Debug.Log("Vine");
             swinging = true;
   
@@ -367,11 +388,19 @@ public class characterMovement : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+
+        int climbableLayer = LayerMask.GetMask("Climbable");
         float ladderGrabDistance = .4f;
-        if (Physics.Raycast(orientation.position, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, LayerMask.NameToLayer("Climbable")))
+
+        if (Physics.Raycast(orientation.position + raycastOffset, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, climbableLayer))
         {
-            if (!isPullPressed || raycastHit.collider != null)
+            if (!isPullPressed)
                 DropLadder();
+
+            if (raycastHit.collider != null)
+            {
+                DropLadder();
+            }
         }
 
     }
