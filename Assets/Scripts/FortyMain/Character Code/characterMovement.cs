@@ -242,6 +242,7 @@ public class characterMovement : MonoBehaviour
         
         // the current rotation of our character
         Quaternion currentRotation = transform.rotation;
+        isRotating = true;
 
         if (isMovementPressed)
         {
@@ -250,8 +251,16 @@ public class characterMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             //Debug.Log("MovementHasBeenPressed");
             //rotate the character to face the positionToLookAt
+            if (isRotating)
+            {
+                transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
+            }
+          
+        }
 
-            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
+        if (!isRotating)
+        {
+            return;
         }
 
 
@@ -278,7 +287,7 @@ public class characterMovement : MonoBehaviour
                 ///myConstantForce.enabled = false;
                 //transform.position = currentSwingable.position;
                 currentMovementInput.x = 0;
-        
+                isRotating = false;
                 Debug.Log("uppies!");
                 characterController.enabled = false;
                 //transform.Translate(Vector3.up * Time.deltaTime * 2f);
@@ -296,8 +305,8 @@ public class characterMovement : MonoBehaviour
 
             if (currentMovementInput.y == 1)
             {
-              
 
+                isRotating = false;
                 Debug.Log("uppies!");
                 currentMovementInput.x = 0;
                 characterController.enabled = false;
