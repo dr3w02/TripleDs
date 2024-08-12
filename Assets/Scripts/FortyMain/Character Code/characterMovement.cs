@@ -353,7 +353,7 @@ public class characterMovement : MonoBehaviour
     {
        
 
-        float ladderGrabDistance = .4f;
+        float ladderGrabDistance = .1f;
 
         int climbableLayer = LayerMask.GetMask("Climbable"); 
         if (Physics.Raycast(orientation.position + raycastOffset, orientation.forward, out RaycastHit raycastHit, ladderGrabDistance, climbableLayer)) // local position is the position the player is facing 
@@ -368,15 +368,33 @@ public class characterMovement : MonoBehaviour
                     GrabLadder(targetDirection);
                 }
             }
-            else
+            
+            if (isClimbingLadder)
             {
                 if (!isPullPressed || raycastHit.collider == null)
+                {
                     DropLadder();
-                Debug.Log("Raycast hitting " + raycastHit.collider.name);
+                    Debug.Log("Raycast hitting " + raycastHit.collider.name);
+                }
+            
             }
+
+            if (Vector3.Dot(targetDirection, lastGrabLadderDirection) < 0)
+            {
+                float ladderFloorDropDistance = .1f;
+
+                Physics.Raycast(transform.position, Vector3.down, out RaycastHit floorRayraycastHit, ladderFloorDropDistance);
+                 {
+                    DropLadder();
+                 }
+
+            }
+            
+
+          
         }
 
-        if (other.gameObject.tag == "Vine" && isPullPressed)
+            if (other.gameObject.tag == "Vine" && isPullPressed)
         {
      
             other.GetComponent<Rigidbody>().velocity = vineVelocityWhenGrabbed;
@@ -387,11 +405,10 @@ public class characterMovement : MonoBehaviour
 
 
     }
-
+/*
     void OnTriggerStay(Collider other)
     {
-        if (!isPullPressed)
-            DropLadder();
+       
 
     }
 
@@ -414,7 +431,7 @@ public class characterMovement : MonoBehaviour
 
     }
 
-
+/*
 
 
 
