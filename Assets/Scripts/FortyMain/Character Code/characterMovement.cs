@@ -244,49 +244,32 @@ public class characterMovement : MonoBehaviour
 
     void handleRotation()
     {
-        
+
         Vector3 positionToLookAt;
-     
+
         positionToLookAt.x = currentMovement.x;
         positionToLookAt.y = zero;
         positionToLookAt.z = currentMovement.z;
-        
+
         // the current rotation of our character
         Quaternion currentRotation = transform.rotation;
-  
+
 
         if (isMovementPressed)
         {
-          
+
             //creates a new rotation based on where player is looking
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             //Debug.Log("MovementHasBeenPressed");
             //rotate the character to face the positionToLookAt
-          
-            
+
+
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
-    
-        }
 
-        if (isClimbingLadder && gameObject.tag == "Vine")
-        {
-            currentMovement.x = 0f;
-            currentMovement.z = 0f;
-
-            Debug.Log("RotationLocked");
-        }
-
-        if (isClimbingLadder && gameObject.tag != "Vine")
-        {
-            currentMovement.x = 0f;
-            currentMovement.z = 0f;
-            positionToLookAt.y = -180f;
-
-
-            Debug.Log("RotationLockedpipe");
         }
 
 
+   
     }
 
     private void Climables()
