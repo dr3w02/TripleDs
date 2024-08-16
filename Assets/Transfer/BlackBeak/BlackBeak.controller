@@ -93,7 +93,7 @@ AnimatorStateMachine:
     m_Position: {x: 680, y: 280, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -386175196576892157}
-    m_Position: {x: 670, y: 30, z: 0}
+    m_Position: {x: 680, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3161517358627481135}
     m_Position: {x: 330, y: 280, z: 0}
@@ -109,7 +109,7 @@ AnimatorStateMachine:
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_EntryPosition: {x: -10, y: 310, z: 0}
+  m_EntryPosition: {x: -10, y: 280, z: 0}
   m_ExitPosition: {x: 780, y: -100, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 3161517358627481135}
@@ -480,7 +480,7 @@ AnimatorStateTransition:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 
+  m_Name: Start Walk
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: WalkFWD
@@ -494,8 +494,8 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
+  m_TransitionDuration: 0.24999994
+  m_TransitionOffset: 0.0031155986
   m_ExitTime: 0.7916667
   m_HasExitTime: 1
   m_HasFixedDuration: 1

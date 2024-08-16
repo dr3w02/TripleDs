@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -52,11 +53,6 @@ public class characterMovement : MonoBehaviour
     private bool isClimbingLadder;
     public CharacterController characterController;
     
-
-   
-    
-    
-
 
     Transform currentSwingable;
     ConstantForce myConstantForce;
@@ -118,7 +114,12 @@ public class characterMovement : MonoBehaviour
     public Transform player;
 
     /// </summary>
+    // For CheckPoints
 
+    [SerializeField] private GameObject _checkpointsParents;
+    public GameObject[] _checkPointsArray;
+
+    private Vector3 _startingPoint;
 
     void Awake()
     {
@@ -177,7 +178,17 @@ public class characterMovement : MonoBehaviour
     }
 
 
-  
+    public void RespawnPlayer()
+    {
+        gameObject.transform.position = _startingPoint;
+        TurnOffMovement();
+        currentMovement = Vector3.zero;
+
+        Debug.Log("WorkingReset");
+
+
+
+    }
 
 
     //Setting Up Jumping Physics 
@@ -413,7 +424,7 @@ public class characterMovement : MonoBehaviour
     }
 
 
-    void OnMovementInput(InputAction.CallbackContext context)
+     void OnMovementInput(InputAction.CallbackContext context)
     {
       
         currentMovementInput = context.ReadValue<Vector2>();
@@ -655,6 +666,16 @@ public class characterMovement : MonoBehaviour
         handleGravity();
         handleJump();
         handleCrouch();
+
+        // Incase player falls through ground 
+
+        if (transform.position.y <= .10f) // checking players Y axsis
+        {
+            RespawnPlayer();
+
+        }
+
+        //add unstuck button here?
 
 
  

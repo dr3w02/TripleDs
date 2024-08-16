@@ -15,7 +15,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _creidtsCanvas;
     [SerializeField] private GameObject _gamePadCanvas;
     [SerializeField] private GameObject _keyboardCanvas;
-
+    [SerializeField] private GameObject _UnstuckCanvas;
 
     [Header("Player Scripts to deactivate on Pause")]
 
@@ -31,6 +31,7 @@ public class MenuManager : MonoBehaviour
 
     private bool isPaused;
 
+    public characterMovement characterMovement;
 
     private void Start()
     {
@@ -92,6 +93,7 @@ public class MenuManager : MonoBehaviour
         _creidtsCanvas.SetActive(false);
         _gamePadCanvas.SetActive(false);
         _keyboardCanvas.SetActive(false);
+        _UnstuckCanvas.SetActive(true);
 
         EventSystem.current.SetSelectedGameObject(_mainMenuFirst);
     }
@@ -104,7 +106,7 @@ public class MenuManager : MonoBehaviour
         _creidtsCanvas.SetActive(false);
         _gamePadCanvas.SetActive(false);
         _keyboardCanvas.SetActive(false);
-
+        _UnstuckCanvas.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
     }
 
@@ -126,6 +128,11 @@ public class MenuManager : MonoBehaviour
 
     }
 
+
+    public void OnUnStuckPress()
+    {
+        characterMovement.RespawnPlayer();
+    }
     public void OnGamePadPress()
     {
         OpenGamePadHandle();

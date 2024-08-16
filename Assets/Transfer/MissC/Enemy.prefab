@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2938335222723745214}
   - component: {fileID: 760296463519925559}
   - component: {fileID: 7774652911722668136}
-  - component: {fileID: 9055647972969206693}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -96,7 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 691961093586439220}
   playerDetector: {fileID: 7774652911722668136}
-  animator: {fileID: 9055647972969206693}
+  animator: {fileID: 6305658422349150997}
   wanderRadius: 10
   timeBetweenAttacks: 1
 --- !u!114 &7774652911722668136
@@ -116,27 +115,6 @@ MonoBehaviour:
   innerDetectionRadius: 2.23
   detectionCooldown: 1.18
   attackRange: 2
---- !u!95 &9055647972969206693
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3903661138965682316}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 87630c544835aa947a2412ca6ab68264, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &3340858515093795104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -223,7 +201,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 791d24ea2a827a3419d4ce786d41b238,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4346780553434397167}
+      addedObject: {fileID: 6305658422349150997}
   m_SourcePrefab: {fileID: 100100000, guid: 791d24ea2a827a3419d4ce786d41b238, type: 3}
 --- !u!1 &2493996728362732657 stripped
 GameObject:
@@ -231,7 +209,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3340858515093795104}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &4346780553434397167
+--- !u!95 &6305658422349150997
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
