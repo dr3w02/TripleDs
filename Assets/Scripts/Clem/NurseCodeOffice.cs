@@ -1,4 +1,5 @@
 using KBCore.Refs;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,6 +23,9 @@ namespace Platformer
         StateMachine stateMachine;
 
         CountdownTimer attackTimer;
+
+
+        public List<Transform> listForBB;
 
         void OnValidate() => this.ValidateRefs();
 

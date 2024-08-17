@@ -8,6 +8,8 @@ TagManager:
   - Ladder
   - Rope
   - CheckPoint
+  - EnemyBB
+  - Waypoint
   layers:
   - Default
   - TransparentFX

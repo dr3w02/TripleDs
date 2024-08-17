@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace Platformer
@@ -9,18 +12,72 @@ namespace Platformer
         readonly Vector3 startpoint;
         readonly float wanderRadius;
         PlayerDetector playerDetector;
+        public NurseCodeOffice nurseCodeOffice;
+        public List<Transform> wayPoint;
+
+        public int currentWayPointIndex = 0;
+      
+
+     
 
 
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
-            this.agent = agent;
-            this.startpoint = enemy.transform.position;
-            this.wanderRadius = wanderRadius;
+            if (enemy == null)
+            {
+                Debug.LogError("Enemy is null in EnemyWanderState constructor.");
+                return;
+            }
 
-            Debug.Log("enemie wander stre plays");
+            if (enemy.gameObject.tag == "EnemyBB")
+            {
+               
+                Debug.Log("Reading WayPoints");
+                wayPoint = nurseCodeOffice.listForBB;
+                Debug.Log("WayPoint list count: " + wayPoint.Count);
+                WalkingBB();
+            }
+            else
+            {
+                this.agent = agent;
+                this.startpoint = enemy.transform.position;
+                this.wanderRadius = wanderRadius;
+
+                Debug.Log("enemie wander stre plays");
+
+            }
+            
         
+        }
+
+        void WalkingBB()
+        {
+            if (wayPoint == null || wayPoint.Count == 0)
+            {
+                Debug.LogWarning("WayPoint list is empty or null.");
+                return;
+            }
+
+
+            if (wayPoint.Count == 0)
+            {
+                return;
+            }
+
+            float distanceToWayPoint = Vector3.Distance(wayPoint[currentWayPointIndex].position, enemy.transform.position);
+
+            if (distanceToWayPoint <= 3 ) 
+            {
+                currentWayPointIndex = (currentWayPointIndex +1) % wayPoint.Count;
+            }
+
+            agent.SetDestination(wayPoint[currentWayPointIndex].position);
+
+
+
 
         }
+
 
 
         public override void OnEnter()

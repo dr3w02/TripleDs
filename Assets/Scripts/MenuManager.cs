@@ -63,6 +63,7 @@ public class MenuManager : MonoBehaviour
 
         _player.enabled = false;
 
+        Cursor.lockState = CursorLockMode.Confined;
         OpenMainMenu();
     }
 
@@ -73,7 +74,7 @@ public class MenuManager : MonoBehaviour
         Time.timeScale = 1f;
 
         _player.enabled = true;
-
+        Cursor.lockState = CursorLockMode.Locked;
         CloseAllMenus();
     }
 
@@ -133,6 +134,7 @@ public class MenuManager : MonoBehaviour
     {
         characterMovement.RespawnPlayer();
     }
+
     public void OnGamePadPress()
     {
         OpenGamePadHandle();

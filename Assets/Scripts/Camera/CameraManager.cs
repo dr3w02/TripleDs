@@ -20,7 +20,15 @@ public class CameraManager : MonoBehaviour
         camera.Priority = 10;
         ActiveCamera = camera;
 
-        foreach(CinemachineVirtualCamera c in cameras)
+        if (ActiveCamera != null )
+        {
+            ActiveCamera.Priority = 0;
+        }
+
+        camera.Priority = 10;
+        ActiveCamera = camera;
+
+        foreach (CinemachineVirtualCamera c in cameras)
         {
             
             if(c != camera && c.Priority != 0)

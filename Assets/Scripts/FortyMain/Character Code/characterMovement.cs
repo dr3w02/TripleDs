@@ -8,6 +8,7 @@ using System.Threading;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,7 +25,7 @@ public class characterMovement : MonoBehaviour
     public Transform cam;
 
     public Animator animator;
-   
+
     CustomInputs input; // calls to the input manager
 
     public Transform orientation;
@@ -33,10 +34,10 @@ public class characterMovement : MonoBehaviour
 
 
     int isWalkingHash;
-    int isRunningHash;  
+    int isRunningHash;
     int isCrouchingHash;
     int isPullingHash;
-  
+
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -52,7 +53,7 @@ public class characterMovement : MonoBehaviour
     //things for climb and swing 
     private bool isClimbingLadder;
     public CharacterController characterController;
-    
+
 
     Transform currentSwingable;
     ConstantForce myConstantForce;
@@ -65,14 +66,14 @@ public class characterMovement : MonoBehaviour
     Vector3 raycastOffset = new Vector3(0, 0.5f, 0);
 
     private Vector3 lastGrabLadderDirection;
- 
+
     //change these to is 
 
     //[SerializeField] float speed = 5; // might've lost this dont forget to add back
 
     //Constants
     public float rotationFactorPerFrame = 15.0f;
-    
+
     public float runMultiplier = 3.0f;
     int zero = 0;
     //fancy jump
@@ -81,7 +82,7 @@ public class characterMovement : MonoBehaviour
     public float groundedGravity = -.05f;
 
 
- 
+
     //Jumping Varibles
 
     bool isJumpPressed = false;
@@ -101,7 +102,7 @@ public class characterMovement : MonoBehaviour
     public float crouchHeight = 0.5f;
     public Vector3 offset;
 
-    
+
     //Selected
 
     public bool isSelectPressed;
@@ -121,10 +122,12 @@ public class characterMovement : MonoBehaviour
 
     private Vector3 _startingPoint;
 
+    private const string SAVE_CHECKPOINT_INDEX = "Last_checkpoint_index";
+
     void Awake()
     {
         input = new CustomInputs();
-     
+
 
         characterController = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
@@ -139,7 +142,7 @@ public class characterMovement : MonoBehaviour
         isCrouchingHash = Animator.StringToHash("isCrouching");
         isPullingHash = Animator.StringToHash("isPulling");
         //isSelectedHash = Animator.StringToHash("isSelected");
-       
+
 
         input.CharacterControls.Movement.started += OnMovementInput;
 
@@ -170,7 +173,7 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Select.performed += onSelect;
         input.CharacterControls.Select.canceled += onSelect;
 
-     
+
 
         input.Enable();
 
@@ -181,13 +184,27 @@ public class characterMovement : MonoBehaviour
     public void RespawnPlayer()
     {
         gameObject.transform.position = _startingPoint;
-        TurnOffMovement();
-        currentMovement = Vector3.zero;
+        //TurnOffMovement();
+        //currentMovement = Vector3.zero;
 
         Debug.Log("WorkingReset");
 
 
 
+    }
+
+    private void loadCheckPoints()
+    {
+        _checkPointsArray = new GameObject[_checkpointsParents.transform.childCount];
+
+        int index = 0;
+
+        foreach (Transform singleCheckpoint in _checkpointsParents.transform)
+        {
+            _checkPointsArray[index] = singleCheckpoint.gameObject;
+            index++;
+
+        }
     }
 
 
@@ -205,7 +222,7 @@ public class characterMovement : MonoBehaviour
         if (!isJumping && characterController.isGrounded && isGrounded && isJumpPressed)
         {
             animator.SetBool(isJumpingHash, true);
-          
+
             isJumpAnimating = true;
             isJumping = true;
             currentMovement.y = initialJumpVelocity * .9f;
@@ -215,12 +232,12 @@ public class characterMovement : MonoBehaviour
         else if (!isJumpPressed && isJumping && characterController.isGrounded && isGrounded)
         {
             isJumping = false;
-          
+
             animator.SetBool(isJumpingHash, false);
         }
     }
 
-  
+
     void onRun(InputAction.CallbackContext context)
     {
         isRunPressed = context.ReadValueAsButton();
@@ -233,7 +250,7 @@ public class characterMovement : MonoBehaviour
         ///Debug.Log("PullPressed");
     }
 
-     void onJump(InputAction.CallbackContext context)
+    void onJump(InputAction.CallbackContext context)
     {
         isJumpPressed = context.ReadValueAsButton();
         //Debug.Log("JumpPressed");
@@ -280,12 +297,12 @@ public class characterMovement : MonoBehaviour
         }
 
 
-   
+
     }
 
     private void Climables()
     {
-        
+
 
         Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * 1f, Color.magenta);
 
@@ -299,18 +316,18 @@ public class characterMovement : MonoBehaviour
 
             if (currentMovementInput.y == -1)
             {
-              
+
                 ///myConstantForce.enabled = false;
                 //transform.position = currentSwingable.position;
                 currentMovementInput.x = 0;
-                
+
                 Debug.Log("uppies!");
                 characterController.enabled = false;
                 //transform.Translate(Vector3.up * Time.deltaTime * 2f);
                 rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
 
-        
-          
+
+
 
             }
             else if (currentMovementInput.y == 0)
@@ -325,7 +342,7 @@ public class characterMovement : MonoBehaviour
             if (currentMovementInput.y == 1)
             {
 
-               
+
                 Debug.Log("uppies!");
                 currentMovementInput.x = 0;
                 characterController.enabled = false;
@@ -352,7 +369,7 @@ public class characterMovement : MonoBehaviour
         }
 
 
-    
+
     }
 
     private void CheckForLadder()
@@ -381,13 +398,25 @@ public class characterMovement : MonoBehaviour
             DropLadder();
         }
 
- 
 
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        int checkPointIndex = -1;
+        checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
+        if(checkPointIndex != -1)
+        {
+            PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
+            _startingPoint = other.gameObject.transform.position;
+            other.gameObject.SetActive(false);
         }
+        
+    }
 
 
-
-        private void GrabLadder(Vector3 lastGrabLadderDirection)
+    private void GrabLadder(Vector3 lastGrabLadderDirection)
         {
 
             //rb.isKinematic = false;
@@ -631,27 +660,37 @@ public class characterMovement : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
-        //Set Animator Reference
-        
-        Debug.Log("start");
-        //Set ID References
+        //CheckPoint saver
 
-
+        int savedCheckPointIndex = -1;
+        savedCheckPointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
+        if (savedCheckPointIndex != -1)
+        {
+            _startingPoint = _checkPointsArray[savedCheckPointIndex].transform.position; //creates the new starting point for everey checkpoint walked through spawns player in right direction
+            RespawnPlayer();
+        }
+        else
+        {
+            _startingPoint = gameObject.transform.position; //no checkpoint current position of player 
+        }
 
     }
 
-   
     // Update is called once per frame
     private void FixedUpdate()
     {
+
+    
 
         handleRotation();
         handleAnimation();
         Climables();
         CheckForLadder();
+
+        loadCheckPoints();
 
         if (isRunPressed)
         {
@@ -682,6 +721,7 @@ public class characterMovement : MonoBehaviour
 
     }
 
+ 
    
     public bool isGrounded = false;
 
