@@ -7,36 +7,42 @@ using UnityEngine.AI;
 namespace Platformer
 {
     public class EnemyWanderState : EnemyBaseState
-   {
+    {
         readonly NavMeshAgent agent;
         readonly Vector3 startpoint;
         readonly float wanderRadius;
         PlayerDetector playerDetector;
-        public NurseCodeOffice nurseCodeOffice;
+
         public List<Transform> wayPoint;
 
         public int currentWayPointIndex = 0;
-      
+        public bool isItBlackBeak;
+        void Start()
+        {
+            isItBlackBeak = GameObject.FindGameObjectWithTag("EnemyBB");
+            Debug.Log("BB");
 
-     
-
-
+        }
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
+           
+
             if (enemy == null)
             {
                 Debug.LogError("Enemy is null in EnemyWanderState constructor.");
                 return;
             }
 
-            if (enemy.gameObject.tag == "EnemyBB")
+            if (isItBlackBeak)
             {
-               
+
                 Debug.Log("Reading WayPoints");
-                wayPoint = nurseCodeOffice.listForBB;
+                wayPoint = enemy.listForBB;
                 Debug.Log("WayPoint list count: " + wayPoint.Count);
                 WalkingBB();
+
             }
+
             else
             {
                 this.agent = agent;
@@ -46,21 +52,19 @@ namespace Platformer
                 Debug.Log("enemie wander stre plays");
 
             }
-            
-        
-        }
 
+
+        }
+  
+
+      
+
+    
         void WalkingBB()
         {
             if (wayPoint == null || wayPoint.Count == 0)
             {
                 Debug.LogWarning("WayPoint list is empty or null.");
-                return;
-            }
-
-
-            if (wayPoint.Count == 0)
-            {
                 return;
             }
 
@@ -78,7 +82,7 @@ namespace Platformer
 
         }
 
-
+        
 
         public override void OnEnter()
         {
@@ -90,30 +94,31 @@ namespace Platformer
 
         public override void Update()
         {
-            if (HasReachedDestination())
+            if (!isItBlackBeak)
             {
-                //find a new destination
-                //mayne find out how to change this is we want her to have a set route !!!!!!!!!!!!!!!
+                if (HasReachedDestination())
+                {
+                    //find a new destination
+                    //mayne find out how to change this is we want her to have a set route !!!!!!!!!!!!!!!
 
-                var randomDirection = Random.insideUnitSphere * wanderRadius;
-                randomDirection += startpoint;
-                NavMeshHit hit;
-                NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, areaMask:1);
+                    var randomDirection = Random.insideUnitSphere * wanderRadius;
+                    randomDirection += startpoint;
+                    NavMeshHit hit;
+                    NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, areaMask: 1);
 
-                var finalPosition = hit.position;
+                    var finalPosition = hit.position;
 
-                agent.SetDestination(finalPosition); /// all of these start pos and final pos maybe ad more for route 
-
-
+                    agent.SetDestination(finalPosition); /// all of these start pos and final pos maybe ad more for route 
+                }
             }
 
-            
 
             //check for player detection
         }
 
         bool HasReachedDestination()
         {
+            
             return !agent.pathPending
                 && agent.remainingDistance <= agent.stoppingDistance
                 && (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);

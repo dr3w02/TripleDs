@@ -67,7 +67,7 @@ namespace Platformer
 
         void Update()
         {
-        
+
             stateMachine.Update();
 
             attackTimer = new CountdownTimer(timeBetweenAttacks);

@@ -98,7 +98,12 @@ MonoBehaviour:
   animator: {fileID: 1505204148157049246}
   wanderRadius: 10
   timeBetweenAttacks: 1
-  listForBB: []
+  listForBB:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &5159818233611785965
 MonoBehaviour:
   m_ObjectHideFlags: 0

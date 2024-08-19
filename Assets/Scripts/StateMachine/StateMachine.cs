@@ -15,6 +15,8 @@ namespace Platformer
             if (transition != null)
                 ChangeState(transition.To);
 
+            
+
             current.State?.Update();
         }
 
