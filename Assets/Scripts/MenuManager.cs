@@ -30,7 +30,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _keyboardMenuFirst;
 
     private bool isPaused;
-
+    private bool playerRested;
     public characterMovement characterMovement;
 
     private void Start()
@@ -76,6 +76,8 @@ public class MenuManager : MonoBehaviour
         _player.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         CloseAllMenus();
+        
+      
     }
 
     private void OpenSettingsMenuHandle()
@@ -128,11 +130,20 @@ public class MenuManager : MonoBehaviour
         OpenCreditsMenuHandle();
 
     }
-
+    private IEnumerator coroutine;
 
     public void OnUnStuckPress()
     {
+        Debug.Log("ButtonPressed");
+       
         characterMovement.RespawnPlayer();
+        playerRested = true;
+
+        if (playerRested)
+        {
+            Unpause();
+            playerRested = false;
+        }
     }
 
     public void OnGamePadPress()

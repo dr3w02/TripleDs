@@ -16,13 +16,12 @@ namespace Platformer
         public List<Transform> wayPoint;
 
         public int currentWayPointIndex = 0;
-        public bool isItBlackBeak;
-        void Start()
-        {
-            isItBlackBeak = GameObject.FindGameObjectWithTag("EnemyBB");
-            Debug.Log("BB");
+        public GameObject isItBlackBeak;
 
-        }
+
+     
+
+            
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
            
@@ -33,13 +32,14 @@ namespace Platformer
                 return;
             }
 
-            if (isItBlackBeak)
+            if (GameObject.FindWithTag("EnemyBB"))
             {
 
                 Debug.Log("Reading WayPoints");
                 wayPoint = enemy.listForBB;
-                Debug.Log("WayPoint list count: " + wayPoint.Count);
-                WalkingBB();
+                //Debug.Log("WayPoint list count: " + wayPoint.Count);
+                //Debug.Log($"Current Waypoint Position: {wayPoint[currentWayPointIndex].position}");
+
 
             }
 
@@ -62,21 +62,25 @@ namespace Platformer
     
         void WalkingBB()
         {
-            if (wayPoint == null || wayPoint.Count == 0)
+            if (GameObject.FindWithTag("EnemyBB"))
             {
-                Debug.LogWarning("WayPoint list is empty or null.");
-                return;
+                if (wayPoint == null || wayPoint.Count == 0)
+                {
+                    Debug.LogWarning("WayPoint list is empty or null.");
+                    return;
+                }
+
+                float distanceToWayPoint = Vector3.Distance(wayPoint[currentWayPointIndex].position, enemy.transform.position);
+
+                if (distanceToWayPoint <= 3)
+                {
+                    currentWayPointIndex = (currentWayPointIndex + 1) % wayPoint.Count;
+                }
+
+                agent.SetDestination(wayPoint[currentWayPointIndex].position);
+
             }
-
-            float distanceToWayPoint = Vector3.Distance(wayPoint[currentWayPointIndex].position, enemy.transform.position);
-
-            if (distanceToWayPoint <= 3 ) 
-            {
-                currentWayPointIndex = (currentWayPointIndex +1) % wayPoint.Count;
-            }
-
-            agent.SetDestination(wayPoint[currentWayPointIndex].position);
-
+ 
 
 
 
@@ -94,7 +98,7 @@ namespace Platformer
 
         public override void Update()
         {
-            if (!isItBlackBeak)
+            if (!GameObject.FindWithTag("EnemyBB"))
             {
                 if (HasReachedDestination())
                 {
@@ -111,6 +115,9 @@ namespace Platformer
                     agent.SetDestination(finalPosition); /// all of these start pos and final pos maybe ad more for route 
                 }
             }
+
+            Debug.Log("WayPoint list count: " + wayPoint.Count);
+            //Debug.Log($"Current Waypoint Position: {wayPoint[currentWayPointIndex].position}");
 
 
             //check for player detection

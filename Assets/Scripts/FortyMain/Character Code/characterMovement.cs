@@ -42,6 +42,7 @@ public class characterMovement : MonoBehaviour
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 currentRunMovement;
+    public float speed;
     bool isMovementPressed;
     bool isRunPressed;
     bool isCrouchPressed = false;
@@ -330,6 +331,7 @@ public class characterMovement : MonoBehaviour
 
 
             }
+
             else if (currentMovementInput.y == 0)
             {
                 rb.velocity = Vector3.zero;
@@ -349,6 +351,7 @@ public class characterMovement : MonoBehaviour
 
                 rb.MovePosition(transform.position + Vector3.down * 2 * Time.deltaTime);
             }
+
             else if (currentMovementInput.y == 0)
             {
                 rb.velocity = Vector3.zero;
@@ -433,10 +436,6 @@ public class characterMovement : MonoBehaviour
 
             }
 
-    
-
-
-
 
         }
 
@@ -459,8 +458,8 @@ public class characterMovement : MonoBehaviour
         currentMovementInput = context.ReadValue<Vector2>();
         Vector3 moveDirection = CameraForward() + CameraRight();
 
-        currentMovement.x = moveDirection.x * currentMovementInput.x;
-        currentMovement.z = moveDirection.z * currentMovementInput.y;
+        currentMovement.x = moveDirection.x * currentMovementInput.x * speed;
+        currentMovement.z = moveDirection.z * currentMovementInput.y * speed;
         //currentMovement.x = currentMovementInput.x;
         //currentMovement.z = currentMovementInput.y;
 
@@ -545,6 +544,7 @@ public class characterMovement : MonoBehaviour
             animator.SetBool(isPullingHash, true);
             Debug.Log("Pull animator on");
         }
+
         else if ((!isPullPressed) && isPulling)
         {
             animator.SetBool(isPullingHash, false);
@@ -682,8 +682,6 @@ public class characterMovement : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-
-    
 
         handleRotation();
         handleAnimation();
