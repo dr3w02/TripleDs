@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,19 +11,15 @@ namespace Platformer
         readonly Vector3 startpoint;
         readonly float wanderRadius;
         PlayerDetector playerDetector;
-
-        public List<Transform> wayPoint;
-
-        public int currentWayPointIndex = 0;
+        
         public GameObject isItBlackBeak;
+        public bool isStopped;
 
+        private Vector3 destination;
+        
 
-     
-
-            
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
-           
 
             if (enemy == null)
             {
@@ -32,16 +27,7 @@ namespace Platformer
                 return;
             }
 
-            if (GameObject.FindWithTag("EnemyBB"))
-            {
-
-                Debug.Log("Reading WayPoints");
-                wayPoint = enemy.listForBB;
-                //Debug.Log("WayPoint list count: " + wayPoint.Count);
-                //Debug.Log($"Current Waypoint Position: {wayPoint[currentWayPointIndex].position}");
-
-
-            }
+            
 
             else
             {
@@ -55,38 +41,16 @@ namespace Platformer
 
 
         }
-  
 
-      
-
-    
-        void WalkingBB()
+        public void MoveToPoint(Vector3 destination, NavMeshAgent agent)
         {
-            if (GameObject.FindWithTag("EnemyBB"))
-            {
-                if (wayPoint == null || wayPoint.Count == 0)
-                {
-                    Debug.LogWarning("WayPoint list is empty or null.");
-                    return;
-                }
+            this.destination = destination;
+            agent.isStopped = false;
+            agent.enabled = true;
 
-                float distanceToWayPoint = Vector3.Distance(wayPoint[currentWayPointIndex].position, enemy.transform.position);
-
-                if (distanceToWayPoint <= 3)
-                {
-                    currentWayPointIndex = (currentWayPointIndex + 1) % wayPoint.Count;
-                }
-
-                agent.SetDestination(wayPoint[currentWayPointIndex].position);
-
-            }
- 
-
-
+            //debug = destination.ToString();
 
         }
-
-        
 
         public override void OnEnter()
         {
@@ -96,9 +60,30 @@ namespace Platformer
             //animator.CrossFade(WalkHash, crossFadeDuration);
         }
 
+
         public override void Update()
         {
-            if (!GameObject.FindWithTag("EnemyBB"))
+           
+
+            //FOR THE SMOOTH MOVEMENT
+            Vector3 direction = agent.transform.DirectionTo(destination);
+
+            float distance = Vector3.Distance(agent.transform.position, destination);
+            //FOR THE SMOOTH MOVEMENT
+
+            if (GameObject.FindWithTag("EnemyBB"))
+            {
+
+                Debug.Log("Reading WayPoints");
+                enemy.WalkingBB();
+
+                //Debug.Log("WayPoint list count: " + wayPoint.Count);
+                //Debug.Log($"Current Waypoint Position: {wayPoint[currentWayPointIndex].position}");
+
+            }
+
+
+           else if (!GameObject.FindWithTag("EnemyBB"))
             {
                 if (HasReachedDestination())
                 {
@@ -116,11 +101,25 @@ namespace Platformer
                 }
             }
 
-            Debug.Log("WayPoint list count: " + wayPoint.Count);
+            Debug.Log("WayPoint list count: " + enemy.wayPoint.Count);
             //Debug.Log($"Current Waypoint Position: {wayPoint[currentWayPointIndex].position}");
 
 
             //check for player detection
+
+            //make enemys turn alot smoother
+
+
+
+            if (distance > 0.1)
+            {
+                LookToward(destination, distance);
+                float distanceBasedSpeedModifier = 1.0f;
+       
+
+                Vector3 movement = agent.transform.forward * Time.deltaTime * distanceBasedSpeedModifier;
+                agent.Move(movement);
+            }
         }
 
         bool HasReachedDestination()
@@ -135,7 +134,7 @@ namespace Platformer
         }
     }
     
-
+  
 
     
 }

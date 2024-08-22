@@ -1,4 +1,5 @@
 using KBCore.Refs;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,7 +15,7 @@ namespace Platformer
         [SerializeField, Self] NavMeshAgent agent;
         [SerializeField, Self] PlayerDetector playerDetector;
         [SerializeField, Child] Animator animator;
-
+        NavMeshAgent navMeshAgent;
     
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 
@@ -24,8 +25,11 @@ namespace Platformer
 
         CountdownTimer attackTimer;
 
+        EnemyWanderState enemyWanderState;
+        public int currentWayPointIndex = 0;
+       
 
-        public List<Transform> listForBB;
+        public List<Transform> wayPoint;
 
         void OnValidate() => this.ValidateRefs();
 
@@ -51,9 +55,11 @@ namespace Platformer
 
 
             stateMachine.SetState(wanderState);
-            
 
 
+            navMeshAgent = GetComponent<NavMeshAgent>();
+
+       
 
         }
 
@@ -71,16 +77,47 @@ namespace Platformer
             stateMachine.Update();
 
             attackTimer = new CountdownTimer(timeBetweenAttacks);
+
+           
+
         }
 
 
-        
+        public void WalkingBB()
+        {
+          
+
+            if (wayPoint.Count == 0)
+            {
+                Debug.LogWarning("WayPoint list is empty or null.");
+
+                return;
+            }
+
+  
+
+            float distanceToWayPoint = Vector3.Distance(wayPoint[currentWayPointIndex].position, transform.position);
+          
+            if (distanceToWayPoint <= 3)
+            {
+
+                currentWayPointIndex = (currentWayPointIndex + 1) % wayPoint.Count;
+
+            }
+
+            agent.SetDestination(wayPoint[currentWayPointIndex].position);
+
+        }
+
+    
+
+
         void FixedUpdate()
         {
-            {
-                stateMachine.FixedUpdate();
-            }
+            stateMachine.FixedUpdate();
+
         }
+        
 
         public void Attack()
         {
