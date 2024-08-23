@@ -21649,12 +21649,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93bfacbc38c4ea44aed7cf6839e3622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RopeBottom: {fileID: 0}
   cam: {fileID: 1501340694}
   animator: {fileID: 1844905809}
-  characterController: {fileID: 368831204}
   orientation: {fileID: 1113787545}
-  ladder: {fileID: 0}
+  speed: 0
   distToGround: 1
+  characterController: {fileID: 368831204}
   vineVelocityWhenGrabbed: {x: 0, y: 0, z: -20}
   climbSpeed: 2
   targetDirection: {x: 0, y: 0, z: 0}
@@ -21670,7 +21671,10 @@ MonoBehaviour:
   crouchHeight: 0.3
   offset: {x: 0, y: 0.02, z: 0}
   isSelectPressed: 0
+  isRotating: 0
   player: {fileID: 1844905808}
+  _checkpointsParents: {fileID: 0}
+  _checkPointsArray: []
   isGrounded: 0
 --- !u!114 &368831202
 MonoBehaviour:
@@ -86553,7 +86557,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1645736909
 Transform:
   m_ObjectHideFlags: 0
