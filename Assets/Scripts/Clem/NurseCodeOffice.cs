@@ -33,6 +33,8 @@ namespace Platformer
 
         void OnValidate() => this.ValidateRefs();
 
+
+
         void Start()
         {
             attackTimer = new CountdownTimer(timeBetweenAttacks);
@@ -59,7 +61,8 @@ namespace Platformer
 
             navMeshAgent = GetComponent<NavMeshAgent>();
 
-       
+           
+            StartCoroutine(WalkingBB());
 
         }
 
@@ -78,37 +81,44 @@ namespace Platformer
 
             attackTimer = new CountdownTimer(timeBetweenAttacks);
 
-           
-
         }
 
 
-        public void WalkingBB()
-        {
-          
 
+        public IEnumerator WalkingBB()
+        {
+       
             if (wayPoint.Count == 0)
             {
                 Debug.LogWarning("WayPoint list is empty or null.");
 
-                return;
             }
-
-  
 
             float distanceToWayPoint = Vector3.Distance(wayPoint[currentWayPointIndex].position, transform.position);
           
             if (distanceToWayPoint <= 3)
             {
 
+              
                 currentWayPointIndex = (currentWayPointIndex + 1) % wayPoint.Count;
 
+                if (wayPoint[4])
+                {
+                    Quaternion lookDir = Quaternion.LookRotation(wayPoint[currentWayPointIndex].position);
+                    yield return new WaitForSeconds(2);
+
+                   
+                    Debug.Log("Waiting 2 secs");
+                }
             }
 
             agent.SetDestination(wayPoint[currentWayPointIndex].position);
 
         }
 
+        
+       
+        
     
 
 

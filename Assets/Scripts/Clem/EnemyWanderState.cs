@@ -49,7 +49,7 @@ namespace Platformer
             agent.enabled = true;
 
             //debug = destination.ToString();
-
+         
         }
 
         public override void OnEnter()
@@ -66,9 +66,10 @@ namespace Platformer
            
 
             //FOR THE SMOOTH MOVEMENT
-            Vector3 direction = agent.transform.DirectionTo(destination);
+            Vector3 direction = agent.transform.TransformDirection(destination);
 
             float distance = Vector3.Distance(agent.transform.position, destination);
+
             //FOR THE SMOOTH MOVEMENT
 
             if (GameObject.FindWithTag("EnemyBB"))
@@ -113,7 +114,7 @@ namespace Platformer
 
             if (distance > 0.1)
             {
-                LookToward(destination, distance);
+                //LookToward(destination, distance);
                 float distanceBasedSpeedModifier = 1.0f;
        
 
