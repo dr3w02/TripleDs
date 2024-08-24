@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3387341970053722159}
   - component: {fileID: 3084874189715586325}
   - component: {fileID: 1438741234483639902}
+  - component: {fileID: 389483291541838011}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6980224496707584161}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.841711, y: 3.4759746, z: -13.038853}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -98,6 +99,7 @@ MonoBehaviour:
   animator: {fileID: 6952462004876781457}
   wanderRadius: 10
   timeBetweenAttacks: 1
+  BlackBeakDeath: {fileID: 0}
 --- !u!114 &1438741234483639902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +117,33 @@ MonoBehaviour:
   innerDetectionRadius: 2.23
   detectionCooldown: 1.18
   attackRange: 2
+--- !u!54 &389483291541838011
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980224496707584161}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &8055361735145944204
 PrefabInstance:
   m_ObjectHideFlags: 0

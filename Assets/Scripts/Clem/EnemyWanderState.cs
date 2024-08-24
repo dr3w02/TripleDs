@@ -7,136 +7,130 @@ namespace Platformer
 {
     public class EnemyWanderState : EnemyBaseState
     {
-        readonly NavMeshAgent agent;
-        readonly Vector3 startpoint;
-        readonly float wanderRadius;
-        PlayerDetector playerDetector;
-        
-        public GameObject isItBlackBeak;
-        public bool isStopped;
+        private NavMeshAgent agent;
+        private readonly WayPoints Wait;
+       private readonly Vector3 startpoint;
+        private readonly float wanderRadius;
+        private PlayerDetector playerDetector;
 
+        public bool isStopped;
         private Vector3 destination;
+        public int currentWayPointIndex = 0;
         
+
+        private List<Transform> wayPoints = new List<Transform>();
 
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
 
             if (enemy == null)
             {
-                Debug.LogError("Enemy is null in EnemyWanderState constructor.");
+                Debug.LogError("Enemy is null");
                 return;
             }
 
-            
+            this.agent = agent;
+            this.startpoint = enemy.transform.position;
+            this.wanderRadius = wanderRadius;
 
-            else
+            Transform wayPointsObject = GameObject.FindGameObjectWithTag("Waypoint").transform;
+            foreach (Transform t in wayPointsObject)
             {
-                this.agent = agent;
-                this.startpoint = enemy.transform.position;
-                this.wanderRadius = wanderRadius;
-
-                Debug.Log("enemie wander stre plays");
-
+                wayPoints.Add(t);
             }
 
+            if (wayPoints.Count == 0)
+            {
+                Debug.LogError("No waypoints found!");
+                return;
+            }
 
+            Debug.Log("Enemy wander state initialized.");
+            animator.CrossFade(WalkHash, crossFadeDuration);
         }
 
-        public void MoveToPoint(Vector3 destination, NavMeshAgent agent)
+        public void MoveToPoint(Vector3 destination)
         {
             this.destination = destination;
             agent.isStopped = false;
             agent.enabled = true;
-
-            //debug = destination.ToString();
-         
+            agent.SetDestination(destination);
         }
 
-        public override void OnEnter()
+        public void WalkingBB()
         {
-            Debug.Log(message: "WANDER");
-            animator.CrossFade(WalkHash, crossFadeDuration);
+            if (wayPoints.Count == 0) return;
 
-            //animator.CrossFade(WalkHash, crossFadeDuration);
+            float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
+
+            if (distanceToWayPoint <= 3f)
+            {
+                currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
+                Debug.Log("Changing waypoint");
+            }
+
+            else if (distanceToWayPoint == 0f)
+            {
+                WaitAtCheckpoint();
+            }
+
+
+            agent.SetDestination(wayPoints[currentWayPointIndex].position);
         }
 
+      
 
         public override void Update()
         {
-           
-
-            //FOR THE SMOOTH MOVEMENT
-            Vector3 direction = agent.transform.TransformDirection(destination);
-
-            float distance = Vector3.Distance(agent.transform.position, destination);
-
-            //FOR THE SMOOTH MOVEMENT
-
-            if (GameObject.FindWithTag("EnemyBB"))
+            if (GameObject.FindGameObjectWithTag("EnemyBB"))
             {
-
-                Debug.Log("Reading WayPoints");
-                enemy.WalkingBB();
-
-                //Debug.Log("WayPoint list count: " + wayPoint.Count);
-                //Debug.Log($"Current Waypoint Position: {wayPoint[currentWayPointIndex].position}");
-
+                WalkingBB();
+            }
+            else
+            {
+                Debug.Log("No enemy found.");
             }
 
-
-           else if (!GameObject.FindWithTag("EnemyBB"))
+            if (!GameObject.FindWithTag("EnemyBB"))
             {
                 if (HasReachedDestination())
                 {
-                    //find a new destination
-                    //mayne find out how to change this is we want her to have a set route !!!!!!!!!!!!!!!
-
                     var randomDirection = Random.insideUnitSphere * wanderRadius;
                     randomDirection += startpoint;
                     NavMeshHit hit;
-                    NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, areaMask: 1);
-
+                    NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1);
                     var finalPosition = hit.position;
-
-                    agent.SetDestination(finalPosition); /// all of these start pos and final pos maybe ad more for route 
+                    agent.SetDestination(finalPosition);
                 }
             }
+        }
+        private IEnumerator WaitAtCheckpoint()
+        {
+            // Stop the enemys movement
+            agent.isStopped = true;
+           
+            // Wait for seconds
+            yield return new WaitForSeconds(2f);
+            Debug.Log("waiting");
 
-            Debug.Log("WayPoint list count: " + enemy.wayPoint.Count);
-            //Debug.Log($"Current Waypoint Position: {wayPoint[currentWayPointIndex].position}");
 
-
-            //check for player detection
-
-            //make enemys turn alot smoother
-
-
-
-            if (distance > 0.1)
-            {
-                //LookToward(destination, distance);
-                float distanceBasedSpeedModifier = 1.0f;
-       
-
-                Vector3 movement = agent.transform.forward * Time.deltaTime * distanceBasedSpeedModifier;
-                agent.Move(movement);
-            }
+            // Resume the movement to the next waypoint
+            agent.isStopped = false;
+            currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
+            agent.SetDestination(wayPoints[currentWayPointIndex].position);
         }
 
-        bool HasReachedDestination()
-        {
-            
-            return !agent.pathPending
-                && agent.remainingDistance <= agent.stoppingDistance
-                && (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
 
-            //if it has no more path it finds a new place to move to 
-            // maybe add looks and move on here 
+        private bool HasReachedDestination()
+        {
+            return !agent.pathPending &&
+                   agent.remainingDistance <= agent.stoppingDistance &&
+                   (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
         }
     }
-    
+}
   
 
     
-}
+
 

@@ -188,7 +188,7 @@ public class characterMovement : MonoBehaviour
         //TurnOffMovement();
         //currentMovement = Vector3.zero;
 
-        Debug.Log("WorkingReset");
+        //Debug.Log("WorkingReset");
 
 
 

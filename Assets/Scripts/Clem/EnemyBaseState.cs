@@ -52,6 +52,11 @@ namespace Platformer
         {
             //noop
         }
+
+        public void OnStateEnter(Animator animator)
+        {
+
+        }
     }
 
 
