@@ -51,7 +51,7 @@ public class characterMovement : MonoBehaviour
     //Things for ground check
     public float distToGround = 1f;
 
-    //things for climb and swing 
+    //things for climb and swing
     private bool isClimbingLadder;
     public CharacterController characterController;
 
@@ -68,7 +68,7 @@ public class characterMovement : MonoBehaviour
 
     private Vector3 lastGrabLadderDirection;
 
-    //change these to is 
+    //change these to is
 
     //[SerializeField] float speed = 5; // might've lost this dont forget to add back
 
@@ -125,6 +125,10 @@ public class characterMovement : MonoBehaviour
 
     private const string SAVE_CHECKPOINT_INDEX = "Last_checkpoint_index";
 
+    //Dylan
+    private bool isRightMouseButtonPressed;
+    //Dylan
+
     void Awake()
     {
         input = new CustomInputs();
@@ -165,10 +169,14 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Crouch.performed += onCrouch;
         input.CharacterControls.Crouch.canceled += onCrouch;
 
-
+        //Dylan
         input.CharacterControls.Pull.started += onPull;
         input.CharacterControls.Pull.performed += onPull;
         input.CharacterControls.Pull.canceled += onPull;
+
+        input.CharacterControls.Pull.started += OnRightMouseButtonDown;
+        input.CharacterControls.Pull.canceled += OnRightMouseButtonUp;
+        //Dylan
 
         input.CharacterControls.Select.started += onSelect;
         input.CharacterControls.Select.performed += onSelect;
@@ -181,6 +189,25 @@ public class characterMovement : MonoBehaviour
         setupJumpVaribles();
     }
 
+    //Dylan
+    private void OnRightMouseButtonDown(InputAction.CallbackContext context)
+    {
+        isRightMouseButtonPressed = true;
+        // Disable run, jump, and crouch controls
+        input.CharacterControls.Run.Disable();
+        input.CharacterControls.Jump.Disable();
+        input.CharacterControls.Crouch.Disable();
+    }
+
+    private void OnRightMouseButtonUp(InputAction.CallbackContext context)
+    {
+        isRightMouseButtonPressed = false;
+        // Re-enable run, jump, and crouch controls
+        input.CharacterControls.Run.Enable();
+        input.CharacterControls.Jump.Enable();
+        input.CharacterControls.Crouch.Enable();
+    }
+    //Dylan
 
     public void RespawnPlayer()
     {
@@ -209,7 +236,7 @@ public class characterMovement : MonoBehaviour
     }
 
 
-    //Setting Up Jumping Physics 
+    //Setting Up Jumping Physics
     void setupJumpVaribles()
     {
         float timeToApex = maxJumpTime / 2;
@@ -238,9 +265,13 @@ public class characterMovement : MonoBehaviour
         }
     }
 
-
+    //Dylan edits - when pulling/pushing disable other controls
     void onRun(InputAction.CallbackContext context)
     {
+        if (!isRightMouseButtonPressed)
+        {
+            isRunPressed = context.ReadValueAsButton();
+        }
         isRunPressed = context.ReadValueAsButton();
         //Debug.Log("RunPressed");
     }
@@ -253,12 +284,20 @@ public class characterMovement : MonoBehaviour
 
     void onJump(InputAction.CallbackContext context)
     {
+        if (!isRightMouseButtonPressed)
+        {
+            isJumpPressed = context.ReadValueAsButton();
+        }
         isJumpPressed = context.ReadValueAsButton();
         //Debug.Log("JumpPressed");
     }
 
     void onCrouch(InputAction.CallbackContext context)
     {
+        if (!isRightMouseButtonPressed)
+        {
+            isCrouchPressed = context.ReadValueAsButton();
+        }
         isCrouchPressed = context.ReadValueAsButton();
         //Debug.Log("CrouchedPressed");
     }
@@ -266,9 +305,7 @@ public class characterMovement : MonoBehaviour
     public void onSelect(InputAction.CallbackContext context)
     {
         isSelectPressed = context.ReadValueAsButton();
-
         Debug.Log("SelectPressed");
-
     }
 
     void handleRotation()
@@ -409,35 +446,35 @@ public class characterMovement : MonoBehaviour
     {
         int checkPointIndex = -1;
         checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
-        if(checkPointIndex != -1)
+        if (checkPointIndex != -1)
         {
             PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
             _startingPoint = other.gameObject.transform.position;
             other.gameObject.SetActive(false);
         }
-        
+
     }
 
 
     private void GrabLadder(Vector3 lastGrabLadderDirection)
+    {
+
+        //rb.isKinematic = false;
+        isClimbingLadder = true;
+        this.lastGrabLadderDirection = lastGrabLadderDirection;
+        //currentMovement.x = 0f;
+        //currentMovement.y = climbSpeed;
+        //currentMovement.z = 0f;
+
+        if (gameObject.tag == "Vine")
         {
-
-            //rb.isKinematic = false;
-            isClimbingLadder = true;
-            this.lastGrabLadderDirection = lastGrabLadderDirection;
-            //currentMovement.x = 0f;
-            //currentMovement.y = climbSpeed;
-            //currentMovement.z = 0f;
-
-            if (gameObject.tag == "Vine")
-            {
-                RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
-                RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
-
-            }
-
+            RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
+            RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
 
         }
+
+
+    }
 
     private void DropLadder()
     {
@@ -452,9 +489,9 @@ public class characterMovement : MonoBehaviour
     }
 
 
-     void OnMovementInput(InputAction.CallbackContext context)
+    void OnMovementInput(InputAction.CallbackContext context)
     {
-      
+
         currentMovementInput = context.ReadValue<Vector2>();
         Vector3 moveDirection = CameraForward() + CameraRight();
 
@@ -469,7 +506,7 @@ public class characterMovement : MonoBehaviour
         //currentRunMovement.z = currentMovementInput.y * runMultiplier;
         isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
 
-      
+
     }
 
     public Vector3 CameraForward()
@@ -502,8 +539,8 @@ public class characterMovement : MonoBehaviour
         bool isRunning = animator.GetBool(isRunningHash);
         bool isPulling = animator.GetBool(isPullingHash);
 
-      
-    
+
+
         //Walking Controls-------------------------------
         if (isMovementPressed && !isWalking)
         {
@@ -512,7 +549,7 @@ public class characterMovement : MonoBehaviour
 
         }
 
-       
+
         else if (!isMovementPressed && isWalking)
         {
             animator.SetBool(isWalkingHash, false);
@@ -534,10 +571,10 @@ public class characterMovement : MonoBehaviour
 
 
         // ! means not
-  
-    
 
-       
+
+
+
         //Pulling Controls-------------------------------
         if ((isPullPressed) && !isPulling)
         {
@@ -558,7 +595,7 @@ public class characterMovement : MonoBehaviour
 
         bool isFalling = currentMovement.y <= 0.0f || !isJumpPressed;
 
-        //larger the multiplier the steeper the fall 
+        //larger the multiplier the steeper the fall
         float fallMultiplier = 2.0f;
 
         if (characterController.isGrounded)
@@ -568,8 +605,8 @@ public class characterMovement : MonoBehaviour
             {
                 animator.SetBool(isJumpingHash, false);
                 isJumpAnimating = false;
-               // Debug.Log("Jumpfalse");
-              
+                // Debug.Log("Jumpfalse");
+
             }
 
             animator.SetBool("isJumping", false);
@@ -605,7 +642,7 @@ public class characterMovement : MonoBehaviour
     }
 
     //Crouch Controller
-    
+
     void handleCrouch()
     {
         bool isCrouching = animator.GetBool(isCrouchingHash);
@@ -623,18 +660,18 @@ public class characterMovement : MonoBehaviour
         if ((isCrouchPressed) && !isCrouching)
         {
             animator.SetBool(isCrouchingHash, true);
-   
-           // Debug.Log("CrouchAnimator");
 
-            
-            characterController.height = characterController.height - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching 
-                
-           // Debug.Log("Crouched");
+            // Debug.Log("CrouchAnimator");
+
+
+            characterController.height = characterController.height - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching
+
+            // Debug.Log("Crouched");
 
             characterController.height = crouchHeight;
-         
+
         }
-        
+
         if ((!isCrouchPressed) && isCrouching)
         {
             animator.SetBool(isCrouchingHash, false);
@@ -649,7 +686,7 @@ public class characterMovement : MonoBehaviour
 
 
 
-        if (characterController.height < normalHeight) // safe guard to keep the player from clipping into the ground 
+        if (characterController.height < normalHeight) // safe guard to keep the player from clipping into the ground
         {
 
             player.localPosition = offset;
@@ -674,7 +711,7 @@ public class characterMovement : MonoBehaviour
         }
         else
         {
-            _startingPoint = gameObject.transform.position; //no checkpoint current position of player 
+            _startingPoint = gameObject.transform.position; //no checkpoint current position of player
         }
 
     }
@@ -704,7 +741,7 @@ public class characterMovement : MonoBehaviour
         handleJump();
         handleCrouch();
 
-        // Incase player falls through ground 
+        // Incase player falls through ground
 
         if (transform.position.y <= .10f) // checking players Y axsis
         {
@@ -715,12 +752,12 @@ public class characterMovement : MonoBehaviour
         //add unstuck button here?
 
 
- 
+
 
     }
 
- 
-   
+
+
     public bool isGrounded = false;
 
     void GroundCheck()
@@ -728,7 +765,7 @@ public class characterMovement : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, distToGround + 0.1f))
         {
             //Debug.Log("Grounded");
-            isGrounded = true; 
+            isGrounded = true;
         }
 
         else
@@ -736,13 +773,13 @@ public class characterMovement : MonoBehaviour
             //Debug.Log("NotGrounded");
             isGrounded = false;
         }
-     
+
     }
 
 
     /// <summary>
-    /// Truning on and off players movement ability 
-    /// 
+    /// Truning on and off players movement ability
+    ///
     public void Enabled()
     {
         input.Enable();
@@ -752,10 +789,12 @@ public class characterMovement : MonoBehaviour
     {
         input.Disable();
     }
-/// </summary>
+    /// </summary>
 
- 
+
 
 
 
 }
+
+
