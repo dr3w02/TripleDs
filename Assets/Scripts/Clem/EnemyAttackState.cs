@@ -11,6 +11,7 @@ namespace Platformer
         readonly Transform player;
 
         NurseCodeOffice nurseCodeOffice;
+    
         public EnemyAttackState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player): base(enemy, animator)
         {
             this.agent = agent;
@@ -24,8 +25,10 @@ namespace Platformer
 
             //if (GameObject.FindWithTag("EnemyBB"))
             //{
-               // nurseCodeOffice.BlackBeakDeath.Priority = 20;
-           // }
+            // nurseCodeOffice.BlackBeakDeath.Priority = 20;
+            // }
+
+            //characterMovement.RespawnPlayer();
         }
         public override void Update()
         {

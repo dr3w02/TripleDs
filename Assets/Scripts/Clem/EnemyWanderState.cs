@@ -77,6 +77,13 @@ namespace Platformer
 
 
             agent.SetDestination(wayPoints[currentWayPointIndex].position);
+
+            Vector3 directionToTarget = wayPoints[currentWayPointIndex].position - agent.transform.position;
+            directionToTarget.y = 0;
+
+            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+            agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
         }
 
       
