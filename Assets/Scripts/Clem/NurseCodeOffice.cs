@@ -18,17 +18,25 @@ namespace Platformer
         [SerializeField, Self] PlayerDetector playerDetector;
         [SerializeField, Child] Animator animator;
 
-    
+        NavMeshAgent navMeshAgent; 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 
         [SerializeField] float timeBetweenAttacks = 1f;
 
-        StateMachine stateMachine;
+        //[SerializeField] float speed;
+
+
+       StateMachine stateMachine;
 
         CountdownTimer attackTimer;
 
         EnemyWanderState enemyWanderState;
       
+
+        /// <summary>
+        /// //Main Scripts
+        /// </summary>
+        /// 
 
         //death cameras 
         [SerializeField] public CinemachineVirtualCamera BlackBeakDeath;
@@ -60,7 +68,9 @@ namespace Platformer
 
 
             stateMachine.SetState(wanderState);
-          
+
+
+            navMeshAgent = GetComponent<NavMeshAgent>();
 
 
 
@@ -87,7 +97,7 @@ namespace Platformer
 
             //Tried to make the animator speed fit with the speed of my gameobject
             //float speed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
-            //animator.SetFloat("speed", speed);
+            //animator.SetFloat("Speed", speed);
             
         }
 
@@ -97,8 +107,8 @@ namespace Platformer
         void FixedUpdate()
         {
             stateMachine.FixedUpdate();
+            
 
-      
         }
         
 

@@ -222,9 +222,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sad Walk
       objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 791d24ea2a827a3419d4ce786d41b238,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 791d24ea2a827a3419d4ce786d41b238, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8164078558771037576, guid: 791d24ea2a827a3419d4ce786d41b238, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 791d24ea2a827a3419d4ce786d41b238,

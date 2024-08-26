@@ -22,10 +22,10 @@ namespace Platformer
             Debug.Log("Attack");
             animator.CrossFade(AttackHash, crossFadeDuration);
 
-            if (GameObject.FindWithTag("EnemyBB"))
-            {
-                nurseCodeOffice.BlackBeakDeath.Priority = 20;
-            }
+            //if (GameObject.FindWithTag("EnemyBB"))
+            //{
+               // nurseCodeOffice.BlackBeakDeath.Priority = 20;
+           // }
         }
         public override void Update()
         {

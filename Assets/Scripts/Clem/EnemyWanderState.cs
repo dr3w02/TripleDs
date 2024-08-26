@@ -34,6 +34,7 @@ namespace Platformer
             this.wanderRadius = wanderRadius;
 
             Transform wayPointsObject = GameObject.FindGameObjectWithTag("Waypoint").transform;
+
             foreach (Transform t in wayPointsObject)
             {
                 wayPoints.Add(t);
@@ -45,17 +46,18 @@ namespace Platformer
                 return;
             }
 
+
             Debug.Log("Enemy wander state initialized.");
             animator.CrossFade(WalkHash, crossFadeDuration);
         }
 
-        public void MoveToPoint(Vector3 destination)
-        {
-            this.destination = destination;
-            agent.isStopped = false;
-            agent.enabled = true;
-            agent.SetDestination(destination);
-        }
+        //public void MoveToPoint(Vector3 destination)
+        //{
+          //  this.destination = destination;
+          //  agent.isStopped = false;
+          //  agent.enabled = true;
+           // agent.SetDestination(destination);
+        //}
 
         public void WalkingBB()
         {
@@ -67,12 +69,11 @@ namespace Platformer
             {
                 currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
                 Debug.Log("Changing waypoint");
+
+          
+          
             }
 
-            else if (distanceToWayPoint == 0f)
-            {
-                WaitAtCheckpoint();
-            }
 
 
             agent.SetDestination(wayPoints[currentWayPointIndex].position);
@@ -82,28 +83,50 @@ namespace Platformer
 
         public override void Update()
         {
-            if (GameObject.FindGameObjectWithTag("EnemyBB"))
+            Vector3 direction = agent.transform.TransformDirection(destination);
+
+            float distance = Vector3.Distance(agent.transform.position, destination);
+
+            //FOR THE SMOOTH MOVEMENT^^^
+
+            if (enemy.CompareTag("EnemyBB"))
             {
                 WalkingBB();
             }
-            else
+         
+
+            else if (!enemy.CompareTag("EnemyBB"))
             {
-                Debug.Log("No enemy found.");
+                WanderRandom();
             }
 
-            if (!GameObject.FindWithTag("EnemyBB"))
+
+            //if (distance > 0.1)
+            //{
+            //    //LookToward(destination, distance);
+            //    float distanceBasedSpeedModifier = 1.0f;
+                
+            
+            //    Vector3 movement = agent.transform.forward * Time.deltaTime * distanceBasedSpeedModifier;
+               // agent.Move(movement);
+           // }
+        }
+
+
+        private void WanderRandom()
+        {
+            if (HasReachedDestination())
             {
-                if (HasReachedDestination())
-                {
-                    var randomDirection = Random.insideUnitSphere * wanderRadius;
-                    randomDirection += startpoint;
-                    NavMeshHit hit;
-                    NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1);
-                    var finalPosition = hit.position;
-                    agent.SetDestination(finalPosition);
-                }
+                Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
+                randomDirection += startpoint;
+                NavMeshHit hit;
+                NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1);
+                var finalPosition = hit.position;
+                agent.SetDestination(hit.position);
             }
         }
+
+
         private IEnumerator WaitAtCheckpoint()
         {
             // Stop the enemys movement
@@ -112,6 +135,8 @@ namespace Platformer
             // Wait for seconds
             yield return new WaitForSeconds(2f);
             Debug.Log("waiting");
+
+            Quaternion lookDir = Quaternion.LookRotation(wayPoints[currentWayPointIndex].position);
 
 
             // Resume the movement to the next waypoint

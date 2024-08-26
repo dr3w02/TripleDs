@@ -21,7 +21,7 @@ namespace Platformer
             Debug.Log("Chase");
             animator.CrossFade(RunHash, crossFadeDuration);
         }
-
+       
         public override void Update()
         {
             agent.SetDestination(player.position);
