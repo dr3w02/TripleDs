@@ -30,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 3886567139526057392}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0021762848, y: -5.5023, z: 0.6839447}
-  m_LocalScale: {x: 0.32086825, y: 2.1181538, z: 0.32086825}
+  m_LocalPosition: {x: 0.0021762848, y: -5.5072, z: 0.6839447}
+  m_LocalScale: {x: 0.32086825, y: 2.1230257, z: 0.32086825}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7544235148883607667}
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 22094d1c2b2395a4e9e73e204daa2fe5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,11 +102,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 0.89
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -135,7 +135,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 96
   m_CollisionDetection: 0
 --- !u!59 &4912904119405344824
 HingeJoint:
@@ -237,7 +237,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 22094d1c2b2395a4e9e73e204daa2fe5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -289,8 +289,8 @@ Transform:
   m_GameObject: {fileID: 7576123838308135480}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0021762848, y: 3.0369596, z: 0.6839447}
-  m_LocalScale: {x: 0.32086825, y: 2.1279423, z: 0.32086825}
+  m_LocalPosition: {x: 0.0021762848, y: 3.02815, z: 0.6839447}
+  m_LocalScale: {x: 0.32086825, y: 2.1366386, z: 0.32086825}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 122436302064587322}
@@ -324,7 +324,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 22094d1c2b2395a4e9e73e204daa2fe5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -361,11 +361,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 0.89
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -394,7 +394,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 96
   m_CollisionDetection: 0
 --- !u!59 &3738618674216032853
 HingeJoint:
@@ -465,8 +465,8 @@ Transform:
   m_GameObject: {fileID: 7754936670397674669}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0021762848, y: -1.2336, z: 0.6839447}
-  m_LocalScale: {x: 0.32086825, y: 2.1217713, z: 0.32086825}
+  m_LocalPosition: {x: 0.0021762848, y: -1.24571, z: 0.6839447}
+  m_LocalScale: {x: 0.32086825, y: 2.1327507, z: 0.32086825}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6302185152036156086}
@@ -500,7 +500,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 22094d1c2b2395a4e9e73e204daa2fe5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -537,11 +537,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 0.89
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -570,7 +570,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 96
   m_CollisionDetection: 0
 --- !u!59 &2629618735437486619
 HingeJoint:
@@ -638,8 +638,8 @@ Transform:
   m_GameObject: {fileID: 7899789698101268357}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.008, z: 0}
-  m_LocalScale: {x: 0.90575993, y: 0.08544667, z: 0.90575993}
+  m_LocalPosition: {x: 0, y: -1.0391, z: 0}
+  m_LocalScale: {x: 0.90575993, y: 0.15013218, z: 0.90575993}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 542300606193866940}
@@ -672,7 +672,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 22094d1c2b2395a4e9e73e204daa2fe5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -755,7 +755,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 22094d1c2b2395a4e9e73e204daa2fe5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -860,8 +860,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5716012, y: 18.574326, z: 1.3525318}
-  m_Center: {x: -0.10475686, y: -3.4396417, z: 0.6652346}
+  m_Size: {x: 1.5716012, y: 20.256195, z: 1.3525318}
+  m_Center: {x: -0.10475686, y: -4.2805805, z: 0.6652346}
 --- !u!1 &8158534288805792401
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,8 +892,8 @@ Transform:
   m_GameObject: {fileID: 8158534288805792401}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0021762848, y: -9.762449, z: 0.6839447}
-  m_LocalScale: {x: 0.32086825, y: 2.1279423, z: 0.32086825}
+  m_LocalPosition: {x: 0.0021762848, y: -10.463968, z: 0.6839447}
+  m_LocalScale: {x: 0.32086825, y: 2.819778, z: 0.32086825}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5168227369788560717}
@@ -926,7 +926,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 22094d1c2b2395a4e9e73e204daa2fe5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -963,14 +963,14 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
+  m_Radius: 0.89
+  m_Height: 2.025973
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.000000057025126, y: -0.012986988, z: -0.00000011405025}
 --- !u!54 &4709671091966599333
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -996,7 +996,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 96
   m_CollisionDetection: 0
 --- !u!59 &6896395948690936985
 HingeJoint:

@@ -4,46 +4,58 @@ using UnityEngine;
 using Cinemachine;
 
 public class CameraManager : MonoBehaviour
-{ 
-    static  List <CinemachineVirtualCamera> cameras = new List<CinemachineVirtualCamera> ();
+{
+    public static CameraManager cameraInstance;
 
-    public static CinemachineVirtualCamera  ActiveCamera = null;
-    
-    public static bool IsActiveCamera(CinemachineVirtualCamera camera)
+    public List <CinemachineVirtualCamera> cameras = new List<CinemachineVirtualCamera> ();
+    public CinemachineVirtualCamera ActiveCamera = null;
+
+    private void Awake()
+    {
+        if(cameraInstance == null)
+        {
+            cameraInstance = this;
+        }
+    }
+
+    public bool IsActiveCamera(CinemachineVirtualCamera camera)
     {
         return camera == ActiveCamera;
 
     }
 
-    public static void SwitchCamera(CinemachineVirtualCamera camera)
+    public void SwitchCamera(CinemachineVirtualCamera camera)
     {
-        camera.Priority = 10;
-        ActiveCamera = camera;
-
-        if (ActiveCamera != null )
-        {
-            ActiveCamera.Priority = 0;
-        }
-
-        camera.Priority = 10;
-        ActiveCamera = camera;
-
         foreach (CinemachineVirtualCamera c in cameras)
         {
-            
-            if(c != camera && c.Priority != 0)
-            {
-              
-                c.Priority = 0;
-            }
+           c.Priority = 0;
         }
+
+        camera.Priority = 10;
     }
 
-    public static void Register(CinemachineVirtualCamera camera)
+    public void ResetCamera(CinemachineVirtualCamera camera)
     {
+        foreach (CinemachineVirtualCamera c in cameras)
+        {
+            if (c == camera)
+            {
+                c.Priority = 0;
+            }
+      
+        }
+   
+
+    }
+
+        public void Register(CinemachineVirtualCamera camera)
+        {
+
         cameras.Add(camera);
         Debug.Log("Camera Registered:" + camera);
-    }
+
+
+        }
 
    
 }

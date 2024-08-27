@@ -36,15 +36,19 @@ public class CameraChange : MonoBehaviour
            
             if (playerRb != null)
             {
-                if (CameraManager.ActiveCamera != cam)
+                if (CameraManager.cameraInstance.ActiveCamera != cam)
                 {
-                    Debug.Log("ActiveCamera" + cam);
-                    CameraManager.SwitchCamera(cam);
+                    Debug.Log("SwitchCamera" + cam);
+                    CameraManager.cameraInstance.SwitchCamera(cam);
 
                 }
             }
 
         }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        CameraManager.cameraInstance.ResetCamera(cam);
     }
 
 
