@@ -40,7 +40,9 @@ public class CameraManager : MonoBehaviour
         {
             if (c == camera)
             {
+
                 c.Priority = 0;
+
             }
       
         }

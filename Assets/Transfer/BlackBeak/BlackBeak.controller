@@ -274,8 +274,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: RunFWD
+  - m_ConditionMode: 1
+    m_ConditionEvent: WalkFWD
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3161517358627481135}
@@ -405,7 +405,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: RunFWD
-  m_Speed: 1
+  m_Speed: 0.46
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4315310552426345390}
@@ -434,7 +434,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WalkFWD
-  m_Speed: 1
+  m_Speed: 0.73
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3641654518206554658}

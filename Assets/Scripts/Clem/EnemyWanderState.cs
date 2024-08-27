@@ -22,6 +22,7 @@ namespace Platformer
 
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
+           
 
             if (enemy == null)
             {
@@ -62,6 +63,8 @@ namespace Platformer
         public void WalkingBB()
         {
             if (wayPoints.Count == 0) return;
+
+            agent.speed = 1;
 
             float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
 
@@ -122,6 +125,8 @@ namespace Platformer
 
         private void WanderRandom()
         {
+            agent.speed = 1;
+
             if (HasReachedDestination())
             {
                 Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;

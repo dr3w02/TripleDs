@@ -22,10 +22,11 @@ namespace Platformer
         void Update()
         {
 
-            if (gameObject.transform.position.y < 20f)
-            {
+           if (gameObject.transform.position.y < -880f)
+           {
                 gameObject.transform.position = spawnPoint;
-            }
+               Debug.Log("FellThrough");
+           }
 
 
         }
