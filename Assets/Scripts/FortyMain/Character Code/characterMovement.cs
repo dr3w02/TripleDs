@@ -704,6 +704,7 @@ public class characterMovement : MonoBehaviour
 
         int savedCheckPointIndex = -1;
         savedCheckPointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
+
         if (savedCheckPointIndex != -1)
         {
             _startingPoint = _checkPointsArray[savedCheckPointIndex].transform.position; //creates the new starting point for everey checkpoint walked through spawns player in right direction
