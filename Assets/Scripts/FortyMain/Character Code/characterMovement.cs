@@ -9,13 +9,10 @@ using System.Threading;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.Animations;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 using static UnityEngine.Tilemaps.Tilemap;
 
 

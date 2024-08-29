@@ -75,8 +75,8 @@ namespace Platformer
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.drag = 20f; // Adjust drag value as needed
-                rb.angularDrag = 20f; // Adjust angular drag value as needed
+                rb.drag = 0f; // Adjust drag value as needed
+                rb.angularDrag = 0f; // Adjust angular drag value as needed
             }
             //add rigidbody drag
             //play pull Animation
