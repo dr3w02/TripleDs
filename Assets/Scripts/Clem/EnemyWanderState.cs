@@ -8,7 +8,7 @@ namespace Platformer
     public class EnemyWanderState : EnemyBaseState
     {
         private NavMeshAgent agent;
-        private readonly WayPoints Wait;
+       // private readonly WayPoints Wait;
        private readonly Vector3 startpoint;
         private readonly float wanderRadius;
         private PlayerDetector playerDetector;
@@ -165,7 +165,10 @@ namespace Platformer
                    (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
         }
     }
+   
 }
+
+
   
 
     

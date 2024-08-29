@@ -10,6 +10,8 @@ TagManager:
   - CheckPoint
   - EnemyBB
   - Waypoint
+  - EnemyClemCam
+  - EnemyClem
   layers:
   - Default
   - TransparentFX

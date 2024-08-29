@@ -3,6 +3,7 @@ using Platformer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using TMPro;
@@ -82,7 +83,7 @@ public class characterMovement : MonoBehaviour
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
 
-
+    
 
     //Jumping Varibles
 
@@ -129,9 +130,9 @@ public class characterMovement : MonoBehaviour
     private bool isRightMouseButtonPressed;
     //Dylan
 
-  
-    
-       
+
+
+
     void Awake()
     {
         input = new CustomInputs();
@@ -272,7 +273,7 @@ public class characterMovement : MonoBehaviour
             animator.SetBool(isJumpingHash, false);
         }
 
-       
+
     }
 
     //Dylan edits - when pulling/pushing disable other controls
@@ -292,7 +293,7 @@ public class characterMovement : MonoBehaviour
         isPullPressed = context.ReadValueAsButton();
         ///Debug.Log("PullPressed");
     }
-  
+
     void onJump(InputAction.CallbackContext context)
     {
         if (!isRightMouseButtonPressed)
@@ -318,7 +319,7 @@ public class characterMovement : MonoBehaviour
         isSelectPressed = context.ReadValueAsButton();
         Debug.Log("SelectPressed");
     }
-  
+
     void handleRotation()
     {
 
@@ -360,15 +361,21 @@ public class characterMovement : MonoBehaviour
 
         if (isClimbingLadder)
         {
-        
-                isClimbingLadder = true;
 
-           
-            
+            characterController.enabled = false;
+            isClimbingLadder = true;
+
+            // Lock the player's position to the X and Z coordinates of the ladder
+            Vector3 currentPosition = transform.position;
+            currentPosition.x = currentSwingable.position.x; // Lock X to the ladder's X
+            currentPosition.z = currentSwingable.position.z; // Lock Z to the ladder's Z
+            transform.position = currentPosition;
+
 
             // Adjust the upward movement to match the ladder's "up" direction
-            Vector3 ladderUpDirection = lastGrabLadderDirection;
-            
+            //Vector3 ladderUpDirection = lastGrabLadderDirection;
+
+
 
             if (currentMovementInput.y == -1)
             {
@@ -380,8 +387,8 @@ public class characterMovement : MonoBehaviour
                 Debug.Log("uppies!");
                 characterController.enabled = false;
                 transform.Translate(Vector3.up * Time.deltaTime * 2f);
-              
-        
+
+
             }
 
             else if (currentMovementInput.y == 0)
@@ -403,7 +410,7 @@ public class characterMovement : MonoBehaviour
                 characterController.enabled = false;
 
                 rb.MovePosition(transform.position + Vector3.down * 2 * Time.deltaTime);
-               
+
             }
 
             else if (currentMovementInput.y == 0)
@@ -413,8 +420,9 @@ public class characterMovement : MonoBehaviour
             }
 
 
-            
-           
+            isGrounded = true;
+
+
         }
 
 
@@ -428,7 +436,7 @@ public class characterMovement : MonoBehaviour
         float ladderGrabDistance = .1f;
 
         int climbableLayer = LayerMask.GetMask("Climbable");
-        
+
 
         Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * ladderGrabDistance, Color.magenta);
 
@@ -438,8 +446,11 @@ public class characterMovement : MonoBehaviour
             if (!isClimbingLadder && isPullPressed)
             {
                 Debug.Log("Raycast hit " + hit.collider.name);
-                //GrabLadder(hit.normal);
-           
+
+  
+
+                GrabLadder(hit.normal);
+
             }
             else if (isClimbingLadder && (!isPullPressed || hit.collider == null))
             {
@@ -448,9 +459,9 @@ public class characterMovement : MonoBehaviour
         }
         else if (isClimbingLadder)
         {
-           
+
             DropLadder();
-           
+
         }
 
 
@@ -484,6 +495,7 @@ public class characterMovement : MonoBehaviour
         //currentMovement.y = climbSpeed;
         //currentMovement.z = 0f;
 
+        //Adding the sway when you grab
         if (gameObject.tag == "Vine")
         {
             RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
@@ -491,8 +503,11 @@ public class characterMovement : MonoBehaviour
 
         }
 
+        
 
     }
+
+
 
     private void DropLadder()
     {
@@ -504,6 +519,7 @@ public class characterMovement : MonoBehaviour
         handleGravity();
         Debug.Log("DROPlADDER");
 
+      
     }
 
 
@@ -642,7 +658,7 @@ public class characterMovement : MonoBehaviour
 
             animator.SetBool(isJumpingHash, false);
 
-            
+
             isGrounded = true;
         }
         else
@@ -659,7 +675,7 @@ public class characterMovement : MonoBehaviour
 
         }
 
-    
+
     }
 
     //Crouch Controller
@@ -807,11 +823,13 @@ public class characterMovement : MonoBehaviour
     public void Enabled()
     {
         input.Enable();
+        characterController.enabled = true;
     }
 
     public void TurnOffMovement()
     {
         input.Disable();
+        characterController.enabled = false;
     }
     /// </summary>
 
@@ -820,5 +838,6 @@ public class characterMovement : MonoBehaviour
 
 
 }
+
 
 

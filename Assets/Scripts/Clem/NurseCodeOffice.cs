@@ -17,6 +17,8 @@ namespace Platformer
         [SerializeField, Self] NavMeshAgent agent;
         [SerializeField, Self] PlayerDetector playerDetector;
         [SerializeField, Child] Animator animator;
+        public characterMovement pausePlayer;
+        
 
         NavMeshAgent navMeshAgent; 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
@@ -24,9 +26,11 @@ namespace Platformer
         [SerializeField] float timeBetweenAttacks = 1f;
 
         //[SerializeField] float speed;
+        public GameObject clemDeathCam;
 
+        public GameObject BlackBeackDeathCam;
 
-       StateMachine stateMachine;
+        StateMachine stateMachine;
 
         CountdownTimer attackTimer;
 
@@ -38,8 +42,7 @@ namespace Platformer
         /// </summary>
         /// 
 
-        //death cameras 
-        [SerializeField] public CinemachineVirtualCamera BlackBeakDeath;
+    
 
 
         void OnValidate() => this.ValidateRefs();

@@ -2,44 +2,72 @@
 using UnityEngine;
 using UnityEngine.AI;
 using Cinemachine;
+using Unity.VisualScripting;
 
 namespace Platformer
 {
     public class EnemyAttackState : EnemyBaseState
     {
-        readonly NavMeshAgent agent;
-        readonly Transform player;
+        private readonly NavMeshAgent agent;
+        private readonly Transform player;
 
-        NurseCodeOffice nurseCodeOffice;
-    
-        public EnemyAttackState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player): base(enemy, animator)
+         
+
+
+        public EnemyAttackState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player) : base(enemy, animator)
         {
             this.agent = agent;
             this.player = player;
+            
+            enemy.clemDeathCam.SetActive(false);
+            enemy.BlackBeackDeathCam.SetActive(false);
+          
         }
 
         public override void OnEnter()
         {
-            Debug.Log("Attack");
-            animator.CrossFade(AttackHash, crossFadeDuration);
+
+            //GameObject clemDeathCam = GameObject.FindGameObjectWithTag("EnemyClemCam");
+            //Debug.Log("Found GameObject with tag 'EnemyClemCam': " + clemDeathCam.name);
+            Debug.Log("Attackingg");
 
             //if (GameObject.FindWithTag("EnemyBB"))
             //{
-            // nurseCodeOffice.BlackBeakDeath.Priority = 20;
+
+            //nursecodeoffice.BlackBeakDeath.Priority = 200;
             // }
 
-            //characterMovement.RespawnPlayer();
+       
+
+            if (enemy.CompareTag("EnemyBB"))
+            {
+                //enemy.pausePlayer.TurnOffMovement();
+                enemy.BlackBeackDeathCam.SetActive(true);
+                Debug.Log("Switch Camera");// Use the stored reference to set active
+                animator.CrossFade(AttackHash, crossFadeDuration);
+              
+            }
+
+            else if (enemy.CompareTag("EnemyClem"))
+            {
+                //enemy.pausePlayer.TurnOffMovement();
+                enemy.clemDeathCam.SetActive(true);
+                Debug.Log("Switch Camera");// Use the stored reference to set active
+                animator.CrossFade(AttackHash, crossFadeDuration);
+                
+            }
+           
+            
         }
+
         public override void Update()
         {
-            
-          agent.SetDestination(player.position);
-          enemy.Attack();
-            
+            agent.SetDestination(player.position);
+            enemy.Attack();
         }
     }
 }
-    
+
 
 
 
