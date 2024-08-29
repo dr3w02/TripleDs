@@ -34,21 +34,21 @@ public class CameraManager : MonoBehaviour
         camera.Priority = 10;
     }
 
-    public void ResetCamera(CinemachineVirtualCamera camera)
-    {
-        foreach (CinemachineVirtualCamera c in cameras)
-        {
-            if (c == camera)
-            {
+    //public void ResetCamera(CinemachineVirtualCamera camera)
+    //{
+        //foreach (CinemachineVirtualCamera c in cameras)
+        //{
+         //   if (c == camera)
+          //  {
 
-                c.Priority = 0;
+               // c.Priority = 0;
 
-            }
+           // }
       
-        }
+       // }
    
 
-    }
+  //  }
 
         public void Register(CinemachineVirtualCamera camera)
         {

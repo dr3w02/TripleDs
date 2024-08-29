@@ -46,10 +46,31 @@ public class CameraChange : MonoBehaviour
 
         }
     }
-    private void OnTriggerExit(Collider other)
+
+    private void OnTriggerStay(Collider other)
     {
-        CameraManager.cameraInstance.ResetCamera(cam);
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Rigidbody playerRb = other.GetComponent<Rigidbody>();
+
+            // playerRb.isKinematic = true;
+
+            if (playerRb != null)
+            {
+                if (CameraManager.cameraInstance.ActiveCamera != cam)
+                {
+                    Debug.Log("SwitchCamera" + cam);
+                    CameraManager.cameraInstance.SwitchCamera(cam);
+
+                }
+            }
+
+        }
     }
+    //private void OnTriggerExit(Collider other)
+    //{
+    // CameraManager.cameraInstance.ResetCamera(cam);
+    //}
 
 
 

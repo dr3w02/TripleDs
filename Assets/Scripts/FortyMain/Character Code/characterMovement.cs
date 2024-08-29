@@ -129,12 +129,15 @@ public class characterMovement : MonoBehaviour
     private bool isRightMouseButtonPressed;
     //Dylan
 
+  
+    
+       
     void Awake()
     {
         input = new CustomInputs();
 
 
-        characterController = GetComponent<CharacterController>();
+        //characterController = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
 
         myConstantForce = GetComponent<ConstantForce>();
@@ -263,6 +266,13 @@ public class characterMovement : MonoBehaviour
 
             animator.SetBool(isJumpingHash, false);
         }
+
+        else
+        {
+            animator.SetBool(isJumpingHash, false);
+        }
+
+       
     }
 
     //Dylan edits - when pulling/pushing disable other controls
@@ -272,6 +282,7 @@ public class characterMovement : MonoBehaviour
         {
             isRunPressed = context.ReadValueAsButton();
         }
+
         isRunPressed = context.ReadValueAsButton();
         //Debug.Log("RunPressed");
     }
@@ -281,7 +292,7 @@ public class characterMovement : MonoBehaviour
         isPullPressed = context.ReadValueAsButton();
         ///Debug.Log("PullPressed");
     }
-
+  
     void onJump(InputAction.CallbackContext context)
     {
         if (!isRightMouseButtonPressed)
@@ -307,7 +318,7 @@ public class characterMovement : MonoBehaviour
         isSelectPressed = context.ReadValueAsButton();
         Debug.Log("SelectPressed");
     }
-
+  
     void handleRotation()
     {
 
@@ -349,8 +360,15 @@ public class characterMovement : MonoBehaviour
 
         if (isClimbingLadder)
         {
+        
+                isClimbingLadder = true;
 
-            isClimbingLadder = true;
+           
+            
+
+            // Adjust the upward movement to match the ladder's "up" direction
+            Vector3 ladderUpDirection = lastGrabLadderDirection;
+            
 
             if (currentMovementInput.y == -1)
             {
@@ -361,12 +379,9 @@ public class characterMovement : MonoBehaviour
 
                 Debug.Log("uppies!");
                 characterController.enabled = false;
-                //transform.Translate(Vector3.up * Time.deltaTime * 2f);
-                rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
-
-
-
-
+                transform.Translate(Vector3.up * Time.deltaTime * 2f);
+              
+        
             }
 
             else if (currentMovementInput.y == 0)
@@ -376,17 +391,19 @@ public class characterMovement : MonoBehaviour
             }
 
 
+
             isGrounded = true;
+
 
             if (currentMovementInput.y == 1)
             {
-
 
                 Debug.Log("uppies!");
                 currentMovementInput.x = 0;
                 characterController.enabled = false;
 
                 rb.MovePosition(transform.position + Vector3.down * 2 * Time.deltaTime);
+               
             }
 
             else if (currentMovementInput.y == 0)
@@ -395,22 +412,15 @@ public class characterMovement : MonoBehaviour
 
             }
 
-            if (Vector3.Dot(targetDirection, lastGrabLadderDirection) < 0)
-            {
-                float ladderFloorDropDistance = .1f;
 
-                Physics.Raycast(transform.position, Vector3.down, out RaycastHit floorRayraycastHit, ladderFloorDropDistance);
-                {
-                    DropLadder();
-                }
-
-
-            }
+            
+           
         }
 
 
 
     }
+
 
     private void CheckForLadder()
     {
@@ -418,15 +428,18 @@ public class characterMovement : MonoBehaviour
         float ladderGrabDistance = .1f;
 
         int climbableLayer = LayerMask.GetMask("Climbable");
+        
 
         Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * ladderGrabDistance, Color.magenta);
 
         if (Physics.Raycast(orientation.position + raycastOffset, orientation.forward, out RaycastHit hit, ladderGrabDistance, climbableLayer))
         {
+
             if (!isClimbingLadder && isPullPressed)
             {
                 Debug.Log("Raycast hit " + hit.collider.name);
-                GrabLadder(hit.normal);
+                //GrabLadder(hit.normal);
+           
             }
             else if (isClimbingLadder && (!isPullPressed || hit.collider == null))
             {
@@ -435,12 +448,16 @@ public class characterMovement : MonoBehaviour
         }
         else if (isClimbingLadder)
         {
+           
             DropLadder();
+           
         }
 
 
 
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -461,7 +478,8 @@ public class characterMovement : MonoBehaviour
 
         //rb.isKinematic = false;
         isClimbingLadder = true;
-        this.lastGrabLadderDirection = lastGrabLadderDirection;
+        this.lastGrabLadderDirection = lastGrabLadderDirection.normalized;
+
         //currentMovement.x = 0f;
         //currentMovement.y = climbSpeed;
         //currentMovement.z = 0f;
@@ -598,7 +616,7 @@ public class characterMovement : MonoBehaviour
         //larger the multiplier the steeper the fall
         float fallMultiplier = 2.0f;
 
-        if (characterController.isGrounded)
+        if (characterController.isGrounded && isGrounded)
         {
 
             if (isJumpAnimating)
@@ -624,7 +642,8 @@ public class characterMovement : MonoBehaviour
 
             animator.SetBool(isJumpingHash, false);
 
-
+            
+            isGrounded = true;
         }
         else
         {
@@ -635,10 +654,12 @@ public class characterMovement : MonoBehaviour
             currentRunMovement.y = nextYVelocity;
 
             animator.SetBool(isJumpingHash, false);
+            isGrounded = true;
 
 
         }
 
+    
     }
 
     //Crouch Controller
@@ -700,6 +721,8 @@ public class characterMovement : MonoBehaviour
 
     private void Start()
     {
+        characterController = GetComponent<CharacterController>();
+
         //CheckPoint saver
 
         int savedCheckPointIndex = -1;
