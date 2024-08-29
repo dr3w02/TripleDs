@@ -135,6 +135,9 @@ public class characterMovement : MonoBehaviour
         input = new CustomInputs();
 
 
+
+       
+
         //characterController = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
 
@@ -170,11 +173,12 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Crouch.performed += onCrouch;
         input.CharacterControls.Crouch.canceled += onCrouch;
 
-        //Dylan
+      
         input.CharacterControls.Pull.started += onPull;
         input.CharacterControls.Pull.performed += onPull;
         input.CharacterControls.Pull.canceled += onPull;
 
+        //Dylan
         input.CharacterControls.Pull.started += OnRightMouseButtonDown;
         input.CharacterControls.Pull.canceled += OnRightMouseButtonUp;
         //Dylan
@@ -189,6 +193,7 @@ public class characterMovement : MonoBehaviour
 
         setupJumpVaribles();
     }
+    
 
     //Dylan
     private void OnRightMouseButtonDown(InputAction.CallbackContext context)
@@ -209,7 +214,7 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Crouch.Enable();
     }
     //Dylan
-
+    
     public void RespawnPlayer()
     {
         gameObject.transform.position = _startingPoint;
@@ -257,6 +262,8 @@ public class characterMovement : MonoBehaviour
             currentMovement.y = initialJumpVelocity * .9f;
             currentRunMovement.y = initialJumpVelocity * .5f;
             //Debug.Log("JumpAnimationPlayed");
+
+            
         }
         else if (!isJumpPressed && isJumping && characterController.isGrounded && isGrounded)
         {
@@ -300,7 +307,7 @@ public class characterMovement : MonoBehaviour
         isJumpPressed = context.ReadValueAsButton();
         //Debug.Log("JumpPressed");
     }
-
+   
     void onCrouch(InputAction.CallbackContext context)
     {
         if (!isRightMouseButtonPressed)
@@ -346,7 +353,7 @@ public class characterMovement : MonoBehaviour
 
 
     }
-
+    
     private void Climables()
     {
 
@@ -362,11 +369,11 @@ public class characterMovement : MonoBehaviour
             characterController.enabled = false;
             isClimbingLadder = true;
 
-            // Lock the player's position to the X and Z coordinates of the ladder
-            Vector3 currentPosition = transform.position;
-            currentPosition.x = currentSwingable.position.x; // Lock X to the ladder's X
-            currentPosition.z = currentSwingable.position.z; // Lock Z to the ladder's Z
-            transform.position = currentPosition;
+            // Lock the players position to the X and Z coordinates of the ladder
+            //Vector3 currentPosition = transform.position;
+            //currentPosition.x = currentSwingable.position.x; // Lock X to the ladders X
+            //currentPosition.z = currentSwingable.position.z; // Lock Z to the ladders Z
+            //transform.position = currentPosition;
 
 
             // Adjust the upward movement to match the ladder's "up" direction
@@ -425,6 +432,7 @@ public class characterMovement : MonoBehaviour
 
 
     }
+    
 
 
     private void CheckForLadder()
@@ -465,7 +473,7 @@ public class characterMovement : MonoBehaviour
 
     }
 
-
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -480,7 +488,7 @@ public class characterMovement : MonoBehaviour
 
     }
 
-
+    
     private void GrabLadder(Vector3 lastGrabLadderDirection)
     {
 
@@ -504,7 +512,7 @@ public class characterMovement : MonoBehaviour
 
     }
 
-
+    
 
     private void DropLadder()
     {
@@ -649,6 +657,7 @@ public class characterMovement : MonoBehaviour
         {
             float previousYVelocity = currentMovement.y;
             float newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
+          
             float nextYVelocity = Mathf.Max((previousYVelocity + newYVelocity) * .5f, -20.0f); //adding a max stops the character from fall too fast from high distances
             currentMovement.y = nextYVelocity;
             currentRunMovement.y = nextYVelocity;
@@ -780,11 +789,11 @@ public class characterMovement : MonoBehaviour
 
         // Incase player falls through ground
 
-        if (transform.position.y <= .10f) // checking players Y axsis
-        {
-            RespawnPlayer();
-
-        }
+        //if (transform.position.y <= .10f) // checking players Y axsis
+        //{
+          //  RespawnPlayer();
+        //
+        //}
 
         //add unstuck button here?
 
@@ -799,8 +808,11 @@ public class characterMovement : MonoBehaviour
 
     void GroundCheck()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, distToGround + 0.1f))
-        {
+        float groundCheckDistance = distToGround + 0.2f;
+        RaycastHit hit;
+
+        if (Physics.SphereCast(transform.position, characterController.radius, Vector3.down, out hit, groundCheckDistance))
+            {
             //Debug.Log("Grounded");
             isGrounded = true;
         }
@@ -820,13 +832,13 @@ public class characterMovement : MonoBehaviour
     public void Enabled()
     {
         input.Enable();
-        characterController.enabled = true;
+      
     }
 
     public void TurnOffMovement()
     {
         input.Disable();
-        characterController.enabled = false;
+      
     }
     /// </summary>
 

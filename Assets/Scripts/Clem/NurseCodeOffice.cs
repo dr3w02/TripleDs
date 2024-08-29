@@ -1,10 +1,8 @@
 using Cinemachine;
 using KBCore.Refs;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 
 namespace Platformer
@@ -17,18 +15,22 @@ namespace Platformer
         [SerializeField, Self] NavMeshAgent agent;
         [SerializeField, Self] PlayerDetector playerDetector;
         [SerializeField, Child] Animator animator;
-        public characterMovement pausePlayer;
-        
+        public characterMovement characterMain;
+       
 
         NavMeshAgent navMeshAgent; 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 
         [SerializeField] float timeBetweenAttacks = 1f;
 
+        [SerializeField] public CanvasGroup myUIGroup;
+
         //[SerializeField] float speed;
         public GameObject clemDeathCam;
 
         public GameObject BlackBeackDeathCam;
+
+        public GameObject mCharacter;
 
         StateMachine stateMachine;
 
@@ -123,7 +125,11 @@ namespace Platformer
             Debug.Log("Attacking");
 
         }
+
+
     }
+
+
 
 }
 

@@ -5,8 +5,9 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 
-public class bookZoomIn : MonoBehaviour, IInteractable 
+public class bookZoomIn : MonoBehaviour, IInteractable
 {
     [SerializeField] private string _prompt;
     [SerializeField] CameraManager cameraManager;
@@ -16,37 +17,44 @@ public class bookZoomIn : MonoBehaviour, IInteractable
     characterMovement characterMovement;
 
     public bool interactable;
-
-    public CinemachineVirtualCamera BookCam;
+    public GameObject character;
+    public GameObject BookCam;
 
     public bool Interact(Interactor interactor)
     {
-
         Debug.Log("OpeningBook");
 
         if (interactable == false)
         {
-            //cameraManager.SwitchCamera(cameraManager.BookCam);
+            BookCam.SetActive(true);
 
-            BookCam.Priority = 11;
+            characterMove.TurnOffMovement();
 
-            characterMove.TurnOffMovement(); Debug.Log("MovementDisabled");
-
-            interactable = true;
+            StartCoroutine(TurnOffCharacterAfterDelay()); 
         }
+
         else
         {
-            //cameraManager.SwitchCamera(cameraManager.mainCam);
-            BookCam.Priority = 0;
-            characterMove.Enabled(); Debug.Log("Movementenabled");
+            BookCam.SetActive(false);
 
+            StartCoroutine(TurnOnCharacterAfterDelay());
+            characterMove.Enabled();
             interactable = false;
         }
 
         return true;
-
     }
 
+    private IEnumerator TurnOffCharacterAfterDelay()
+    {
+        yield return new WaitForSeconds(2f); 
+        character.SetActive(false);
+    }
+
+    private IEnumerator TurnOnCharacterAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);  
+        character.SetActive(true);
+    }
 }
 
-   

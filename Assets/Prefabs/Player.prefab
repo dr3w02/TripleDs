@@ -87,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 3479632575324006349}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.21}
+  m_LocalPosition: {x: 0, y: 0.02, z: 0.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3508,22 +3508,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 7
+      value: 11.108944
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.789762
+      value: -21.13
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.38
+      value: 20.91
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -25.006
+      value: -53.18
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
@@ -5063,7 +5063,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 122
@@ -5165,9 +5165,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.07242502
-  m_Height: 0.33
+  m_Height: 0.24034587
   m_Direction: 1
-  m_Center: {x: 0, y: 0.16726151, z: 0}
+  m_Center: {x: 0, y: 0.21208863, z: 0}
 --- !u!114 &661588615290421737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5210,7 +5210,7 @@ CharacterController:
   m_Radius: 0.05
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.01
+  m_SkinWidth: 0.2
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.18, z: 0}
 --- !u!4 &7901477280858204300 stripped
