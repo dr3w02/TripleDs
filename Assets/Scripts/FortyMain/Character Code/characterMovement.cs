@@ -136,8 +136,6 @@ public class characterMovement : MonoBehaviour
 
 
 
-       
-
         //characterController = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
 
@@ -218,6 +216,7 @@ public class characterMovement : MonoBehaviour
     public void RespawnPlayer()
     {
         gameObject.transform.position = _startingPoint;
+        Debug.Log("Player respawned at: " + _startingPoint);
         //TurnOffMovement();
         //currentMovement = Vector3.zero;
 
@@ -473,21 +472,32 @@ public class characterMovement : MonoBehaviour
 
     }
 
-    
+
 
     private void OnTriggerEnter(Collider other)
     {
-        int checkPointIndex = -1;
-        checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
-        if (checkPointIndex != -1)
+        if (other.CompareTag("Checkpoint"))
         {
-            PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
-            _startingPoint = other.gameObject.transform.position;
-            other.gameObject.SetActive(false);
+            int checkPointIndex = -1;
+            checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
+
+            if (checkPointIndex != -1)
+            {
+                PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
+                _startingPoint = other.gameObject.transform.position;
+                other.gameObject.SetActive(false);
+
+            }
+            else
+            {
+                Debug.Log("Collider triggered but no checkpoint found.");
+            }
         }
+            
 
     }
 
+ 
     
     private void GrabLadder(Vector3 lastGrabLadderDirection)
     {
@@ -737,13 +747,18 @@ public class characterMovement : MonoBehaviour
         else
         {
             player.localPosition = Vector3.zero;
+
         }
     }
 
 
     private void Start()
     {
+   
+
         characterController = GetComponent<CharacterController>();
+
+    
 
         //CheckPoint saver
 
@@ -757,6 +772,7 @@ public class characterMovement : MonoBehaviour
         }
         else
         {
+            Debug.Log("No CheckPoint");
             _startingPoint = gameObject.transform.position; //no checkpoint current position of player
         }
 
@@ -770,6 +786,7 @@ public class characterMovement : MonoBehaviour
         handleAnimation();
         Climables();
         CheckForLadder();
+
 
         loadCheckPoints();
 
@@ -789,13 +806,12 @@ public class characterMovement : MonoBehaviour
 
         // Incase player falls through ground
 
-        //if (transform.position.y <= .10f) // checking players Y axsis
+        //if (transform.position.y <= -10f) // checking players Y axsis
         //{
-          //  RespawnPlayer();
-        //
+          // RespawnPlayer();
+        
         //}
 
-        //add unstuck button here?
 
 
 

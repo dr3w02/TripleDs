@@ -17,7 +17,7 @@ namespace Platformer
         [SerializeField] private bool fadeOut = true;
         [SerializeField] private float fadeWaitTime = 4f;
         [SerializeField] private float clemWaitTime = 3f;
-        [SerializeField] private float BBWaitTime = 3f;
+        [SerializeField] private float BBWaitTime = 2f;
         public EnemyAttackState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player) : base(enemy, animator)
         {
             this.agent = agent;
@@ -50,10 +50,8 @@ namespace Platformer
 
                 animator.CrossFade(AttackHash, crossFadeDuration);
 
-                enemy.StartCoroutine(WaitBetweenFadeInOutClem());
+                enemy.StartCoroutine(WaitBB());
 
-
-                Debug.Log("Switch Camera");// Use the stored reference to set active
 
 
 
@@ -77,7 +75,7 @@ namespace Platformer
 
         }
 
-        public IEnumerable WaitBetweenFadeInOutBB()
+        public IEnumerator WaitBB()
         {
             
                 yield return new WaitForSeconds(BBWaitTime);
@@ -104,6 +102,7 @@ namespace Platformer
 
 
                 enemy.characterMain.RespawnPlayer();
+                Debug.Log("Respawning");
 
                 // Wait for the specified amount of time
                 yield return new WaitForSeconds(fadeWaitTime);
@@ -128,6 +127,7 @@ namespace Platformer
 
             
         }
+
     
         public IEnumerator WaitBetweenFadeInOutClem()
         {
@@ -189,7 +189,7 @@ namespace Platformer
 
         public override void Update()
         {
-            agent.SetDestination(player.position);
+            //agent.SetDestination(player.position);
             enemy.Attack();
         }
 
