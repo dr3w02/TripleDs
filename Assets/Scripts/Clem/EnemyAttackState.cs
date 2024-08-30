@@ -41,11 +41,11 @@ namespace Platformer
             //nursecodeoffice.BlackBeakDeath.Priority = 200;
             // }
 
-
+            enemy.characterMain.TurnOffMovement();
 
             if (enemy.CompareTag("EnemyBB"))
             {
-
+                agent.GetComponent<NavMeshAgent>().isStopped = true;
                 enemy.BlackBeackDeathCam.SetActive(true);
 
                 animator.CrossFade(AttackHash, crossFadeDuration);
@@ -62,7 +62,7 @@ namespace Platformer
             else if (enemy.CompareTag("EnemyClem"))
             {
 
-
+                agent.GetComponent<NavMeshAgent>().isStopped = true;
                 enemy.clemDeathCam.SetActive(true);
 
 
@@ -83,7 +83,7 @@ namespace Platformer
                 yield return new WaitForSeconds(BBWaitTime);
 
                 enemy.mCharacter.SetActive(false);
-                enemy.characterMain.TurnOffMovement();
+          
 
                 Debug.Log("Switch Camera");// Use the stored reference to set active
 
@@ -118,7 +118,8 @@ namespace Platformer
                         enemy.BlackBeackDeathCam.SetActive(false);
                         enemy.mCharacter.SetActive(true);
                         enemy.characterMain.Enabled();
-                    }
+                        agent.GetComponent<NavMeshAgent>().isStopped = false;
+                }
                     else
                     {
                         fadeOut = false;
@@ -132,12 +133,10 @@ namespace Platformer
         public IEnumerator WaitBetweenFadeInOutClem()
         {
             
-
-            
                 yield return new WaitForSeconds(clemWaitTime);
 
                 enemy.mCharacter.SetActive(false);
-                enemy.characterMain.TurnOffMovement();
+               
 
                 Debug.Log("Switch Camera");// Use the stored reference to set active
 
@@ -170,9 +169,11 @@ namespace Platformer
                         enemy.myUIGroup.alpha -= Time.deltaTime;
                         yield return null;  // Wait for the next frame
                         enemy.clemDeathCam.SetActive(false);
+              
                         enemy.mCharacter.SetActive(true);
                         enemy.characterMain.Enabled();
-                    }
+                        agent.GetComponent<NavMeshAgent>().isStopped = false;
+                }
                     else
                     {
                         fadeOut = false;

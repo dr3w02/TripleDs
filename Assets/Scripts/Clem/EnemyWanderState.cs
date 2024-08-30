@@ -64,7 +64,7 @@ namespace Platformer
         {
             if (wayPoints.Count == 0) return;
 
-            agent.speed = 1;
+            agent.speed = 3;
 
             float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
 
