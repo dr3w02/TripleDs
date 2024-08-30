@@ -3513,17 +3513,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.76
+      value: -15.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.19
+      value: 6.55
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.07
+      value: -2.05
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
@@ -5077,7 +5077,7 @@ MonoBehaviour:
   isSelectPressed: 0
   isRotating: 0
   player: {fileID: 3889798967974273305}
-  _checkpointsParents: {fileID: 0}
+  _checkpointsParent: {fileID: 0}
   _checkPointsArray: []
   isGrounded: 0
 --- !u!114 &5259313588709691103

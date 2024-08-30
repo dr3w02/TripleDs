@@ -49,7 +49,7 @@ public class characterMovement : MonoBehaviour
     //Things for ground check
     public float distToGround = 1f;
 
-    //things for climb and swing
+    //things for climb and swing 
     private bool isClimbingLadder;
     public CharacterController characterController;
 
@@ -57,7 +57,7 @@ public class characterMovement : MonoBehaviour
     Transform currentSwingable;
     ConstantForce myConstantForce;
     public Vector3 vineVelocityWhenGrabbed;
-    public float climbSpeed = 2f;
+    public float climbSpeed = 3f;
 
     public Vector3 targetDirection;
     //bool swinging = false;
@@ -66,7 +66,7 @@ public class characterMovement : MonoBehaviour
 
     private Vector3 lastGrabLadderDirection;
 
-    //change these to is
+    //change these to is 
 
     //[SerializeField] float speed = 5; // might've lost this dont forget to add back
 
@@ -80,9 +80,9 @@ public class characterMovement : MonoBehaviour
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
 
-    
 
-    //Jumping Varibles
+
+   //Jumping Varibles
 
     bool isJumpPressed = false;
     public float initialJumpVelocity;
@@ -113,8 +113,11 @@ public class characterMovement : MonoBehaviour
 
     public Transform player;
 
+
     /// </summary>
     // For CheckPoints
+
+   
 
     [SerializeField] private GameObject _checkpointsParents;
     public GameObject[] _checkPointsArray;
@@ -122,6 +125,7 @@ public class characterMovement : MonoBehaviour
     private Vector3 _startingPoint;
 
     private const string SAVE_CHECKPOINT_INDEX = "Last_checkpoint_index";
+
 
     //Dylan
     private bool isRightMouseButtonPressed;
@@ -135,8 +139,7 @@ public class characterMovement : MonoBehaviour
         input = new CustomInputs();
 
 
-
-        //characterController = GetComponent<CharacterController>();
+        characterController = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
 
         myConstantForce = GetComponent<ConstantForce>();
@@ -171,7 +174,7 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Crouch.performed += onCrouch;
         input.CharacterControls.Crouch.canceled += onCrouch;
 
-      
+
         input.CharacterControls.Pull.started += onPull;
         input.CharacterControls.Pull.performed += onPull;
         input.CharacterControls.Pull.canceled += onPull;
@@ -191,7 +194,8 @@ public class characterMovement : MonoBehaviour
 
         setupJumpVaribles();
     }
-    
+
+
 
     //Dylan
     private void OnRightMouseButtonDown(InputAction.CallbackContext context)
@@ -212,15 +216,16 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Crouch.Enable();
     }
     //Dylan
-    
+
+
+
     public void RespawnPlayer()
     {
         gameObject.transform.position = _startingPoint;
-        Debug.Log("Player respawned at: " + _startingPoint);
-        //TurnOffMovement();
-        //currentMovement = Vector3.zero;
+        TurnOffMovement();
+        currentMovement = Vector3.zero;
 
-        //Debug.Log("WorkingReset");
+        Debug.Log("WorkingReset");
 
 
 
@@ -241,7 +246,7 @@ public class characterMovement : MonoBehaviour
     }
 
 
-    //Setting Up Jumping Physics
+    //Setting Up Jumping Physics 
     void setupJumpVaribles()
     {
         float timeToApex = maxJumpTime / 2;
@@ -261,8 +266,6 @@ public class characterMovement : MonoBehaviour
             currentMovement.y = initialJumpVelocity * .9f;
             currentRunMovement.y = initialJumpVelocity * .5f;
             //Debug.Log("JumpAnimationPlayed");
-
-            
         }
         else if (!isJumpPressed && isJumping && characterController.isGrounded && isGrounded)
         {
@@ -270,14 +273,8 @@ public class characterMovement : MonoBehaviour
 
             animator.SetBool(isJumpingHash, false);
         }
-
-        else
-        {
-            animator.SetBool(isJumpingHash, false);
-        }
-
-
     }
+
 
     //Dylan edits - when pulling/pushing disable other controls
     void onRun(InputAction.CallbackContext context)
@@ -306,7 +303,7 @@ public class characterMovement : MonoBehaviour
         isJumpPressed = context.ReadValueAsButton();
         //Debug.Log("JumpPressed");
     }
-   
+
     void onCrouch(InputAction.CallbackContext context)
     {
         if (!isRightMouseButtonPressed)
@@ -352,33 +349,17 @@ public class characterMovement : MonoBehaviour
 
 
     }
-    
+
     private void Climables()
     {
 
 
         Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * 1f, Color.magenta);
 
-        //not climbing the ladder
-
-
+     
         if (isClimbingLadder)
         {
-
-            characterController.enabled = false;
             isClimbingLadder = true;
-
-            // Lock the players position to the X and Z coordinates of the ladder
-            //Vector3 currentPosition = transform.position;
-            //currentPosition.x = currentSwingable.position.x; // Lock X to the ladders X
-            //currentPosition.z = currentSwingable.position.z; // Lock Z to the ladders Z
-            //transform.position = currentPosition;
-
-
-            // Adjust the upward movement to match the ladder's "up" direction
-            //Vector3 ladderUpDirection = lastGrabLadderDirection;
-
-
 
             if (currentMovementInput.y == -1)
             {
@@ -389,9 +370,8 @@ public class characterMovement : MonoBehaviour
 
                 Debug.Log("uppies!");
                 characterController.enabled = false;
-                transform.Translate(Vector3.up * Time.deltaTime * 2f);
-
-
+                //transform.Translate(Vector3.up * Time.deltaTime * 2f);
+                rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
             }
 
             else if (currentMovementInput.y == 0)
@@ -400,20 +380,17 @@ public class characterMovement : MonoBehaviour
 
             }
 
-
-
             isGrounded = true;
-
 
             if (currentMovementInput.y == 1)
             {
+
 
                 Debug.Log("uppies!");
                 currentMovementInput.x = 0;
                 characterController.enabled = false;
 
                 rb.MovePosition(transform.position + Vector3.down * 2 * Time.deltaTime);
-
             }
 
             else if (currentMovementInput.y == 0)
@@ -422,17 +399,19 @@ public class characterMovement : MonoBehaviour
 
             }
 
+            if (Vector3.Dot(targetDirection, lastGrabLadderDirection) < 0)
+            {
+                float ladderFloorDropDistance = .1f;
 
-            isGrounded = true;
+                Physics.Raycast(transform.position, Vector3.down, out RaycastHit floorRayraycastHit, ladderFloorDropDistance);
+                {
+                    DropLadder();
+                }
 
 
+            }
         }
-
-
-
     }
-    
-
 
     private void CheckForLadder()
     {
@@ -441,20 +420,14 @@ public class characterMovement : MonoBehaviour
 
         int climbableLayer = LayerMask.GetMask("Climbable");
 
-
         Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * ladderGrabDistance, Color.magenta);
 
         if (Physics.Raycast(orientation.position + raycastOffset, orientation.forward, out RaycastHit hit, ladderGrabDistance, climbableLayer))
         {
-
             if (!isClimbingLadder && isPullPressed)
             {
                 Debug.Log("Raycast hit " + hit.collider.name);
-
-  
-
                 GrabLadder(hit.normal);
-
             }
             else if (isClimbingLadder && (!isPullPressed || hit.collider == null))
             {
@@ -463,54 +436,38 @@ public class characterMovement : MonoBehaviour
         }
         else if (isClimbingLadder)
         {
-
             DropLadder();
-
         }
 
 
 
     }
-
-
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Checkpoint"))
+        int checkPointIndex = -1;
+        checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
+        if (checkPointIndex != -1)
         {
-            int checkPointIndex = -1;
-            checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
-
-            if (checkPointIndex != -1)
-            {
-                PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
-                _startingPoint = other.gameObject.transform.position;
-                other.gameObject.SetActive(false);
-
-            }
-            else
-            {
-                Debug.Log("Collider triggered but no checkpoint found.");
-            }
+            PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
+            _startingPoint = other.gameObject.transform.position;
+            other.gameObject.SetActive(false);
         }
-            
 
     }
 
- 
-    
+
+
     private void GrabLadder(Vector3 lastGrabLadderDirection)
     {
 
         //rb.isKinematic = false;
         isClimbingLadder = true;
-        this.lastGrabLadderDirection = lastGrabLadderDirection.normalized;
-
+        this.lastGrabLadderDirection = lastGrabLadderDirection;
         //currentMovement.x = 0f;
         //currentMovement.y = climbSpeed;
         //currentMovement.z = 0f;
 
-        //Adding the sway when you grab
         if (gameObject.tag == "Vine")
         {
             RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
@@ -518,11 +475,8 @@ public class characterMovement : MonoBehaviour
 
         }
 
-        
 
     }
-
-    
 
     private void DropLadder()
     {
@@ -534,8 +488,9 @@ public class characterMovement : MonoBehaviour
         handleGravity();
         Debug.Log("DROPlADDER");
 
-      
     }
+
+
 
 
     void OnMovementInput(InputAction.CallbackContext context)
@@ -581,6 +536,9 @@ public class characterMovement : MonoBehaviour
 
         return direction;
     }
+
+
+
 
     void handleAnimation()
     {
@@ -644,10 +602,10 @@ public class characterMovement : MonoBehaviour
 
         bool isFalling = currentMovement.y <= 0.0f || !isJumpPressed;
 
-        //larger the multiplier the steeper the fall
+        //larger the multiplier the steeper the fall 
         float fallMultiplier = 2.0f;
 
-        if (characterController.isGrounded && isGrounded)
+        if (characterController.isGrounded)
         {
 
             if (isJumpAnimating)
@@ -667,7 +625,6 @@ public class characterMovement : MonoBehaviour
         {
             float previousYVelocity = currentMovement.y;
             float newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
-          
             float nextYVelocity = Mathf.Max((previousYVelocity + newYVelocity) * .5f, -20.0f); //adding a max stops the character from fall too fast from high distances
             currentMovement.y = nextYVelocity;
             currentRunMovement.y = nextYVelocity;
@@ -675,7 +632,6 @@ public class characterMovement : MonoBehaviour
             animator.SetBool(isJumpingHash, false);
 
 
-            isGrounded = true;
         }
         else
         {
@@ -686,11 +642,9 @@ public class characterMovement : MonoBehaviour
             currentRunMovement.y = nextYVelocity;
 
             animator.SetBool(isJumpingHash, false);
-            isGrounded = true;
 
 
         }
-
 
     }
 
@@ -717,7 +671,7 @@ public class characterMovement : MonoBehaviour
             // Debug.Log("CrouchAnimator");
 
 
-            characterController.height = characterController.height - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching
+            characterController.height = characterController.height - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching 
 
             // Debug.Log("Crouched");
 
@@ -739,7 +693,7 @@ public class characterMovement : MonoBehaviour
 
 
 
-        if (characterController.height < normalHeight) // safe guard to keep the player from clipping into the ground
+        if (characterController.height < normalHeight) // safe guard to keep the player from clipping into the ground 
         {
 
             player.localPosition = offset;
@@ -747,24 +701,16 @@ public class characterMovement : MonoBehaviour
         else
         {
             player.localPosition = Vector3.zero;
-
         }
     }
 
 
     private void Start()
     {
-   
-
-        characterController = GetComponent<CharacterController>();
-
-    
-
         //CheckPoint saver
 
         int savedCheckPointIndex = -1;
         savedCheckPointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
-
         if (savedCheckPointIndex != -1)
         {
             _startingPoint = _checkPointsArray[savedCheckPointIndex].transform.position; //creates the new starting point for everey checkpoint walked through spawns player in right direction
@@ -772,8 +718,7 @@ public class characterMovement : MonoBehaviour
         }
         else
         {
-            Debug.Log("No CheckPoint");
-            _startingPoint = gameObject.transform.position; //no checkpoint current position of player
+            _startingPoint = gameObject.transform.position; //no checkpoint current position of player 
         }
 
     }
@@ -786,7 +731,6 @@ public class characterMovement : MonoBehaviour
         handleAnimation();
         Climables();
         CheckForLadder();
-
 
         loadCheckPoints();
 
@@ -804,14 +748,15 @@ public class characterMovement : MonoBehaviour
         handleJump();
         handleCrouch();
 
-        // Incase player falls through ground
+        // Incase player falls through ground 
 
-        //if (transform.position.y <= -10f) // checking players Y axsis
-        //{
-          // RespawnPlayer();
-        
-        //}
+        if (transform.position.y <= .10f) // checking players Y axsis
+        {
+            RespawnPlayer();
 
+        }
+
+        //add unstuck button here?
 
 
 
@@ -824,11 +769,8 @@ public class characterMovement : MonoBehaviour
 
     void GroundCheck()
     {
-        float groundCheckDistance = distToGround + 0.2f;
-        RaycastHit hit;
-
-        if (Physics.SphereCast(transform.position, characterController.radius, Vector3.down, out hit, groundCheckDistance))
-            {
+        if (Physics.Raycast(transform.position, Vector3.down, distToGround + 0.1f))
+        {
             //Debug.Log("Grounded");
             isGrounded = true;
         }
@@ -843,22 +785,18 @@ public class characterMovement : MonoBehaviour
 
 
     /// <summary>
-    /// Truning on and off players movement ability
-    ///
+    /// Truning on and off players movement ability 
+    /// 
     public void Enabled()
     {
         input.Enable();
-      
     }
 
     public void TurnOffMovement()
     {
         input.Disable();
-      
     }
     /// </summary>
-
-
 
 
 

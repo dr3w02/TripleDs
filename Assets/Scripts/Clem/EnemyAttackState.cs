@@ -16,7 +16,7 @@ namespace Platformer
         [SerializeField] private bool fadeIn = false;
         [SerializeField] private bool fadeOut = true;
         [SerializeField] private float fadeWaitTime = 4f;
-        [SerializeField] private float clemWaitTime = 3f;
+        [SerializeField] private float clemWaitTime = 2f;
         [SerializeField] private float BBWaitTime = 2f;
         public EnemyAttackState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player) : base(enemy, animator)
         {
@@ -35,12 +35,7 @@ namespace Platformer
             //Debug.Log("Found GameObject with tag 'EnemyClemCam': " + clemDeathCam.name);
             Debug.Log("Attackin in State");
 
-            //if (GameObject.FindWithTag("EnemyBB"))
-            //{
-
-            //nursecodeoffice.BlackBeakDeath.Priority = 200;
-            // }
-
+            
 
 
             if (enemy.CompareTag("EnemyBB"))
@@ -63,11 +58,9 @@ namespace Platformer
 
                 enemy.clemDeathCam.SetActive(true);
 
-
                 animator.CrossFade(AttackHash, crossFadeDuration);
 
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem());
-
 
 
             }
@@ -124,8 +117,6 @@ namespace Platformer
                     }
                 }
 
-
-            
         }
 
     
