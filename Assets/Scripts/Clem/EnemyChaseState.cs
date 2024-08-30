@@ -29,7 +29,7 @@ namespace Platformer
         public override void Update()
         {
             //float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
-            agent.speed = agent.speed * 2;
+            agent.speed = 3;
             agent.SetDestination(player.position);
         }
     }
