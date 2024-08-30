@@ -54,7 +54,7 @@ public class CameraManager : MonoBehaviour
         {
 
         cameras.Add(camera);
-        //Debug.Log("Camera Registered:" + camera);
+        Debug.Log("Camera Registered:" + camera);
 
 
         }
