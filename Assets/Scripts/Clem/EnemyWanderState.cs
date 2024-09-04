@@ -71,7 +71,7 @@ namespace Platformer
             if (distanceToWayPoint <= 3f)
             {
                 currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
-                Debug.Log("Changing waypoint");
+                //Debug.Log("Changing waypoint");
 
           
           
@@ -82,6 +82,7 @@ namespace Platformer
             agent.SetDestination(wayPoints[currentWayPointIndex].position);
 
             Vector3 directionToTarget = wayPoints[currentWayPointIndex].position - agent.transform.position;
+
             directionToTarget.y = 0;
 
             Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
