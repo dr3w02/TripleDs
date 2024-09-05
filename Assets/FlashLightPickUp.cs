@@ -9,9 +9,14 @@ namespace Platformer
     public class FlashLightPickUp : MonoBehaviour, IInteractable
     {
         [SerializeField] private string _prompt;
+
         public GameObject pickedUpFlashLight;
+
         public GameObject inHandFlashLight;
-        public bool interactable;
+
+        public bool hasLight;
+
+        
         public string InteractionPrompt => _prompt;
 
 
@@ -19,17 +24,18 @@ namespace Platformer
         {
             Debug.Log("FlashLight");
 
-            if (interactable == false)
+            hasLight = true;
+            if (hasLight == true)
             {
-                pickedUpFlashLight.gameObject.SetActive(true);
-               // inHandFlashLight.gameObject.SetActive(false);
+               pickedUpFlashLight.gameObject.SetActive(false);
+               inHandFlashLight.gameObject.SetActive(true);
             }
 
-            else if (interactable == true)
+            else 
             {
-                pickedUpFlashLight.gameObject.SetActive(false);
-                //inHandFlashLight.gameObject.SetActive(true);
-                //interactable = false;
+                pickedUpFlashLight.gameObject.SetActive(true);
+                inHandFlashLight.gameObject.SetActive(false);
+                hasLight = false;
             }
 
             return true;
