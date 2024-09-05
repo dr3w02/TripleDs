@@ -123,7 +123,7 @@ namespace Platformer
         public void Attacking(PlayerDetectorOrphan Detection)
         {
 
-            if (Detection.CanAttackPlayer)
+            //if (Detection.CanAttackPlayer)
             {
 
             }
