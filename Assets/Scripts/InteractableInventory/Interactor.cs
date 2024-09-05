@@ -48,6 +48,7 @@ public class Interactor : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(_interactionPoint.position,_interactionPointRadius);
+
     }
 
 
