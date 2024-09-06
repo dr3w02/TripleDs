@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class InputManager : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class InputManager : MonoBehaviour
 
     private InputAction _menuOpenCloseAction;
 
+    //Music Box
+    public bool charging;
+
     private void Awake()
     {
         if (Instance == null)
@@ -22,6 +26,13 @@ public class InputManager : MonoBehaviour
 
         _playerInput = GetComponent<PlayerInput>();
         _menuOpenCloseAction = _playerInput.actions["MenuOpenClose"];
+
+       
+    }
+
+    public bool GetHold()
+    {
+        return charging;
     }
 
     // Update is called once per frame

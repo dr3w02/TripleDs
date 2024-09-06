@@ -24,22 +24,16 @@ namespace Platformer
         public bool MusicPlay;
 
 
-        /// </summary>
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
         
         // Update is called once per frame
          void Update()
          {
-            if (MusicPlay)
+            if (MusicPlay == true)
             {
                 Sleeping();
             }
 
-            else if (!MusicPlay)
+            else if (MusicPlay == false)
             {
                 Running();
             }

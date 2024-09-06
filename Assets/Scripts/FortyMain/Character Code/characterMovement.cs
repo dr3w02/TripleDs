@@ -1,19 +1,12 @@
 using Microsoft.Win32.SafeHandles;
 using Platformer;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
-using static UnityEngine.Tilemaps.Tilemap;
+
 
 
 
@@ -25,10 +18,11 @@ public class characterMovement : MonoBehaviour
     public Animator animator;
 
     CustomInputs input; // calls to the input manager
-
+    InputManager inputManager;
     public Transform orientation;
 
     Rigidbody rb;
+
 
 
     int isWalkingHash;
@@ -129,7 +123,6 @@ public class characterMovement : MonoBehaviour
 
 
 
-
     void Awake()
     {
         input = new CustomInputs();
@@ -187,13 +180,28 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Select.performed += onSelect;
         input.CharacterControls.Select.canceled += onSelect;
 
-
+        // this is to charge up the music box might change my interacables to match this control?
+        input.CharacterControls.Hold.performed += onHolding;
+        input.CharacterControls.Hold.canceled += onNotHolding;
 
         input.Enable();
 
         setupJumpVaribles();
     }
+
     
+
+    private void onNotHolding(InputAction.CallbackContext context)
+    {
+        
+        InputManager.Instance.charging = false;
+    }
+
+    private void onHolding(InputAction.CallbackContext context)
+    {
+        InputManager.Instance.charging = true;
+    }
+
 
     //Dylan
     private void OnRightMouseButtonDown(InputAction.CallbackContext context)

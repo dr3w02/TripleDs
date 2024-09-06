@@ -89,6 +89,15 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hold"",
+                    ""type"": ""Button"",
+                    ""id"": ""2b4a0780-d30b-4be2-985e-3206610d0b0f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -259,6 +268,17 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""9c71d79b-9852-4bde-a651-eb0e8db6c8a7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""e9e221b6-fe48-49d1-80ac-4c154457a092"",
                     ""path"": ""<Keyboard>/capsLock"",
                     ""interactions"": """",
@@ -321,6 +341,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         m_CharacterControls_Pull = m_CharacterControls.FindAction("Pull", throwIfNotFound: true);
         m_CharacterControls_Select = m_CharacterControls.FindAction("Select", throwIfNotFound: true);
         m_CharacterControls_Climb = m_CharacterControls.FindAction("Climb", throwIfNotFound: true);
+        m_CharacterControls_Hold = m_CharacterControls.FindAction("Hold", throwIfNotFound: true);
         // PauseMenu
         m_PauseMenu = asset.FindActionMap("PauseMenu", throwIfNotFound: true);
         m_PauseMenu_MenuOpenClose = m_PauseMenu.FindAction("MenuOpenClose", throwIfNotFound: true);
@@ -392,6 +413,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Pull;
     private readonly InputAction m_CharacterControls_Select;
     private readonly InputAction m_CharacterControls_Climb;
+    private readonly InputAction m_CharacterControls_Hold;
     public struct CharacterControlsActions
     {
         private @CustomInputs m_Wrapper;
@@ -403,6 +425,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         public InputAction @Pull => m_Wrapper.m_CharacterControls_Pull;
         public InputAction @Select => m_Wrapper.m_CharacterControls_Select;
         public InputAction @Climb => m_Wrapper.m_CharacterControls_Climb;
+        public InputAction @Hold => m_Wrapper.m_CharacterControls_Hold;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -433,6 +456,9 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Climb.started += instance.OnClimb;
             @Climb.performed += instance.OnClimb;
             @Climb.canceled += instance.OnClimb;
+            @Hold.started += instance.OnHold;
+            @Hold.performed += instance.OnHold;
+            @Hold.canceled += instance.OnHold;
         }
 
         private void UnregisterCallbacks(ICharacterControlsActions instance)
@@ -458,6 +484,9 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Climb.started -= instance.OnClimb;
             @Climb.performed -= instance.OnClimb;
             @Climb.canceled -= instance.OnClimb;
+            @Hold.started -= instance.OnHold;
+            @Hold.performed -= instance.OnHold;
+            @Hold.canceled -= instance.OnHold;
         }
 
         public void RemoveCallbacks(ICharacterControlsActions instance)
@@ -530,6 +559,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         void OnPull(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
         void OnClimb(InputAction.CallbackContext context);
+        void OnHold(InputAction.CallbackContext context);
     }
     public interface IPauseMenuActions
     {
