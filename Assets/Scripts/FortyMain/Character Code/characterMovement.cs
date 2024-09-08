@@ -122,6 +122,27 @@ public class characterMovement : MonoBehaviour
     //Dylan
 
 
+    private void Start()
+    {
+        characterController = GetComponent<CharacterController>();
+
+        //CheckPoint saver
+
+        int savedCheckPointIndex = -1;
+        savedCheckPointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
+
+        if (savedCheckPointIndex != -1)
+        {
+            _startingPoint = _checkPointsArray[savedCheckPointIndex].transform.position; //creates the new starting point for everey checkpoint walked through spawns player in right direction
+            RespawnPlayer();
+        }
+        else
+        {
+            _startingPoint = gameObject.transform.position; //no checkpoint current position of player
+        }
+
+    }
+
 
     void Awake()
     {
@@ -748,27 +769,6 @@ public class characterMovement : MonoBehaviour
         }
     }
 
-
-    private void Start()
-    {
-        characterController = GetComponent<CharacterController>();
-
-        //CheckPoint saver
-
-        int savedCheckPointIndex = -1;
-        savedCheckPointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
-
-        if (savedCheckPointIndex != -1)
-        {
-            _startingPoint = _checkPointsArray[savedCheckPointIndex].transform.position; //creates the new starting point for everey checkpoint walked through spawns player in right direction
-            RespawnPlayer();
-        }
-        else
-        {
-            _startingPoint = gameObject.transform.position; //no checkpoint current position of player
-        }
-
-    }
 
     // Update is called once per frame
     private void FixedUpdate()

@@ -24,7 +24,7 @@ namespace Platformer
         void Awake()
         {
 
-            Player = GameObject.FindGameObjectWithTag("Player").transform;  //make sure to TAG the player
+        
 
 
         }

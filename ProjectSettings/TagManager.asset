@@ -12,6 +12,7 @@ TagManager:
   - Waypoint
   - EnemyClemCam
   - EnemyClem
+  - MusicBox
   layers:
   - Default
   - TransparentFX

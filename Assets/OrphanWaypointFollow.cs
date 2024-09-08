@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Platformer
 {
@@ -17,17 +18,37 @@ namespace Platformer
         public Animator orphanAnim;
         public GameObject sleepingPoint;
 
-       
+        readonly Transform player;
+
+
+        readonly NavMeshAgent gameObjectOrphan;
+
+        public LayerMask whatIsPlayer;
         /// <summary>
         // Music Box Logic 
 
         public bool MusicPlay;
 
 
-        
+        public float sightRange, attackRange;
+
+        public bool playerInSightRange, playerInAttackRange;
+
+        public float timeBetweenAttacks;
+
+        bool alreadyAttacked;
+
         // Update is called once per frame
-         void Update()
+        void Update()
          {
+
+            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+
+
+            if (playerInSightRange && !playerInAttackRange) Chasing();
+            if (playerInAttackRange && playerInSightRange) AttackPlayer();
+
             if (MusicPlay == true)
             {
                 Sleeping();
@@ -111,20 +132,66 @@ namespace Platformer
             orphan.transform.rotation = Quaternion.RotateTowards(orphan.transform.rotation, targetRotation, Time.deltaTime * 300f);
 
 
-           
+
         }
 
-        public void Attacking(PlayerDetectorOrphan Detection)
+
+        private void OnTriggerEnter(Collider other)
         {
 
-            //if (Detection.CanAttackPlayer)
+            Debug.Log("Chase");
+            orphanAnim.SetBool("RunFWD", true);
+            orphanAnim.SetBool("Idel", false);
+
+            gameObjectOrphan.SetDestination(player.position);
+
+
+            if (!alreadyAttacked)
             {
+                //Attack anim here 
+
+
+                alreadyAttacked = true;
+                Invoke(nameof(ResetAttack), timeBetweenAttacks);
+
+
+            }
+        }
+
+        public void Chasing()
+        {
+ 
+            Debug.Log("Chase");
+            orphanAnim.SetBool("RunFWD", true);
+            orphanAnim.SetBool("Idel", false);
+
+            gameObjectOrphan.SetDestination(player.position);
+
+
+            if (!alreadyAttacked)
+            {
+                //Attack anim here 
+
+
+                alreadyAttacked = true;
+                Invoke(nameof(ResetAttack), timeBetweenAttacks);
+
 
             }
 
+        }
+
+        public void AttackPlayer()
+        {
 
         }
 
+
+        private void ResetAttack()
+        {
+            alreadyAttacked = false;
+            // reset here 
+        }
 
     }
     

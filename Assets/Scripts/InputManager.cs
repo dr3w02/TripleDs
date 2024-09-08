@@ -24,7 +24,6 @@ public class InputManager : MonoBehaviour
             Instance = this;
         }
 
-        _playerInput = GetComponent<PlayerInput>();
         _menuOpenCloseAction = _playerInput.actions["MenuOpenClose"];
 
        

@@ -15,24 +15,53 @@ namespace Platformer
         public TimerController timer;
         private float fillSpeed = 5.0f;
         public float maxTime = 20.0f; // change here u gotta change the other one on timer
-        void Update()
+
+        public GameObject MusicBoxCollider;
+
+        string Music = "MusicBox";
+
+        public Transform Player { get; private set; }
+        public void Start()
         {
-           
-            if (InputManager.Instance.GetHold())
+            MusicBoxCollider = GameObject.FindGameObjectWithTag(Music);
+
+            Player = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+
+            if (other.CompareTag("Player")) 
             {
-                timer.MusicBoxWindUp();
-                radialImage.fillAmount += Time.deltaTime * fillSpeed;
+                if (InputManager.Instance.GetHold())
+                {
+                    timer.MusicBoxWindUp();
+                    radialImage.fillAmount += Time.deltaTime * fillSpeed;
+
+                }
 
             }
 
-            else
-            {
-
-                timer.MusicBoxWindDown();
-            }
 
             // Clamp fillAmount between 0 and 1
             radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                timer.MusicBoxWindDown();
+            }
+
+        }
+
+        void Update()
+        {
+
+            timer.MusicBoxWindDown();
+
+
         }
 
 
