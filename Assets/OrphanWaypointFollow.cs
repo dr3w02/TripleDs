@@ -22,7 +22,9 @@ namespace Platformer
         // Transforms of character
         public Transform player;
         // Physical GameObject
-        public GameObject mCharacter;
+        public GameObject mCharacter;/// <summary>
+        /// //check you!!!!!!!!!!!!!!!!!!!!!!!!
+        /// </summary>
         // Script
         public characterMovement characterMain;
         // Player
@@ -217,21 +219,21 @@ namespace Platformer
         {
 
                 
-                OrphanDeathCam.SetActive(false);
+             OrphanDeathCam.SetActive(false);
 
-                characterMain.TurnOffMovement();
+             characterMain.TurnOffMovement();
 
-                orphanAnim.SetBool("Attack", true);
+             orphanAnim.SetBool("Attack", true);
 
-                orphanAnim.SetBool("RunFWD", false);
+             orphanAnim.SetBool("RunFWD", false);
                 
-                OrphanDeathCam.SetActive(true);
+             OrphanDeathCam.SetActive(true);
 
-                FourtySix.SetActive(true);
+             FourtySix.SetActive(true);
 
              StartCoroutine(WaitBetweenFadeInOut());
 
-                Debug.Log("Switch Camera");
+             Debug.Log("Switch Camera");
             
         }
 
