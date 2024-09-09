@@ -17,10 +17,10 @@ namespace Platformer
         public GameObject orphan;
         public Animator orphanAnim;
         public GameObject sleepingPoint;
-
+        public GameObject FourtySix;
         // Player
         // Transforms of character
-        readonly Transform player;
+        public Transform player;
         // Physical GameObject
         public GameObject mCharacter;
         // Script
@@ -37,9 +37,12 @@ namespace Platformer
         public PlayerDetector PlayerDect;
         //readonly NavMeshAgent orphanNav;
 
-        [SerializeField] private float WaitTime = 3f;
+        [SerializeField] private float WaitTime = 0.5f;
 
-  
+        public bool running;
+
+        public bool Chase;
+
 
         // Music Box Logic
         public bool MusicPlay;
@@ -49,35 +52,55 @@ namespace Platformer
         public void Start()
         {
             OrphanDeathCam.SetActive(false);
-          
+
+            FourtySix.SetActive(false);
         }
 
         // Update is called once per frame
         void Update()
         {
 
-
-            // && !PlayerDect.CanAttackPlayer()
-            if (PlayerDect.CanDetectPlayer())
-            {
-                Chasing();
-                Debug.Log("CHASING");
-            }
-
-            if (PlayerDect.CanDetectPlayer() && PlayerDect.CanAttackPlayer())
-            {
-                AttackPlayer();
-                Debug.Log("CATTACKINGHH");
-            }
-
+           
             if (MusicPlay)
             {
                 Sleeping();
+                running = false;
             }
-            else
+
+            else if (!MusicPlay)
             {
-                Running();
+                running = true;
             }
+
+
+            if (!MusicPlay && PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer() && Chase == true)
+            {
+                    running = false; // Stop running and start chasing
+                    Chasing();
+                    Debug.Log("CHASING");
+                   
+            }
+
+
+            else if (!MusicPlay && PlayerDect.CanDetectPlayer() && PlayerDect.CanAttackPlayer())
+            {
+                Chase = false;
+                running = false;
+                AttackPlayer();
+                Debug.Log("CATTACKINGHH");
+               
+            }
+
+            else if (!MusicPlay && !PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer() && running == true)
+            {
+                Debug.Log("Running");
+                Running();
+                
+                Chase = true;
+
+            }
+
+
         }
 
         public void Sleeping()
@@ -110,62 +133,74 @@ namespace Platformer
             orphan.transform.rotation = Quaternion.RotateTowards(orphan.transform.rotation, targetRotation, Time.deltaTime * 300f);
         }
 
+
         public void Running()
         {
-            Debug.Log("Running");
-            Vector3 destination = waypointsOrphan[index].transform.position;
-            Vector3 newPos = Vector3.MoveTowards(transform.position, waypointsOrphan[index].transform.position, speed * Time.deltaTime);
-
-            transform.position = newPos;
-
-            orphanAnim.SetBool("RunFWD", true);
-            orphanAnim.SetBool("Idel", false);
-
-            float distance = Vector3.Distance(transform.position, destination);
-
-            if (distance <= 0.0001)
+            if (running == true)
             {
-                if (index < waypointsOrphan.Count - 1)
+                Debug.Log("Running");
+                Vector3 destination = waypointsOrphan[index].transform.position;
+                Vector3 newPos = Vector3.MoveTowards(transform.position, waypointsOrphan[index].transform.position, speed * Time.deltaTime);
+
+                transform.position = newPos;
+
+                orphanAnim.SetBool("RunFWD", true);
+                orphanAnim.SetBool("Idel", false);
+                orphanAnim.SetBool("Attack", false);
+
+                float distance = Vector3.Distance(transform.position, destination);
+
+                if (distance <= 0.0001)
                 {
-                    index++;
+                    if (index < waypointsOrphan.Count - 1)
+                    {
+                        index++;
+                    }
+                    else if (isLoop)
+                    {
+                        index = 0;
+                    }
                 }
-                else if (isLoop)
-                {
-                    index = 0;
-                }
+
+
+                Vector3 directionToTarget = waypointsOrphan[index].transform.position - orphan.transform.position;
+                directionToTarget.y = 0;
+
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                orphan.transform.rotation = Quaternion.RotateTowards(orphan.transform.rotation, targetRotation, Time.deltaTime * 300f);
             }
-
-            Vector3 directionToTarget = waypointsOrphan[index].transform.position - orphan.transform.position;
-            directionToTarget.y = 0;
-
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-            orphan.transform.rotation = Quaternion.RotateTowards(orphan.transform.rotation, targetRotation, Time.deltaTime * 300f);
+            
         }
 
      
 
         public void Chasing()
         {
-            
-            
-            Debug.Log("Chase");
-            orphanAnim.SetBool("RunFWD", true);
-            orphanAnim.SetBool("Idel", false);
+            if  (Chase == true)
+            {
+                if (player == null || orphanAnim == null || orphan == null)
+                {
+                    Debug.LogError("Missing references in Chasing method");
+                    return;
+                }
 
-            // orphanNav.SetDestination(player.position);
-            //
-            ///Setting it manually
-            //  Vector3 directionToPlayer = (player.transform.position - orphan.transform.position).normalized;
-            // orphan.transform.position = Vector3.MoveTowards(orphan.transform.position, player.transform.position, speed * Time.deltaTime);
+                Debug.Log("Chase");
 
-           // Vector3 newPosition = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-            //transform.position = newPosition;
+                orphanAnim.SetBool("RunFWD", true);
+                orphanAnim.SetBool("Idel", false);
+                orphanAnim.SetBool("Attack", false);
 
-           // Vector3 directionToTarget = player.transform.position - orphan.transform.position;
-           // directionToTarget.y = 0;
 
-           // Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-           // orphan.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, Time.deltaTime * 300f);
+                Vector3 newPos = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+                transform.position = newPos;
+
+                Vector3 directionToTarget = player.transform.position - orphan.transform.position;
+                directionToTarget.y = 0;
+
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                orphan.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, Time.deltaTime * 300f);
+            }
+           
 
 
             if (!alreadyAttacked)
@@ -180,16 +215,21 @@ namespace Platformer
 
         public void AttackPlayer()
         {
-       
+
+                
                 OrphanDeathCam.SetActive(false);
+
                 characterMain.TurnOffMovement();
 
-                //orphanNav.isStopped = true;
+                orphanAnim.SetBool("Attack", true);
+
+                orphanAnim.SetBool("RunFWD", false);
+                
                 OrphanDeathCam.SetActive(true);
 
-                orphanAnim.SetBool("RunFWD", true);
+                FourtySix.SetActive(true);
 
-                StartCoroutine(WaitBetweenFadeInOut());
+             StartCoroutine(WaitBetweenFadeInOut());
 
                 Debug.Log("Switch Camera");
             
@@ -197,9 +237,12 @@ namespace Platformer
 
         public IEnumerator WaitBetweenFadeInOut()
         {
-            yield return new WaitForSeconds(WaitTime);
 
             mCharacter.SetActive(false);
+            yield return new WaitForSeconds(WaitTime);
+
+            
+
             Debug.Log("Switch Camera");
 
             fadeIn = true;
@@ -218,7 +261,7 @@ namespace Platformer
             }
 
             characterMain.RespawnPlayer();
-
+            FourtySix.SetActive(false);
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
 
@@ -232,7 +275,7 @@ namespace Platformer
                     OrphanDeathCam.SetActive(false);
                     mCharacter.SetActive(true);
                     characterMain.Enabled();
-                    GetComponent<NavMeshAgent>().isStopped = false;
+                    //GetComponent<NavMeshAgent>().isStopped = false;
                 }
                 else
                 {
@@ -244,6 +287,7 @@ namespace Platformer
         private void ResetAttack()
         {
             alreadyAttacked = false;
+           
         }
     }
 }

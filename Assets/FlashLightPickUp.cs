@@ -25,6 +25,7 @@ namespace Platformer
             Debug.Log("FlashLight");
 
             hasLight = true;
+
             if (hasLight == true)
             {
                pickedUpFlashLight.gameObject.SetActive(false);
