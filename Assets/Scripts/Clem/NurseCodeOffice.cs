@@ -16,8 +16,8 @@ namespace Platformer
         [SerializeField, Self] PlayerDetector playerDetector;
         [SerializeField, Child] Animator animator;
         public characterMovement characterMain;
-       
 
+        
         NavMeshAgent navMeshAgent; 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 
@@ -106,8 +106,8 @@ namespace Platformer
             
         }
 
-  
-  
+
+
 
         void FixedUpdate()
         {

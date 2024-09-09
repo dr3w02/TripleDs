@@ -1,16 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using Cinemachine;
 
 namespace Platformer
 {
     public class OrphanWaypointFollow : MonoBehaviour
     {
-        public List <GameObject> waypointsOrphan;
+        public List<GameObject> waypointsOrphan;
         public float speed = 2;
         int index = 0;
         public bool isLoop = true;
@@ -18,54 +18,72 @@ namespace Platformer
         public Animator orphanAnim;
         public GameObject sleepingPoint;
 
+        // Player
+        // Transforms of character
         readonly Transform player;
+        // Physical GameObject
+        public GameObject mCharacter;
+        // Script
+        public characterMovement characterMain;
+        // Player
 
+        // Handle the fade out and in
+        [SerializeField] private bool fadeIn = false;
+        [SerializeField] private bool fadeOut = true;
+        [SerializeField] public CanvasGroup myUIGroup;
+        [SerializeField] private float fadeWaitTime = 4f;
 
-        readonly NavMeshAgent gameObjectOrphan;
+        public GameObject OrphanDeathCam;
+        public PlayerDetector PlayerDect;
+        //readonly NavMeshAgent orphanNav;
 
-        public LayerMask whatIsPlayer;
-        /// <summary>
-        // Music Box Logic 
+        [SerializeField] private float WaitTime = 3f;
 
+  
+
+        // Music Box Logic
         public bool MusicPlay;
-
-
-        public float sightRange, attackRange;
-
-        public bool playerInSightRange, playerInAttackRange;
-
-        public float timeBetweenAttacks;
-
+    
         bool alreadyAttacked;
+
+        public void Start()
+        {
+            OrphanDeathCam.SetActive(false);
+          
+        }
 
         // Update is called once per frame
         void Update()
-         {
-
-            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        {
 
 
-            if (playerInSightRange && !playerInAttackRange) Chasing();
-            if (playerInAttackRange && playerInSightRange) AttackPlayer();
+            // && !PlayerDect.CanAttackPlayer()
+            if (PlayerDect.CanDetectPlayer())
+            {
+                Chasing();
+                Debug.Log("CHASING");
+            }
 
-            if (MusicPlay == true)
+            if (PlayerDect.CanDetectPlayer() && PlayerDect.CanAttackPlayer())
+            {
+                AttackPlayer();
+                Debug.Log("CATTACKINGHH");
+            }
+
+            if (MusicPlay)
             {
                 Sleeping();
             }
-
-            else if (MusicPlay == false)
+            else
             {
                 Running();
             }
-
-
         }
 
-
-       public void Sleeping()
+        public void Sleeping()
         {
             Debug.Log("Sleeping");
+
             Vector3 destinationSleep = sleepingPoint.transform.position;
 
             Vector3 newPos = Vector3.MoveTowards(transform.position, sleepingPoint.transform.position, speed * Time.deltaTime);
@@ -78,10 +96,10 @@ namespace Platformer
             orphanAnim.SetBool("Idel", false);
 
             if (distanceSleep == 0)
-           {
+            {
                 orphanAnim.SetBool("RunFWD", false);
                 orphanAnim.SetBool("Idel", true);
-           }
+            }
 
             Vector3 directionToTarget = sleepingPoint.transform.position - orphan.transform.position;
 
@@ -91,12 +109,12 @@ namespace Platformer
 
             orphan.transform.rotation = Quaternion.RotateTowards(orphan.transform.rotation, targetRotation, Time.deltaTime * 300f);
         }
+
         public void Running()
         {
             Debug.Log("Running");
             Vector3 destination = waypointsOrphan[index].transform.position;
             Vector3 newPos = Vector3.MoveTowards(transform.position, waypointsOrphan[index].transform.position, speed * Time.deltaTime);
-
 
             transform.position = newPos;
 
@@ -111,92 +129,121 @@ namespace Platformer
                 {
                     index++;
                 }
-
-                else
+                else if (isLoop)
                 {
-                    if (isLoop)
-                    {
-                        index = 0;
-                    }
-
+                    index = 0;
                 }
-
             }
 
             Vector3 directionToTarget = waypointsOrphan[index].transform.position - orphan.transform.position;
-
             directionToTarget.y = 0;
 
             Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-
             orphan.transform.rotation = Quaternion.RotateTowards(orphan.transform.rotation, targetRotation, Time.deltaTime * 300f);
-
-
-
         }
 
-
-        private void OnTriggerEnter(Collider other)
-        {
-
-            Debug.Log("Chase");
-            orphanAnim.SetBool("RunFWD", true);
-            orphanAnim.SetBool("Idel", false);
-
-            gameObjectOrphan.SetDestination(player.position);
-
-
-            if (!alreadyAttacked)
-            {
-                //Attack anim here 
-
-
-                alreadyAttacked = true;
-                Invoke(nameof(ResetAttack), timeBetweenAttacks);
-
-
-            }
-        }
+     
 
         public void Chasing()
         {
- 
+            
+            
             Debug.Log("Chase");
             orphanAnim.SetBool("RunFWD", true);
             orphanAnim.SetBool("Idel", false);
 
-            gameObjectOrphan.SetDestination(player.position);
+            // orphanNav.SetDestination(player.position);
+            //
+            ///Setting it manually
+            //  Vector3 directionToPlayer = (player.transform.position - orphan.transform.position).normalized;
+            // orphan.transform.position = Vector3.MoveTowards(orphan.transform.position, player.transform.position, speed * Time.deltaTime);
+
+           // Vector3 newPosition = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+            //transform.position = newPosition;
+
+           // Vector3 directionToTarget = player.transform.position - orphan.transform.position;
+           // directionToTarget.y = 0;
+
+           // Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+           // orphan.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, Time.deltaTime * 300f);
 
 
             if (!alreadyAttacked)
             {
-                //Attack anim here 
-
+                // Attack animation logic here
 
                 alreadyAttacked = true;
-                Invoke(nameof(ResetAttack), timeBetweenAttacks);
 
-
+                ResetAttack();
             }
-
         }
 
         public void AttackPlayer()
         {
+       
+                OrphanDeathCam.SetActive(false);
+                characterMain.TurnOffMovement();
 
+                //orphanNav.isStopped = true;
+                OrphanDeathCam.SetActive(true);
+
+                orphanAnim.SetBool("RunFWD", true);
+
+                StartCoroutine(WaitBetweenFadeInOut());
+
+                Debug.Log("Switch Camera");
+            
         }
 
+        public IEnumerator WaitBetweenFadeInOut()
+        {
+            yield return new WaitForSeconds(WaitTime);
+
+            mCharacter.SetActive(false);
+            Debug.Log("Switch Camera");
+
+            fadeIn = true;
+
+            while (fadeIn)
+            {
+                if (myUIGroup.alpha < 1)
+                {
+                    myUIGroup.alpha += Time.deltaTime;
+                    yield return null; // Wait for the next frame
+                }
+                else
+                {
+                    fadeIn = false;
+                }
+            }
+
+            characterMain.RespawnPlayer();
+
+            // Wait for the specified amount of time
+            yield return new WaitForSeconds(fadeWaitTime);
+
+            fadeOut = true;
+            while (fadeOut)
+            {
+                if (myUIGroup.alpha > 0)
+                {
+                    myUIGroup.alpha -= Time.deltaTime;
+                    yield return null; // Wait for the next frame
+                    OrphanDeathCam.SetActive(false);
+                    mCharacter.SetActive(true);
+                    characterMain.Enabled();
+                    GetComponent<NavMeshAgent>().isStopped = false;
+                }
+                else
+                {
+                    fadeOut = false;
+                }
+            }
+        }
 
         private void ResetAttack()
         {
             alreadyAttacked = false;
-            // reset here 
         }
-
     }
-    
-   
-    
-        
-    
 }

@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
             Instance = this;
         }
 
-        _menuOpenCloseAction = _playerInput.actions["MenuOpenClose"];
+       // _menuOpenCloseAction = _playerInput.actions["MenuOpenClose"];
 
        
     }
@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        MenuOpenCloseInput = _menuOpenCloseAction.WasPressedThisFrame();
+       // MenuOpenCloseInput = _menuOpenCloseAction.WasPressedThisFrame();
 
     }
 }

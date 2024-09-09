@@ -19,7 +19,7 @@ namespace Platformer
 
         IDetectionStrategy detectionStrategy;
 
-
+       
 
         void Awake()
         {
@@ -42,6 +42,7 @@ namespace Platformer
         {
 
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
+         
         }
 
         public bool CanAttackPlayer()

@@ -18,6 +18,7 @@ namespace Platformer
         [SerializeField] private float fadeWaitTime = 4f;
         [SerializeField] private float clemWaitTime = 3f;
         [SerializeField] private float BBWaitTime = 3f;
+
         public EnemyAttackState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player) : base(enemy, animator)
         {
             this.agent = agent;
