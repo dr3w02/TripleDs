@@ -7,6 +7,7 @@ namespace Platformer
 {
     public class BrakeTheVent : MonoBehaviour
     {
+
         public Animator VentAnim;
 
         public GameObject VentFixed;
@@ -19,14 +20,16 @@ namespace Platformer
         public GameObject PlayerDead;
 
         public ScrewDriver screw;
-        string Vent = "Vent";
+
+    
+
         public Collider ventOutskirts;
 
-
+        public Collider VentColliderTrigger;
        
 
 
-        [SerializeField] private float WaitTime = 0.5f;
+        [SerializeField] private float WaitTime = 20f;
 
         // Handle the fade out and in
         [SerializeField] private bool fadeIn = false;
@@ -39,25 +42,31 @@ namespace Platformer
 
        
         public GameObject VentDeathCam;
+
+
         private void Start()
         {
-            VentAnim.SetBool("VentSpin", true);
-            VentAnim.SetBool("Dead", false);
-            ventOutskirts.isTrigger = false;
             VentFixed.SetActive(true);
+            VentAnim.SetBool("VentSpin", true);
+          
+            VentAnim.SetBool("Dead", false);
 
+            ventOutskirts.isTrigger = false;
+            
             VentBroken.SetActive(false);
             PlayerDead.SetActive(false);
+            VentDeathCam.SetActive(false);
 
-
-            ventOutskirts = GetComponent<Collider>();
+           // ventOutskirts = GetComponent<Collider>();
 
 
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider VentColliderTrigger)
         {
-            if (other.CompareTag("Player"))
+            Debug.Log("Trigger entered by: " + VentColliderTrigger.gameObject.name);
+
+            if (VentColliderTrigger.CompareTag("Player"))
             {
                 if (screw.hasScrew == true)
                 {
@@ -65,19 +74,31 @@ namespace Platformer
                     VentFixed.SetActive(false);
                     VentAnim.SetBool("VentSpin", false);
                     VentBroken.SetActive(true);
+                    VentDeathCam.SetActive(false);
+                    screw.holdingScrew.gameObject.SetActive(true);
                 }
             }
-            else if (screw.hasScrew == false)
+
+            if (VentColliderTrigger.CompareTag("Player"))
             {
-                VentAnim.SetBool("Dead", true);
+                if (screw.hasScrew == false)
+                {
+                    VentDeathCam.SetActive(true);
+                    VentFixed.SetActive(true);
 
-                //mCharacter.SetActive(false);
-                PlayerDead.SetActive(true);
+                    VentAnim.SetBool("Dead", true);
+                    VentAnim.SetBool("VentSpin", true);
+                    mCharacter.SetActive(false);
 
-                StartCoroutine(WaitBetweenFadeInOut());
+
+                   PlayerDead.SetActive(true);
+
+                   StartCoroutine(WaitBetweenFadeInOut());
+                }
+
             }
 
-           
+
 
         }
 
@@ -110,7 +131,7 @@ namespace Platformer
             }
 
             characterMain.RespawnPlayer();
-            mCharacter.SetActive(false);
+            //mCharacter.SetActive(false);
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
 
@@ -125,6 +146,15 @@ namespace Platformer
                     mCharacter.SetActive(true);
                     characterMain.Enabled();
                     //GetComponent<NavMeshAgent>().isStopped = false;
+
+
+                    VentFixed.SetActive(true);
+                    screw.pickedUpScrew.gameObject.SetActive(true);
+                    screw.holdingScrew.gameObject.SetActive(false);
+
+                    VentAnim.SetBool("Dead", false);
+                    VentAnim.SetBool("VentSpin", true);
+                    PlayerDead.SetActive(false);
                 }
                 else
                 {

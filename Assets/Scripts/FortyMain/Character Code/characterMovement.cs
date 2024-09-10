@@ -23,12 +23,14 @@ public class characterMovement : MonoBehaviour
 
     Rigidbody rb;
 
-
+   
 
     int isWalkingHash;
     int isRunningHash;
     int isCrouchingHash;
     int isPullingHash;
+    int isRopeHash;
+    int isLadderHash;
 
 
     Vector2 currentMovementInput;
@@ -164,6 +166,10 @@ public class characterMovement : MonoBehaviour
         isJumpingHash = Animator.StringToHash("isJumping");
         isCrouchingHash = Animator.StringToHash("isCrouching");
         isPullingHash = Animator.StringToHash("isPulling");
+        isRopeHash = Animator.StringToHash("isRope");
+        isLadderHash = Animator.StringToHash("isLadder");
+       
+
         //isSelectedHash = Animator.StringToHash("isSelected");
 
 
@@ -525,6 +531,8 @@ public class characterMovement : MonoBehaviour
         isClimbingLadder = true;
         this.lastGrabLadderDirection = lastGrabLadderDirection.normalized;
 
+        animator.SetBool(isLadderHash, true);
+        animator.SetBool(isPullingHash, false);
         //currentMovement.x = 0f;
         //currentMovement.y = climbSpeed;
         //currentMovement.z = 0f;
@@ -534,7 +542,8 @@ public class characterMovement : MonoBehaviour
         {
             RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
             RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
-
+            animator.SetBool(isRopeHash, true);
+            animator.SetBool(isPullingHash, false);
         }
 
         
@@ -552,8 +561,10 @@ public class characterMovement : MonoBehaviour
         rb.velocity = Vector3.zero;
         handleGravity();
         Debug.Log("DROPlADDER");
+        animator.SetBool(isLadderHash, false);
+        animator.SetBool(isRopeHash, false);
 
-      
+
     }
 
 
@@ -646,7 +657,21 @@ public class characterMovement : MonoBehaviour
         //Pulling Controls-------------------------------
         if ((isPullPressed) && !isPulling)
         {
-            animator.SetBool(isPullingHash, true);
+
+           //if (isClimbingLadder == true)
+          // {
+                   // animator.SetBool(isRopeHash, true);
+          //}
+
+               // else if (gameObject.tag == "Ladder")
+                //{
+                   // animator.SetBool(isLadderHash, true);
+               // }
+            
+          
+            
+                animator.SetBool(isPullingHash, true);
+            
             Debug.Log("Pull animator on");
         }
 

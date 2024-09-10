@@ -32,6 +32,7 @@ namespace Platformer
             {
                 pickedUpScrew.gameObject.SetActive(true);
                 holdingScrew.gameObject.SetActive(false);
+                hasScrew = false;
             }
 
 
