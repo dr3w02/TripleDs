@@ -422,7 +422,7 @@ public class characterMovement : MonoBehaviour
                 Debug.Log("Hit object position: " + hit.transform.position);
                 Debug.Log("Hit object rotation: " + hit.transform.rotation);
                 Debug.Log("Hit object scale: " + hit.transform.localScale);
-
+                isClimbingLadder = true;
                 // Call GrabLadder to handle attaching to the ladder
                 GrabLadder(hit.transform, hit.normal);
                 
@@ -458,18 +458,21 @@ public class characterMovement : MonoBehaviour
 
     private void GrabLadder(Transform hitTransform, Vector3 hitNormal)
     {
-        isClimbingLadder = true;
+        while (isClimbingLadder == true)
+        {
+            characterController.enabled = false;
 
-        characterController.enabled = false;
+            Debug.LogWarning("clIMBING");
 
-        Debug.LogWarning("clIMBING");
+            Vector3 alignedPosition = hitTransform.position + hitNormal + ClimbOffset;
+            player.transform.position = alignedPosition;
+            player.transform.rotation = hitTransform.rotation;
+            orientation.forward = hitNormal;
 
-        Vector3 alignedPosition = hitTransform.position + hitNormal + ClimbOffset;
-        player.transform.position = alignedPosition;
-        player.transform.rotation = hitTransform.rotation;
-        orientation.forward = hitNormal;
+            HandleClimbingMovement();
 
-        HandleClimbingMovement();
+        }
+
 
 
     }
