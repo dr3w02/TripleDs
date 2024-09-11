@@ -2,6 +2,7 @@ using Microsoft.Win32.SafeHandles;
 using Platformer;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -60,7 +61,7 @@ public class characterMovement : MonoBehaviour
     //bool swinging = false;
 
     Vector3 raycastOffset = new Vector3(0, 0.5f, 0);
-    Vector3 ClimbOffset = new Vector3(0, 0, -0.5f);
+    Vector3 ClimbOffset = new Vector3(0, 0, 0.2f);
 
     private Vector3 lastGrabLadderDirection;
 
@@ -363,6 +364,10 @@ public class characterMovement : MonoBehaviour
 
     void handleRotation()
     {
+        if (isClimbingLadder)
+        {
+            return;
+        }
 
         Vector3 positionToLookAt;
 
@@ -386,6 +391,8 @@ public class characterMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
 
         }
+        
+      
 
 
 
@@ -399,6 +406,10 @@ public class characterMovement : MonoBehaviour
         float ladderGrabDistance = 5f;
         float sphereRadius = 0.5f;
         int climbableLayer = LayerMask.GetMask("Climbable");
+
+
+        Vector3 originalPosition = player.transform.position;
+        Quaternion originalRotation = player.transform.rotation;
 
         // SphereCast to detect ladder
         if (Physics.SphereCast(orientation.position + raycastOffset, sphereRadius, orientation.forward, out RaycastHit hit, ladderGrabDistance, climbableLayer))
@@ -414,20 +425,30 @@ public class characterMovement : MonoBehaviour
 
                 // Call GrabLadder to handle attaching to the ladder
                 GrabLadder(hit.transform, hit.normal);
-
+                
             }
+
             // If player is climbing but pull is not pressed anymore, stop climbing
             else if (isClimbingLadder && !isPullPressed || hit.collider == null)
             {
                 DropLadder();
+                player.transform.position = originalPosition;
+                player.transform.rotation = originalRotation;
+            }
+
+            else if (hit.collider == null)
+            {
+                DropLadder();
+                player.transform.position = originalPosition;
+                player.transform.rotation = originalRotation;
             }
         }
+
         // If there's no hit but the player is climbing, drop the ladder
         else if (isClimbingLadder)
         {
             DropLadder();
         }
-    
 
 
 
@@ -438,55 +459,47 @@ public class characterMovement : MonoBehaviour
     private void GrabLadder(Transform hitTransform, Vector3 hitNormal)
     {
         isClimbingLadder = true;
-      
-      
 
-        characterController.enabled = false; // Disable character controller while climbing
+        characterController.enabled = false;
 
-  
-        Vector3 alignedPosition = hitTransform.position + hitNormal  + ClimbOffset; 
+        Debug.LogWarning("clIMBING");
+
+        Vector3 alignedPosition = hitTransform.position + hitNormal + ClimbOffset;
         player.transform.position = alignedPosition;
-
-
-        orientation.forward =- hitNormal;
+        player.transform.rotation = hitTransform.rotation;
+        orientation.forward = hitNormal;
 
         HandleClimbingMovement();
-      
+
+
     }
 
     private void HandleClimbingMovement()
     {
-        float climbSpeed = 0.00003f;
-        Vector3 moveDirection = CameraForward() + CameraRight();
+        float climbSpeed = 0.5f;
 
-        // Move up if input is -1 (climbing up)
+      
+        // Move up if input is -1 climbing up
         if (currentMovementInput.y == -1)
         {
-
-       
+            characterController.enabled = false;
             rb.MovePosition(player.transform.position + Vector3.up * climbSpeed * Time.deltaTime);
            
        
             Debug.LogWarning("CLIMBING UP");
         }
-        // Move down if input is 1 (climbing down)
+        // Move down if input is 1 climbing down
 
 
         else if (currentMovementInput.y == 1)
         {
-
-            Vector3 positionToLookAt;
-            positionToLookAt.z = -0f;
-            
+            characterController.enabled = false;
+            rb.freezeRotation = true;
             rb.MovePosition(player.transform.position + Vector3.down * climbSpeed * Time.deltaTime);
             Debug.LogWarning("CLIMBING DOWN");
         }
 
-        
-
-        
-        rb.velocity = Vector3.zero;
-        rb.freezeRotation = true; 
+     
 
         if (gameObject.tag == "Vine")
         {
@@ -497,10 +510,10 @@ public class characterMovement : MonoBehaviour
 
     private void DropLadder()
     {
+      
         isClimbingLadder = false;
         
         characterController.enabled = true; 
-        rb.velocity = Vector3.zero;
 
         // Reset animations
         animator.SetBool(isLadderHash, false);
@@ -775,7 +788,7 @@ public class characterMovement : MonoBehaviour
         handleCrouch();
 
 
-        HandleClimbingMovement();
+        //HandleClimbingMovement();
 
         // Incase player falls through ground
 
