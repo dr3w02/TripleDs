@@ -420,6 +420,7 @@ public class characterMovement : MonoBehaviour
     void handleRotation()
     {
         
+
         Vector3 positionToLookAt;
 
         positionToLookAt.x = currentMovement.x;
@@ -430,15 +431,30 @@ public class characterMovement : MonoBehaviour
         Quaternion currentRotation = transform.rotation;
 
 
+        if (ClimableFound == true)
+        {
+            return;
+        
+        }
+
+
+        if (ClimableFound == false)
+        {
+            handleRotation();
+
+        }
+
         if (isMovementPressed)
         {
 
-            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
-            
+           Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
 
-            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
+
+           transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
 
         }
+        
+           
 
 
 
@@ -480,7 +496,7 @@ public class characterMovement : MonoBehaviour
                       
 
                         float ladderXRotation = -ladderRotation.x ;
-                        float ladderZRotation = -ladderRotation.z ;
+                        float ladderZRotation = -ladderRotation.z * 0f;
                       
 
                         Vector3 currentRotation = player.transform.rotation.eulerAngles;
@@ -549,7 +565,8 @@ public class characterMovement : MonoBehaviour
     {
         if (lastHit != null || ClimableFound == true)
         {
-           
+            characterController.enabled = false;
+          
             // Move up if input is -1 climbing up
             if (currentMovementInput.y == -1)
             {
@@ -594,7 +611,7 @@ public class characterMovement : MonoBehaviour
     {
         Debug.LogWarning("Drop");
         isClimbingLadder = false;
-        
+       
         characterController.enabled = true;
 
         // Reset animations
@@ -607,7 +624,7 @@ public class characterMovement : MonoBehaviour
         float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
         float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
 
-     
+      
         this.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
 
         Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
