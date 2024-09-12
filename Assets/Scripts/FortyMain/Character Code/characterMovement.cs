@@ -27,6 +27,7 @@ public class characterMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    public GameObject lasthit;
 
 
     int isWalkingHash;
@@ -411,59 +412,52 @@ public class characterMovement : MonoBehaviour
 
     private void CheckForLadder()
     {
-       
-            float ladderGrabDistance = 5f;
-            float sphereRadius = 0.5f;
-            int climbableLayer = LayerMask.GetMask("Climbable");
 
-            // Save the player's original position and rotation in case they need to drop the ladder
-            Vector3 originalPosition = player.transform.position;
-            Quaternion originalRotation = player.transform.rotation;
-               
-                
-            // Perform SphereCast to detect a climbable object (like a ladder)
-            if (Physics.SphereCast(orientation.position + raycastOffset, sphereRadius, orientation.forward, out RaycastHit hit, ladderGrabDistance, climbableLayer))
+        if (ClimableFound)
+        {
+            // If the pull button is pressed, handle climbing
+            if (isPullPressed)
             {
-                // If the pull button is pressed, handle climbing
-                if (isPullPressed)
-                {
-                    // If not already climbing, initiate climbing
-                    if (!isClimbingLadder)
-                    {
-                        Debug.Log("Raycast hit " + hit.collider.name);
-                        Debug.Log("Hit object position: " + hit.transform.position);
-                        Debug.Log("Hit object rotation: " + hit.transform.rotation);
-                        Debug.Log("Hit object scale: " + hit.transform.localScale);
-                        isClimbingLadder = true;
-                        HandleClimbingMovement(hit.transform, hit.normal);
-                    }
 
-                    // If already climbing, continue handling the climbing movement
-                    HandleClimbingMovement(hit.transform, hit.normal);
-                }
-                else
+                // If not already climbing, initiate climbing
+                if (!isClimbingLadder)
                 {
-                    // If the pull button is released while climbing, drop the ladder
-                    if (isClimbingLadder)
-                    {
-                        DropLadder();
-                        isClimbingLadder = false;
-                        player.transform.position = originalPosition;
-                        player.transform.rotation = originalRotation;
-                    }
+                   
+
+                    player.transform.position = lasthit.gameObject.transform.position;
+
+                    isClimbingLadder = true;
+                    HandleClimbingMovement();
+                }
+
+                // If already climbing, continue handling the climbing movement
+                HandleClimbingMovement();
+            }
+            else
+            {
+                // If the pull button is released while climbing, drop the ladder
+                if (isClimbingLadder)
+                {
+                    DropLadder();
+                    isClimbingLadder = false;
+            
+
                 }
             }
-            else if (isClimbingLadder)
-            {
-                // If no ladder is detected but the player is climbing, drop the ladder
-                DropLadder();
-                isClimbingLadder = false;
-                player.transform.position = originalPosition;
-                player.transform.rotation = originalRotation;
-            }
-        
+        }
+
+        else if (isClimbingLadder)
+        {
+            // If no ladder is detected but the player is climbing, drop the ladder
+            DropLadder();
+            isClimbingLadder = false;
+           
+        }
     }
-
+    
+              
+        
+   
 
 
            
@@ -489,22 +483,15 @@ public class characterMovement : MonoBehaviour
 
  //   }
 
-    private void HandleClimbingMovement(Transform hitTransform, Vector3 hitNormal)
+    private void HandleClimbingMovement()
     {
            // Move up if input is -1 climbing up
             if (currentMovementInput.y == -1)
             {
                 characterController.enabled = false;
-                rb.MovePosition(player.transform.position + Vector3.up / climbSpeed * Time.deltaTime);
+                rb.MovePosition(player.transform.position +  Vector3.up / climbSpeed * Time.deltaTime);
             
-                Vector3 alignedPosition = hitTransform.position + hitNormal + ClimbOffset;
-                player.transform.position = alignedPosition;
-
-               Quaternion targetRotation = Quaternion.LookRotation(-hitNormal);
-
-               orientation.forward = -hitNormal;
-
-            Debug.LogWarning("CLIMBING UP");
+                Debug.LogWarning("CLIMBING UP");
 
 
             }
@@ -514,10 +501,12 @@ public class characterMovement : MonoBehaviour
             else if (currentMovementInput.y == 1)
             {
                 characterController.enabled = false;
-                // rb.freezeRotation = true;
-               rb.MovePosition(player.transform.position + Vector3.down / climbSpeed * Time.deltaTime);
+            // rb.freezeRotation = true;
+        
+                 rb.MovePosition(player.transform.position + Vector3.down / climbSpeed * Time.deltaTime);
 
-               // characterController.transform.position += Vector3.up / climbSpeed;
+         
+               //characterController.transform.position += Vector3.up / climbSpeed;
                 Debug.LogWarning("CLIMBING DOWN");
             }
 
@@ -534,7 +523,6 @@ public class characterMovement : MonoBehaviour
 
     private void DropLadder()
     {
-
         Debug.LogWarning("Drop");
         isClimbingLadder = false;
         
@@ -790,7 +778,7 @@ public class characterMovement : MonoBehaviour
 
     public LayerMask layer;
 
-
+    public bool ClimableFound;
     // Update is called once per frame
     private void FixedUpdate()
     {
@@ -812,7 +800,13 @@ public class characterMovement : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit,ladderGrabDistance, climbableLayer))
         {
+            GameObject lastHit = hit.transform.gameObject;
 
+            ClimableFound = true;
+        }
+        else
+        {
+            ClimableFound = false;
         }
 
         if (isRunPressed)
