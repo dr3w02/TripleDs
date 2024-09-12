@@ -466,26 +466,26 @@ public class characterMovement : MonoBehaviour
                     //position
 
                   
-                        //Vector3 lastHitPosition = lastHit.transform.position;
-                        //Vector3 newPosition = lastHitPosition + ClimbOffset;
+                        Vector3 lastHitPosition = lastHit.transform.position;
+                        Vector3 newPosition = lastHitPosition + ClimbOffset;
                         //player.transform.position = newPosition;
-                        //this.transform.position = newPosition;
+                        this.transform.position = newPosition;
                 
 
                     //Rotation
 
                        
-                        //Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles;
+                        Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles;
 
                       
 
-                        //float ladderXRotation = -ladderRotation.x ;
-                        //float ladderZRotation = -ladderRotation.z ;
+                        float ladderXRotation = -ladderRotation.x ;
+                        float ladderZRotation = -ladderRotation.z ;
                       
 
-                        //Vector3 currentRotation = player.transform.rotation.eulerAngles;
+                        Vector3 currentRotation = player.transform.rotation.eulerAngles;
 
-                        //this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
+                        this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
 
                         //player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
 
@@ -603,15 +603,14 @@ public class characterMovement : MonoBehaviour
 
         //player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
 
-        //float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
-        //float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
-        //float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
+        float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
+        float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
+        float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
 
-        // If no ladder is detected but the player is climbing, drop the ladder
-        //player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
-        //this.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+     
+        this.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
 
-        //Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
+        Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
 
         //player.transform.rotation = playerRotation;
 
@@ -639,19 +638,22 @@ public class characterMovement : MonoBehaviour
 
             isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
 
-        /*
+        
         if (OnSlope())
         {
             characterController.enabled = false;
 
-            //rb.AddForce(GetSlopeMoveDirection() * climbSpeed * 20f, ForceMode.Force);
-           
+            rb.AddForce(GetSlopeMoveDirection() * climbSpeed * 20f, ForceMode.Force);
+
             if (rb.velocity.y > 0)
-              //  rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            {
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+        
         }
 
         rb.useGravity = !OnSlope();
-        */
+        
     }
 
 
@@ -856,12 +858,6 @@ public class characterMovement : MonoBehaviour
 
        
 
-        //if (crouched == true && isCrouchPressed)
-        //{
-        //  isCrouchPressed = context.ReadValueAsButton();
-        //  crouched = false;
-        //}
-
         if (crouched == false)
         {
            
@@ -895,24 +891,24 @@ public class characterMovement : MonoBehaviour
     }
 
 
-    /*
+    
     private bool OnSlope()
     {
-       // if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+       if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
-         //   float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-          //  return angle < maxSlopeAngle && angle != 0;
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+           return angle < maxSlopeAngle && angle != 0;
         }
 
         return false;
     }
 
-   // private Vector3 GetSlopeMoveDirection()
+    private Vector3 GetSlopeMoveDirection()
     {
-        //return Vector3.ProjectOnPlane(currentMovement, slopeHit.normal).normalized;
+        return Vector3.ProjectOnPlane(currentMovement, slopeHit.normal).normalized;
     }
 
-    */
+    
 
 
     // Update is called once per frame
@@ -932,10 +928,10 @@ public class characterMovement : MonoBehaviour
         var ray = new Ray(this.transform.position, this.transform.forward);
 
         RaycastHit hit;
-       
-        //Debug.DrawRay(this.transform.position, this.transform.forward * ladderGrabDistance);
 
-        if (Physics.Raycast(ray, out hit,ladderGrabDistance, climbableLayer))
+        //Gizmos.DrawRay(this.transform.position, this.transform.forward * ladderGrabDistance);
+
+        if (Physics.Raycast(ray, out hit, ladderGrabDistance, climbableLayer))
         {
             lastHit = hit.transform.gameObject;
 
@@ -944,48 +940,51 @@ public class characterMovement : MonoBehaviour
 
             Debug.Log("Hit object: " + hit.transform.gameObject.name);
 
-            DrawOnGizmos();
 
 
         }
 
-        else if (lastHit == null)
-        {
-            Debug.LogWarning("LastHitNULL");
-            ClimableFound = false;
-        }
-
-      
         else
         {
-            ClimableFound = false;
-            Debug.LogWarning("Raycast did not hit but LastHit is not null.");
+            if (lastHit == null)
+            {
+                Debug.LogWarning("LastHitNULL");
+                ClimableFound = false;
+            }
+
+
+            else
+            {
+                ClimableFound = false;
+                Debug.LogWarning("Raycast did not hit but LastHit is not null.");
+            }
+
+
+
+            if (isRunPressed)
+            {
+                characterController.Move(currentRunMovement * Time.deltaTime);
+            }
+            else
+            {
+                characterController.Move(currentMovement * Time.deltaTime);
+            }
+
+            GroundCheck();
+            handleGravity();
+            handleJump();
+            handleCrouch();
+
+            // Incase player falls through ground
+
+            //if (transform.position.y <= .10f) // checking players Y axsis
+            //{
+            //  RespawnPlayer();
+            //
+            //}
+
+            //add unstuck button here?
         }
-
-        if (isRunPressed)
-        {
-            characterController.Move(currentRunMovement * Time.deltaTime);
-        }
-        else
-        {
-            characterController.Move(currentMovement * Time.deltaTime);
-        }
-
-        GroundCheck();
-        handleGravity();
-        handleJump();
-        handleCrouch();
-
-        // Incase player falls through ground
-
-        //if (transform.position.y <= .10f) // checking players Y axsis
-        //{
-        //  RespawnPlayer();
-        //
-        //}
-
-        //add unstuck button here?
-
 
 
 
@@ -1015,13 +1014,16 @@ public class characterMovement : MonoBehaviour
 
     }
 
+    /*
     void DrawOnGizmos()
     {
         FixedUpdate();
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(collision, 0.2f);
+       Gizmos.DrawWireSphere(collision, 0.2f);
 
-    }
+   }
+    */
+
 
     /// <summary>
     /// Truning on and off players movement ability
