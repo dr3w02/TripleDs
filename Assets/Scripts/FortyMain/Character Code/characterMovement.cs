@@ -16,7 +16,7 @@ using UnityEngine.UIElements;
 
 public class characterMovement : MonoBehaviour
 {
-    public GameObject RopeBottom;
+  
     public Transform cam;
 
     public Animator animator;
@@ -29,7 +29,8 @@ public class characterMovement : MonoBehaviour
 
     
     public Vector3 collision = Vector3.zero;
-  
+
+    [Header("Controls")]
 
     int isWalkingHash;
     int isRunningHash;
@@ -38,7 +39,7 @@ public class characterMovement : MonoBehaviour
     int isRopeHash;
     int isLadderHash;
 
-
+   
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 currentRunMovement;
@@ -85,17 +86,21 @@ public class characterMovement : MonoBehaviour
     int zero = 0;
     //fancy jump
     //9.8
+
+
+    [Header("Gravity")]
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
 
 
-   
 
-    
+
+
 
 
     //Jumping Varibles
 
+    [Header("Jump")]
     bool isJumpPressed = false;
     public float initialJumpVelocity;
     public float maxJumpHeight = 4.0f;
@@ -104,14 +109,10 @@ public class characterMovement : MonoBehaviour
     int isJumpingHash;
     bool isJumpAnimating = false;
 
+ 
 
     /// <summary>
-    // For Couch Up and Down
 
-    public float crouchSpeed = 2;
-    public float normalHeight = 2;
-    public float crouchHeight = 0.5f;
-    public Vector3 offset;
 
 
     //Selected
@@ -148,10 +149,21 @@ public class characterMovement : MonoBehaviour
     private RaycastHit slopeHit;
 
 
+    [Header("Crouched")]
+    public bool crouched;
+    // For Couch Up and Down
 
+    public float crouchSpeed = 2;
+    public float normalHeight = 2;
+    public float crouchHeight = 0.5f;
+    public Vector3 offset;
+
+    [Header("Climbing")]
     public LayerMask layer;
     private GameObject lastHit;
     public bool ClimableFound;
+
+    public GameObject RopeBottom;
 
 
 
@@ -384,13 +396,20 @@ public class characterMovement : MonoBehaviour
 
     void onCrouch(InputAction.CallbackContext context)
     {
-        if (!isRightMouseButtonPressed)
+        if (context.performed)
         {
-            isCrouchPressed = context.ReadValueAsButton();
+            if (!isRightMouseButtonPressed)
+            {
+                isCrouchPressed = context.ReadValueAsButton();
+
+
+            }
         }
+       
         isCrouchPressed = context.ReadValueAsButton();
-        //Debug.Log("CrouchedPressed");
+        Debug.Log("CrouchedPressed");
     }
+ 
 
     public void onSelect(InputAction.CallbackContext context)
     {
@@ -400,28 +419,22 @@ public class characterMovement : MonoBehaviour
 
     void handleRotation()
     {
-        // if (isClimbingLadder)
-        // {
-        //   return;
-        // }
-
+        
         Vector3 positionToLookAt;
 
         positionToLookAt.x = currentMovement.x;
         positionToLookAt.y = zero;
         positionToLookAt.z = currentMovement.z;
 
-        // the current rotation of our character
+        
         Quaternion currentRotation = transform.rotation;
 
 
         if (isMovementPressed)
         {
 
-            //creates a new rotation based on where player is looking
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
-            //Debug.Log("MovementHasBeenPressed");
-            //rotate the character to face the positionToLookAt
+            
 
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
 
@@ -448,34 +461,33 @@ public class characterMovement : MonoBehaviour
                     {
                         
                       
-                        Vector3 ladderForward = lastHit.transform.forward;
+                        //Vector3 ladderForward = lastHit.transform.forward;
 
                     //position
 
                   
-                        Vector3 lastHitPosition = lastHit.transform.position;
-                        Vector3 newPosition = lastHitPosition + ClimbOffset;
+                        //Vector3 lastHitPosition = lastHit.transform.position;
+                        //Vector3 newPosition = lastHitPosition + ClimbOffset;
                         //player.transform.position = newPosition;
-                        this.transform.position = newPosition;
-                    //player.transform.position = lastHit.transform.position;
-                    // this.transform.position = lastHit.transform.position;
+                        //this.transform.position = newPosition;
+                
 
                     //Rotation
 
                        
-                        Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles;
+                        //Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles;
 
                       
 
-                        float ladderXRotation = -ladderRotation.x ;
-                        float ladderZRotation = -ladderRotation.z ;
+                        //float ladderXRotation = -ladderRotation.x ;
+                        //float ladderZRotation = -ladderRotation.z ;
                       
 
-                        Vector3 currentRotation = player.transform.rotation.eulerAngles;
+                        //Vector3 currentRotation = player.transform.rotation.eulerAngles;
 
-                        this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
+                        //this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
 
-                        player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
+                        //player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
 
 
                         Debug.LogWarning(lastHit.transform.position);
@@ -531,24 +543,7 @@ public class characterMovement : MonoBehaviour
     
 
 
-  //  private void GrabLadder(Transform hitTransform, Vector3 hitNormal)
-   // {
 
-        //    isClimbingLadder = true;
-      
-    //   Debug.LogWarning("clIMBING");
-
-         //   Vector3 alignedPosition = hitTransform.position + hitNormal + ClimbOffset;
-         //   player.transform.position = alignedPosition;
-
-        //    Quaternion targetRotation = Quaternion.LookRotation(-hitNormal);
-            
-       //     orientation.forward = -hitNormal;
-
-        
-
-
- //   }
 
     private void HandleClimbingMovement()
     {
@@ -606,19 +601,19 @@ public class characterMovement : MonoBehaviour
         //animator.SetBool(isLadderHash, false);
         //animator.SetBool(isRopeHash, false);
 
-        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+        //player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
 
-        float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
-        float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
-        float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
+        //float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
+        //float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
+        //float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
 
         // If no ladder is detected but the player is climbing, drop the ladder
-        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
-        this.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+        //player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+        //this.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
 
-        Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
+        //Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
 
-        player.transform.rotation = playerRotation;
+        //player.transform.rotation = playerRotation;
 
 
     }
@@ -627,29 +622,36 @@ public class characterMovement : MonoBehaviour
     
     void OnMovementInput(InputAction.CallbackContext context)
     {
+     
+        
+            currentMovementInput = context.ReadValue<Vector2>();
+            Vector3 moveDirection = CameraForward() + CameraRight();
 
-        currentMovementInput = context.ReadValue<Vector2>();
-        Vector3 moveDirection = CameraForward() + CameraRight();
+            currentMovement.x = moveDirection.x * currentMovementInput.x * speed;
+            currentMovement.z = moveDirection.z * currentMovementInput.y * speed;
+            //currentMovement.x = currentMovementInput.x;
+            //currentMovement.z = currentMovementInput.y;
 
-        currentMovement.x = moveDirection.x * currentMovementInput.x * speed;
-        currentMovement.z = moveDirection.z * currentMovementInput.y * speed;
-        //currentMovement.x = currentMovementInput.x;
-        //currentMovement.z = currentMovementInput.y;
+            currentRunMovement.x = moveDirection.x * currentMovementInput.x * runMultiplier;
+            currentRunMovement.z = moveDirection.z * currentMovementInput.y * runMultiplier;
+            //currentRunMovement.x = currentMovementInput.x * runMultiplier;
+            //currentRunMovement.z = currentMovementInput.y * runMultiplier;
 
-        currentRunMovement.x = moveDirection.x * currentMovementInput.x * runMultiplier;
-        currentRunMovement.z = moveDirection.z * currentMovementInput.y * runMultiplier;
-        //currentRunMovement.x = currentMovementInput.x * runMultiplier;
-        //currentRunMovement.z = currentMovementInput.y * runMultiplier;
+            isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
 
-        isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
-
+        /*
         if (OnSlope())
         {
-            characterController.enabled = true;
+            characterController.enabled = false;
 
-            rb.AddForce(GetSlopeMoveDirection() * climbSpeed * 20f, ForceMode.Force);
+            //rb.AddForce(GetSlopeMoveDirection() * climbSpeed * 20f, ForceMode.Force);
+           
+            if (rb.velocity.y > 0)
+              //  rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
 
+        rb.useGravity = !OnSlope();
+        */
     }
 
 
@@ -812,76 +814,105 @@ public class characterMovement : MonoBehaviour
     {
         bool isCrouching = animator.GetBool(isCrouchingHash);
 
-        if (currentMovement.x != 0 || currentMovement.z != 0)
-        {
-            animator.SetFloat("crouchSpeed", 1);
-        }
-        else
-        {
-            animator.SetFloat("crouchSpeed", 0);
-        }
-
-        //Crouching Controls-------------------------------
         if ((isCrouchPressed) && !isCrouching)
         {
-            animator.SetBool(isCrouchingHash, true);
-
-            // Debug.Log("CrouchAnimator");
-
-
-            characterController.height = characterController.height - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching
-
-            // Debug.Log("Crouched");
-
-            characterController.height = crouchHeight;
-
+            crouched = true;
         }
-
-        if ((!isCrouchPressed) && isCrouching)
+        else if ((isCrouchPressed) && isCrouching)
         {
-            animator.SetBool(isCrouchingHash, false);
-            // Debug.Log("CrouchAnimatoroff");
+            crouched = false;
+            Debug.Log("CROUCHEDAGAIN");
+        }
+        
+
+        if (crouched == true)
+        {
+
+            if (currentMovement.x != 0 || currentMovement.z != 0 )
+            {
+                animator.SetFloat("crouchSpeed", 1);
+            }
+            else
+            {
+                animator.SetFloat("crouchSpeed", 0);
+            }
+
+            
+                animator.SetBool(isCrouchingHash, true);
+
+                // Debug.Log("CrouchAnimator");
 
 
-            characterController.height = characterController.height + crouchSpeed * Time.deltaTime;
+                characterController.height = characterController.height - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching
 
+                // Debug.Log("Crouched");
 
-            characterController.height = normalHeight;
+                characterController.height = crouchHeight;
+            
+            
+
+            
         }
 
+       
 
+        //if (crouched == true && isCrouchPressed)
+        //{
+        //  isCrouchPressed = context.ReadValueAsButton();
+        //  crouched = false;
+        //}
+
+        if (crouched == false)
+        {
+           
+                animator.SetBool(isCrouchingHash, false);
+                // Debug.Log("CrouchAnimatoroff");
+
+                crouched = false;
+                characterController.height = characterController.height + crouchSpeed * Time.deltaTime;
+
+
+                characterController.height = normalHeight;
+
+            
+
+        }
+        
+
+        
+        
 
         if (characterController.height < normalHeight) // safe guard to keep the player from clipping into the ground
         {
 
             player.localPosition = offset;
         }
+
         else
         {
             player.localPosition = Vector3.zero;
         }
     }
 
-   
+
+    /*
     private bool OnSlope()
     {
-        RaycastHit slopeHit;
-
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f * 0.3f))
+       // if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
+         //   float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+          //  return angle < maxSlopeAngle && angle != 0;
         }
 
         return false;
     }
 
-    private Vector3 GetSlopeMoveDirection()
+   // private Vector3 GetSlopeMoveDirection()
     {
-        return Vector3.ProjectOnPlane(currentMovement, slopeHit.normal).normalized;
+        //return Vector3.ProjectOnPlane(currentMovement, slopeHit.normal).normalized;
     }
 
- 
+    */
 
 
     // Update is called once per frame
@@ -901,7 +932,8 @@ public class characterMovement : MonoBehaviour
         var ray = new Ray(this.transform.position, this.transform.forward);
 
         RaycastHit hit;
-        
+       
+        //Debug.DrawRay(this.transform.position, this.transform.forward * ladderGrabDistance);
 
         if (Physics.Raycast(ray, out hit,ladderGrabDistance, climbableLayer))
         {
@@ -909,26 +941,25 @@ public class characterMovement : MonoBehaviour
 
             ClimableFound = true;
 
-           
-            Debug.Log(hit.transform.gameObject);
 
-      ;
-            
+            Debug.Log("Hit object: " + hit.transform.gameObject.name);
+
+            DrawOnGizmos();
+
+
         }
-
-       
-        
 
         else if (lastHit == null)
         {
             Debug.LogWarning("LastHitNULL");
             ClimableFound = false;
-
         }
 
+      
         else
         {
             ClimableFound = false;
+            Debug.LogWarning("Raycast did not hit but LastHit is not null.");
         }
 
         if (isRunPressed)
