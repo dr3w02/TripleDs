@@ -27,8 +27,9 @@ public class characterMovement : MonoBehaviour
 
     Rigidbody rb;
 
-    public GameObject lasthit;
-
+    
+    public Vector3 collision = Vector3.zero;
+  
 
     int isWalkingHash;
     int isRunningHash;
@@ -66,7 +67,9 @@ public class characterMovement : MonoBehaviour
     //bool swinging = false;
 
     Vector3 raycastOffset = new Vector3(0, 0.5f, 0);
-    Vector3 ClimbOffset = new Vector3(0, 0, 0.2f);
+
+
+    public Vector3 ClimbOffset = new Vector3(0, 0, -0.8f);
 
     private Vector3 lastGrabLadderDirection;
 
@@ -154,6 +157,10 @@ public class characterMovement : MonoBehaviour
         PlayerPrefs.SetFloat("PlayerX", player.transform.position.x);
         PlayerPrefs.SetFloat("PlayerY", player.transform.position.y);
         PlayerPrefs.SetFloat("PlayerZ", player.transform.position.z);
+
+        PlayerPrefs.SetFloat("PlayerXR", player.transform.rotation.x);
+        PlayerPrefs.SetFloat("PlayerYR", player.transform.rotation.y);
+        PlayerPrefs.SetFloat("PlayerZR", player.transform.rotation.z);
 
     }
 
@@ -396,7 +403,6 @@ public class characterMovement : MonoBehaviour
             //Debug.Log("MovementHasBeenPressed");
             //rotate the character to face the positionToLookAt
 
-
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
 
         }
@@ -408,50 +414,106 @@ public class characterMovement : MonoBehaviour
     }
 
 
-
-
     private void CheckForLadder()
     {
-
-        if (ClimableFound)
-        {
-            // If the pull button is pressed, handle climbing
-            if (isPullPressed)
+       
+            if (lastHit != null || ClimableFound == true)
             {
-
-                // If not already climbing, initiate climbing
-                if (!isClimbingLadder)
+                // If the pull button is pressed, handle climbing
+                if (isPullPressed)
                 {
+
+                    // If not already climbing, initiate climbing
+                    if (!isClimbingLadder)
+                    {
+                        Vector3 ladderForward = lastHit.transform.forward;
+
+                    //position
+
+
+                        Vector3 lastHitPosition = lastHit.transform.position;
+                        Vector3 newPosition = lastHitPosition + ClimbOffset;
+                        player.transform.position = newPosition;
+                        this.transform.position = newPosition;
+                        //player.transform.position = lastHit.transform.position;
+                       // this.transform.position = lastHit.transform.position;
+
+                    //Rotation
+
+                        Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles;
+
+                        float ladderXRotation = -ladderRotation.x;
+
+                        Vector3 currentRotation = player.transform.rotation.eulerAngles;
+
+                        player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, currentRotation.z);
+
+
+                        Debug.LogWarning(lastHit.transform.position);
+                        Debug.Log(player.transform.position);
+                        // player.transform.position = lasthit.point;
+
+                        isClimbingLadder = true;
+                        HandleClimbingMovement();
+                    }
+
+                 
+                }
+                else
+                {
+                    // If the pull button is released while climbing, drop the ladder
+                    if (isClimbingLadder)
+                    {
+                        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+
+                      
+                        float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
+                        float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
+                        float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
+
+                        // If no ladder is detected but the player is climbing, drop the ladder
+                        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+                        Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
+
+                        player.transform.rotation = playerRotation;
+
+
+                        isClimbingLadder = false;
+
+                        DropLadder();
+
+
+
+
+                    }
+
                    
 
-                    player.transform.position = lasthit.gameObject.transform.position;
-
-                    isClimbingLadder = true;
-                    HandleClimbingMovement();
-                }
-
-                // If already climbing, continue handling the climbing movement
-                HandleClimbingMovement();
-            }
-            else
-            {
-                // If the pull button is released while climbing, drop the ladder
-                if (isClimbingLadder)
-                {
-                    DropLadder();
-                    isClimbingLadder = false;
-            
-
+                   
                 }
             }
-        }
 
-        else if (isClimbingLadder)
+
+
+      
+
+
+        else if (isClimbingLadder || ClimableFound == false)
         {
+            float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
+            float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
+            float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
+
             // If no ladder is detected but the player is climbing, drop the ladder
-            DropLadder();
+            player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+            Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
+
+            player.transform.rotation = playerRotation;
+
+
+
             isClimbingLadder = false;
-           
+            DropLadder();
         }
     }
     
@@ -485,12 +547,15 @@ public class characterMovement : MonoBehaviour
 
     private void HandleClimbingMovement()
     {
-           // Move up if input is -1 climbing up
+        if (lastHit != null || ClimableFound == true)
+        {
+            // Move up if input is -1 climbing up
             if (currentMovementInput.y == -1)
             {
+               
                 characterController.enabled = false;
-                rb.MovePosition(player.transform.position +  Vector3.up / climbSpeed * Time.deltaTime);
-            
+                rb.MovePosition(player.transform.position + Vector3.up * climbSpeed * Time.deltaTime);
+
                 Debug.LogWarning("CLIMBING UP");
 
 
@@ -500,13 +565,14 @@ public class characterMovement : MonoBehaviour
 
             else if (currentMovementInput.y == 1)
             {
+                
                 characterController.enabled = false;
-            // rb.freezeRotation = true;
-        
-                 rb.MovePosition(player.transform.position + Vector3.down / climbSpeed * Time.deltaTime);
+                // rb.freezeRotation = true;
 
-         
-               //characterController.transform.position += Vector3.up / climbSpeed;
+                rb.MovePosition(player.transform.position + Vector3.down * climbSpeed * Time.deltaTime);
+
+
+                //characterController.transform.position += Vector3.up / climbSpeed;
                 Debug.LogWarning("CLIMBING DOWN");
             }
 
@@ -517,8 +583,10 @@ public class characterMovement : MonoBehaviour
                 RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
                 RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
             }
-        
-       
+
+        }
+
+
     }
 
     private void DropLadder()
@@ -526,13 +594,13 @@ public class characterMovement : MonoBehaviour
         Debug.LogWarning("Drop");
         isClimbingLadder = false;
         
-        characterController.enabled = true; 
+        characterController.enabled = true;
+        
+       // Reset animations
+       //animator.SetBool(isLadderHash, false);
+       //animator.SetBool(isRopeHash, false);
 
-        // Reset animations
-        //animator.SetBool(isLadderHash, false);
-        //animator.SetBool(isRopeHash, false);
-
-        player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+       
     }
 
 
@@ -643,16 +711,8 @@ public class characterMovement : MonoBehaviour
         if ((isPullPressed) && !isPulling)
         {
 
-            if  (isClimbingLadder == true)
-            {
-
-                animator.SetBool(isLadderHash, true);
-            }
-
-            else
-            {
-                animator.SetBool(isPullingHash, true);
-            }
+          animator.SetBool(isPullingHash, true);
+            
 
             Debug.Log("Pull animator on");
         }
@@ -777,7 +837,7 @@ public class characterMovement : MonoBehaviour
     }
 
     public LayerMask layer;
-
+    private GameObject lastHit;
     public bool ClimableFound;
     // Update is called once per frame
     private void FixedUpdate()
@@ -793,17 +853,28 @@ public class characterMovement : MonoBehaviour
 
         loadCheckPoints();
 
-        var ray = new Ray(player.transform.position, player.transform.forward);
+        var ray = new Ray(this.transform.position, this.transform.forward);
 
         RaycastHit hit;
-
+        
 
         if (Physics.Raycast(ray, out hit,ladderGrabDistance, climbableLayer))
         {
-            GameObject lastHit = hit.transform.gameObject;
+            lastHit = hit.transform.gameObject;
 
             ClimableFound = true;
+
+            Debug.Log(hit.transform.gameObject);
         }
+        
+
+        else if (lastHit == null)
+        {
+            Debug.LogWarning("LastHitNULL");
+            ClimableFound = false;
+
+        }
+
         else
         {
             ClimableFound = false;
@@ -848,9 +919,10 @@ public class characterMovement : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.SphereCast(transform.position, characterController.radius, Vector3.down, out hit, groundCheckDistance))
-            {
+        {
             //Debug.Log("Grounded");
             isGrounded = true;
+
         }
 
         else
@@ -861,6 +933,13 @@ public class characterMovement : MonoBehaviour
 
     }
 
+    void DrawOnGizmos()
+    {
+        FixedUpdate();
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(collision, 0.2f);
+
+    }
 
     /// <summary>
     /// Truning on and off players movement ability
