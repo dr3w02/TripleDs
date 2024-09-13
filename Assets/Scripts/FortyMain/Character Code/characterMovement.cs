@@ -146,7 +146,14 @@ public class characterMovement : MonoBehaviour
     public float maxSlopeAngle;
 
     public float playerHeight = 0.3057787f;
+
+  
     private RaycastHit slopeHit;
+
+
+
+
+
 
 
     [Header("Crouched")]
@@ -159,7 +166,7 @@ public class characterMovement : MonoBehaviour
     public Vector3 offset;
 
     [Header("Climbing")]
-    public LayerMask layer;
+
     private GameObject lastHit;
     public bool ClimableFound;
 
@@ -172,7 +179,7 @@ public class characterMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         //CheckPoint saver
-
+        Collider collider = GetComponent<Collider>();
         int savedCheckPointIndex = -1;
         savedCheckPointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
 
@@ -424,25 +431,16 @@ public class characterMovement : MonoBehaviour
         Vector3 positionToLookAt;
 
         positionToLookAt.x = currentMovement.x;
-        positionToLookAt.y = zero;
+        positionToLookAt.y = 0;
         positionToLookAt.z = currentMovement.z;
 
         
         Quaternion currentRotation = transform.rotation;
 
 
-        if (ClimableFound == true)
-        {
-            return;
         
-        }
 
-
-        if (ClimableFound == false)
-        {
-            handleRotation();
-
-        }
+      
 
         if (isMovementPressed)
         {
@@ -453,11 +451,21 @@ public class characterMovement : MonoBehaviour
            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
 
         }
-        
-           
 
 
 
+
+        else if (ClimableFound == true)
+        {
+
+            //Quaternion climbingRotation = transform.rotation;
+
+            //climbingRotation.x = 0; 
+
+            //transform.rotation = climbingRotation;
+
+            return;
+        }
 
 
     }
@@ -468,11 +476,11 @@ public class characterMovement : MonoBehaviour
        
             if (lastHit != null || ClimableFound == true)
             {
-                // If the pull button is pressed, handle climbing
+          
                 if (isPullPressed)
                 {
                     
-                    // If not already climbing, initiate climbing
+                   
                     if (!isClimbingLadder)
                     {
                         
@@ -490,19 +498,23 @@ public class characterMovement : MonoBehaviour
 
                     //Rotation
 
+
                        
-                        Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles;
+                        Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles.normalized;
+                        
 
-                      
 
-                        float ladderXRotation = -ladderRotation.x ;
-                        float ladderZRotation = -ladderRotation.z * 0f;
-                      
+                         float ladderXRotation = -ladderRotation.x ;
+                         float ladderZRotation =  0f;
+                         float ladderYRotation = -ladderRotation.y;
 
+        
                         Vector3 currentRotation = player.transform.rotation.eulerAngles;
+                        Vector3 currentRotationThis = this.transform.rotation.eulerAngles;
 
-                        this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
+                        this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotationThis.y, ladderZRotation).normalized;
 
+                        player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation).normalized;
                         //player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
 
 
@@ -518,7 +530,7 @@ public class characterMovement : MonoBehaviour
                 }
                 else
                 {
-                    // If the pull button is released while climbing, drop the ladder
+               
                     if (isClimbingLadder)
                     {
 
@@ -549,22 +561,15 @@ public class characterMovement : MonoBehaviour
             DropLadder();
         }
     }
-    
-              
-        
+
+
    
-
-
-           
-    
-
-
-
-
     private void HandleClimbingMovement()
     {
         if (lastHit != null || ClimableFound == true)
         {
+            //OnSlope();
+
             characterController.enabled = false;
           
             // Move up if input is -1 climbing up
@@ -594,7 +599,7 @@ public class characterMovement : MonoBehaviour
                 Debug.LogWarning("CLIMBING DOWN");
             }
 
-
+            
 
             if (gameObject.tag == "Vine")
             {
@@ -655,23 +660,24 @@ public class characterMovement : MonoBehaviour
 
             isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
 
-        
-        if (OnSlope())
-        {
-            characterController.enabled = false;
 
-            rb.AddForce(GetSlopeMoveDirection() * climbSpeed * 20f, ForceMode.Force);
 
-            if (rb.velocity.y > 0)
-            {
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-            }
-        
-        }
+      //  if (OnSlope())
+        //{
+            // Vector3 slopeMovement = GetSlopeMoveDirection() * speed;
+            //characterController.Move(slopeMovement * Time.deltaTime);
 
-        rb.useGravity = !OnSlope();
-        
+
+        //
+          //  rb.AddForce(GetSlopeMoveDirection() * speed * 20f, ForceMode.Force);
+        //}
+
+
+
+
     }
+
+
 
 
     //CheckPonts
@@ -908,30 +914,40 @@ public class characterMovement : MonoBehaviour
     }
 
 
-    
+    /*
     private bool OnSlope()
     {
-       if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+       
+        if (Physics.Raycast(player.transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+           float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+           return angle < maxSlopeAngle && angle != 0;
+
+        }
+
+        if (Physics.Raycast(this.transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-           return angle < maxSlopeAngle && angle != 0;
+            return angle < maxSlopeAngle && angle != 0;
         }
+
 
         return false;
     }
-
+    
     private Vector3 GetSlopeMoveDirection()
     {
         return Vector3.ProjectOnPlane(currentMovement, slopeHit.normal).normalized;
     }
 
-    
+    */
 
 
-    // Update is called once per frame
     private void FixedUpdate()
     {
-        float ladderGrabDistance = 5f;
+
+
+        float ladderGrabDistance = 10f;
         //float sphereRadius = 0.5f;
         int climbableLayer = LayerMask.GetMask("Climbable");
        
@@ -942,20 +958,23 @@ public class characterMovement : MonoBehaviour
 
         loadCheckPoints();
 
+       
+
         var ray = new Ray(this.transform.position, this.transform.forward);
 
-        RaycastHit hit;
+        RaycastHit hitClimable;
 
-        //Gizmos.DrawRay(this.transform.position, this.transform.forward * ladderGrabDistance);
 
-        if (Physics.Raycast(ray, out hit, ladderGrabDistance, climbableLayer))
+        if (Physics.Raycast(ray, out hitClimable, ladderGrabDistance, climbableLayer))
         {
-            lastHit = hit.transform.gameObject;
+            lastHit = hitClimable.transform.gameObject;
+
+            collision = hitClimable.point;
 
             ClimableFound = true;
 
 
-            Debug.Log("Hit object: " + hit.transform.gameObject.name);
+            Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
 
 
 
@@ -973,9 +992,10 @@ public class characterMovement : MonoBehaviour
             else
             {
                 ClimableFound = false;
+
                 Debug.LogWarning("Raycast did not hit but LastHit is not null.");
             }
-
+        }
 
 
             if (isRunPressed)
@@ -986,6 +1006,7 @@ public class characterMovement : MonoBehaviour
             {
                 characterController.Move(currentMovement * Time.deltaTime);
             }
+
 
             GroundCheck();
             handleGravity();
@@ -1001,7 +1022,7 @@ public class characterMovement : MonoBehaviour
             //}
 
             //add unstuck button here?
-        }
+        
 
 
 
@@ -1031,15 +1052,15 @@ public class characterMovement : MonoBehaviour
 
     }
 
-    /*
-    void DrawOnGizmos()
-    {
-        FixedUpdate();
-        Gizmos.color = Color.yellow;
-       Gizmos.DrawWireSphere(collision, 0.2f);
+ 
 
-   }
-    */
+    void OnDrawGizmosSelected()
+    {
+        // Draw a yellow sphere at the transform's position
+        Gizmos.color = Color.yellow;
+
+        Gizmos.DrawSphere(transform.position, 1);
+    }
 
 
     /// <summary>

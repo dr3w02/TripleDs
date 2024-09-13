@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
             Instance = this;
         }
 
-        //_menuOpenCloseAction = _playerInput.actions["MenuOpenClose"];
+        _menuOpenCloseAction = _playerInput.actions["MenuOpenClose"];
 
        
     }
