@@ -143,12 +143,12 @@ public class characterMovement : MonoBehaviour
 
     [Header("SlopeHandling")]
 
-    public float maxSlopeAngle;
+   // public float maxSlopeAngle;
 
-    public float playerHeight = 0.3057787f;
+    //public float playerHeight = 0.3057787f;
 
   
-    private RaycastHit slopeHit;
+   // private RaycastHit slopeHit;
 
 
 
@@ -172,11 +172,13 @@ public class characterMovement : MonoBehaviour
 
     public GameObject RopeBottom;
 
-
+    public Vector3 climbRayOffset = new Vector3(0, 3f, 0);
 
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
+
+     
 
         //CheckPoint saver
         Collider collider = GetComponent<Collider>();
@@ -615,6 +617,7 @@ public class characterMovement : MonoBehaviour
     private void DropLadder()
     {
         Debug.LogWarning("Drop");
+
         isClimbingLadder = false;
        
         characterController.enabled = true;
@@ -661,18 +664,18 @@ public class characterMovement : MonoBehaviour
             isMovementPressed = currentMovementInput.x != zero || currentMovementInput.y != zero;
 
 
-
-      //  if (OnSlope())
-        //{
+        /*
+        if (OnSlope())
+        {
             // Vector3 slopeMovement = GetSlopeMoveDirection() * speed;
             //characterController.Move(slopeMovement * Time.deltaTime);
 
 
-        //
-          //  rb.AddForce(GetSlopeMoveDirection() * speed * 20f, ForceMode.Force);
-        //}
+        
+            rb.AddForce(GetSlopeMoveDirection() * speed * 20f, ForceMode.Force);
+        }
 
-
+        */
 
 
     }
@@ -935,13 +938,14 @@ public class characterMovement : MonoBehaviour
         return false;
     }
     
+
     private Vector3 GetSlopeMoveDirection()
     {
         return Vector3.ProjectOnPlane(currentMovement, slopeHit.normal).normalized;
     }
 
-    */
-
+*/
+  
 
     private void FixedUpdate()
     {
@@ -949,7 +953,7 @@ public class characterMovement : MonoBehaviour
 
         float ladderGrabDistance = 10f;
         //float sphereRadius = 0.5f;
-        int climbableLayer = LayerMask.GetMask("Climbable");
+        
        
         handleRotation();
         handleAnimation();
@@ -958,13 +962,15 @@ public class characterMovement : MonoBehaviour
 
         loadCheckPoints();
 
-       
 
-        var ray = new Ray(this.transform.position, this.transform.forward);
+        int climbableLayer = LayerMask.GetMask("Climbable");
+
+        var ray = new Ray(this.transform.position, this.transform.forward + climbRayOffset);
 
         RaycastHit hitClimable;
 
-
+        Debug.DrawRay(this.transform.position, (this.transform.forward + climbRayOffset) * ladderGrabDistance, Color.red);
+        Debug.Log("Climbable Layer Mask: " + climbableLayer);
         if (Physics.Raycast(ray, out hitClimable, ladderGrabDistance, climbableLayer))
         {
             lastHit = hitClimable.transform.gameObject;
@@ -976,7 +982,7 @@ public class characterMovement : MonoBehaviour
 
             Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
 
-
+            OnDrawGizmosSelected();
 
         }
 
@@ -986,6 +992,7 @@ public class characterMovement : MonoBehaviour
             {
                 Debug.LogWarning("LastHitNULL");
                 ClimableFound = false;
+
             }
 
 
@@ -1059,7 +1066,7 @@ public class characterMovement : MonoBehaviour
         // Draw a yellow sphere at the transform's position
         Gizmos.color = Color.yellow;
 
-        Gizmos.DrawSphere(transform.position, 1);
+        Gizmos.DrawWireSphere(this.transform.position, 3);
     }
 
 
