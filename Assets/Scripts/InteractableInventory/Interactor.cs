@@ -1,22 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 
+/*
+interface IInteractable
+{
+    public void Interact();
 
+}
+*/
 
 public class Interactor : MonoBehaviour
 {
 
-
+    //public Transform InteractorSource;
+    //public float InteractRange;
     [SerializeField] private Transform _interactionPoint;
     [SerializeField] private float _interactionPointRadius = 0.5f;
     [SerializeField] private LayerMask _interactableMask;
 
-
+    
 
     private readonly Collider[] _colliders = new Collider[3];
 
@@ -38,7 +43,6 @@ public class Interactor : MonoBehaviour
 
 
 
-       
         }
     }
 
@@ -51,8 +55,25 @@ public class Interactor : MonoBehaviour
     }
 
 
+    /*
 
 
+    void Update()
+    {
+       if (Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
+
+            if(Physics.Raycast( r, out RaycastHit hitInfo,InteractRange))
+            {
+                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+                {
+                    interactObj.Interact();
+                }
+            }
+        }
+    }
+    */
 }
 
 

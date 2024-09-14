@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.TextCore.Text;
+
 
 public class bookZoomIn : MonoBehaviour, IInteractable
 {
@@ -16,34 +16,52 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
     characterMovement characterMovement;
 
-    public bool interactable;
+   
     public GameObject character;
     public GameObject BookCam;
+
+
+
+    private bool isZoomedIn = false;
+
 
     public bool Interact(Interactor interactor)
     {
         Debug.Log("OpeningBook");
 
-        if (interactable == false)
+        if (!isZoomedIn)
         {
-            BookCam.SetActive(true);
-
-            characterMove.TurnOffMovement();
-
-            StartCoroutine(TurnOffCharacterAfterDelay()); 
+            ZoomInOnBook();
         }
-
         else
         {
-            BookCam.SetActive(false);
-
-            StartCoroutine(TurnOnCharacterAfterDelay());
-            characterMove.Enabled();
-            interactable = false;
+            ZoomOut();
         }
 
         return true;
     }
+
+
+    private void ZoomInOnBook()
+    {
+        BookCam.SetActive(true);
+
+        characterMove.TurnOffMovement();
+
+        isZoomedIn = true;
+
+        StartCoroutine(TurnOffCharacterAfterDelay());
+    }
+
+    private void ZoomOut()
+    {
+        BookCam.SetActive(false);
+        characterMove.Enabled();
+
+        StartCoroutine(TurnOnCharacterAfterDelay());
+        isZoomedIn = false;
+    }
+
 
     private IEnumerator TurnOffCharacterAfterDelay()
     {
@@ -53,7 +71,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
     private IEnumerator TurnOnCharacterAfterDelay()
     {
-        yield return new WaitForSeconds(1f);  
+        yield return new WaitForSeconds(0.5f);  
         character.SetActive(true);
     }
 }
