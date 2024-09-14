@@ -14,23 +14,17 @@ namespace Platformer
 
         public GameObject BathroomDeathCam;
 
-        /*
-        [SerializeField] private float WaitTime = 20f;
-
-        // Handle the fade out and in
-        [SerializeField] private bool fadeIn = false;
-        [SerializeField] private bool fadeOut = true;
-        [SerializeField] public CanvasGroup myUIGroup;
-        [SerializeField] private float fadeWaitTime = 4f;
-        */
-
-
-
+        public Animator animator1, animator2, animator3, animator4, animator5, animator6;
+        public Collider lever1, lever2, lever3, lever4, lever5, lever6;
+        public AudioClip leverSoundEffect;
 
         private void Start()
         {
-            PlayerDead.SetActive(false);
-            BathroomDeathCam.SetActive(false);
+            if (PlayerDead != null)
+                PlayerDead.SetActive(false);
+
+            if (BathroomDeathCam != null)
+                BathroomDeathCam.SetActive(false);
         }
 
         private void OnTriggerEnter(Collider ElectricColliderTrigger)
@@ -47,5 +41,6 @@ namespace Platformer
                 }
             }
         }
+
     }
 }
