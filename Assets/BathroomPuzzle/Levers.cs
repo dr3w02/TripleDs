@@ -9,8 +9,8 @@ namespace Platformer
         [SerializeField] private string _prompt = "Pull Lever";
         public string InteractionPrompt => _prompt;
 
-        public Animator leverAnimator1, leverAnimator2, leverAnimator3, leverAnimator4, leverAnimator5, leverAnimator6;
-        public Collider lever1, lever2, lever3, lever4, lever5, lever6;
+        public Animator[] leverAnimators;
+        public Collider[] levers;
         public AudioClip leverSoundEffect;
 
         private int LeverDownHash;
@@ -26,11 +26,16 @@ namespace Platformer
         {
             Debug.Log("Lever Down");
 
-            lever1 = GetComponent<Collider>();
+            for (int i = 0; i < levers.Length; i++)
+            {
+                levers[i].isTrigger = true;
+                leverAnimators[i].SetBool(LeverDownHash, true);
+            }
 
-
-            lever1.isTrigger = true;
-            leverAnimator1.SetBool(LeverDownHash, true);
+            if (leverSoundEffect)
+            {
+                AudioSource.PlayClipAtPoint(leverSoundEffect, transform.position);
+            }
 
             return true;
         }
