@@ -12,11 +12,13 @@ public class InputManager : MonoBehaviour
 
     private PlayerInput _playerInput;
 
+
     private InputAction _menuOpenCloseAction;
 
     //Music Box
     public bool charging;
 
+ 
     private void Awake()
     {
         if (Instance == null)

@@ -21,6 +21,8 @@ namespace Platformer
         string Music = "MusicBox";
 
         public Transform Player { get; private set; }
+
+
         public void Start()
         {
             MusicBoxCollider = GameObject.FindGameObjectWithTag(Music);

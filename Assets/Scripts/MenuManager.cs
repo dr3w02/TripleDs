@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -25,9 +22,9 @@ public class MenuManager : MonoBehaviour
     [Header("First Selected Options")]
     [SerializeField] private GameObject _mainMenuFirst;
     [SerializeField] private GameObject _settingsMenuFirst;
-    [SerializeField] private GameObject _creditsMenuFirst;
-    [SerializeField] private GameObject _gamePadMenuFirst;
-    [SerializeField] private GameObject _keyboardMenuFirst;
+    //[SerializeField] private GameObject _creditsMenuFirst;
+    //[SerializeField] private GameObject _gamePadMenuFirst;
+    //[SerializeField] private GameObject _keyboardMenuFirst;
 
     private bool isPaused;
     private bool playerRested;
@@ -41,6 +38,7 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
+
         if (InputManager.Instance.MenuOpenCloseInput)
         {
             if (!isPaused)
@@ -76,8 +74,8 @@ public class MenuManager : MonoBehaviour
         _player.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         CloseAllMenus();
-        
-      
+
+
     }
 
     private void OpenSettingsMenuHandle()
@@ -135,7 +133,7 @@ public class MenuManager : MonoBehaviour
     public void OnUnStuckPress()
     {
         Debug.Log("ButtonPressed");
-       
+
         characterMovement.RespawnPlayer();
         playerRested = true;
 
@@ -165,7 +163,7 @@ public class MenuManager : MonoBehaviour
         _gamePadCanvas.SetActive(false);
         _keyboardCanvas.SetActive(false);
 
-        EventSystem.current.SetSelectedGameObject(_creditsMenuFirst);
+        // EventSystem.current.SetSelectedGameObject(_creditsMenuFirst);
     }
 
     private void OpenGamePadHandle()
@@ -176,7 +174,7 @@ public class MenuManager : MonoBehaviour
         _gamePadCanvas.SetActive(true);
         _keyboardCanvas.SetActive(false);
 
-        EventSystem.current.SetSelectedGameObject(_gamePadMenuFirst);
+        //EventSystem.current.SetSelectedGameObject(_gamePadMenuFirst);
     }
 
     private void OpenKeyboardHandle()
@@ -188,7 +186,7 @@ public class MenuManager : MonoBehaviour
         _keyboardCanvas.SetActive(true);
 
 
-        EventSystem.current.SetSelectedGameObject(_keyboardMenuFirst);
+        // EventSystem.current.SetSelectedGameObject(_keyboardMenuFirst);
     }
 
     //////BackButton//////////////////

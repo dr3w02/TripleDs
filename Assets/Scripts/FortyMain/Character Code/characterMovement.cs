@@ -970,7 +970,7 @@ public class characterMovement : MonoBehaviour
         RaycastHit hitClimable;
 
         Debug.DrawRay(this.transform.position, (this.transform.forward + climbRayOffset) * ladderGrabDistance, Color.red);
-        Debug.Log("Climbable Layer Mask: " + climbableLayer);
+        //Debug.Log("Climbable Layer Mask: " + climbableLayer);
         if (Physics.Raycast(ray, out hitClimable, ladderGrabDistance, climbableLayer))
         {
             lastHit = hitClimable.transform.gameObject;
@@ -980,7 +980,7 @@ public class characterMovement : MonoBehaviour
             ClimableFound = true;
 
 
-            Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
+           // Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
 
             OnDrawGizmosSelected();
 

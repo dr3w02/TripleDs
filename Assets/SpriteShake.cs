@@ -6,35 +6,44 @@ namespace Platformer
 {
     public class SpriteShake : MonoBehaviour
     {
-        public bool start = false;
-        public AnimationCurve curve;
-        public float duration = 1f;
+        [SerializeField] public GameObject InteractableSprite;
+        [SerializeField] private Animator InteractAnim;
+        private Collider showGlassesCollider; 
 
-        private void Update()
+        void Start()
         {
-            if (start)
+            showGlassesCollider = gameObject.GetComponent<Collider>();
+            InteractableSprite.SetActive(false);
+            InteractAnim.SetBool("Glasses", false);
+        }
+
+        private void OnTriggerEnter(Collider other) 
+        {
+            Debug.Log("OnTriggerEnter called with: " + other.name);
+
+            if (other.CompareTag("Player"))
             {
-                start = false;
-                StartCoroutine(Shaking());
+                InteractableSprite.SetActive(true);
+                InteractAnim.SetBool("Glasses", true);
             }
         }
 
-
-        IEnumerator Shaking()
+        private void OnTriggerStay(Collider other) 
         {
-            Vector3 startPosition = transform.position;
-            float elapsedTime = 0f;
-
-            while(elapsedTime < duration)
+            if (other.CompareTag("Player"))
             {
-                elapsedTime += Time.deltaTime;
-                transform.position = startPosition + Random.insideUnitSphere;
-
-                yield return null;
+                InteractableSprite.SetActive(true);
+                InteractAnim.SetBool("Glasses", true);
             }
+        }
 
-            transform.position = startPosition;
-
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                InteractableSprite.SetActive(false);
+                InteractAnim.SetBool("Glasses", false);
+            }
         }
     }
 }
