@@ -97,6 +97,7 @@ public class characterMovement : MonoBehaviour
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
 
+    public bool isGrounded;
 
     //Jumping Varibles
 
@@ -153,7 +154,6 @@ public class characterMovement : MonoBehaviour
 
 
 
-    public bool gravityEnabled = true;
 
 
     [Header("Crouched")]
@@ -177,8 +177,6 @@ public class characterMovement : MonoBehaviour
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
-
-     
 
         //CheckPoint saver
         Collider collider = GetComponent<Collider>();
@@ -356,6 +354,7 @@ public class characterMovement : MonoBehaviour
             isJumping = true;
             currentMovement.y = initialJumpVelocity * .9f;
             currentRunMovement.y = initialJumpVelocity * .5f;
+            isGrounded = false;
             //Debug.Log("JumpAnimationPlayed");
 
 
@@ -364,6 +363,7 @@ public class characterMovement : MonoBehaviour
         {
             isJumping = false;
 
+       
             animator.SetBool(isJumpingHash, false);
         }
 
@@ -372,7 +372,7 @@ public class characterMovement : MonoBehaviour
             animator.SetBool(isJumpingHash, false);
         }
 
-
+        
     }
 
     //Dylan edits - when pulling/pushing disable other controls
@@ -482,8 +482,7 @@ public class characterMovement : MonoBehaviour
                 if (isPullPressed)
                 {
 
-                    gravityEnabled = false;
-                    isGrounded = true;
+                    //isGrounded = true;
 
 
                     if (!isClimbingLadder)
@@ -641,7 +640,7 @@ public class characterMovement : MonoBehaviour
 
 
 
-                if (gameObject.tag == "Vine")
+             if (gameObject.tag == "Vine")
             {
                 RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
                 RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
@@ -843,6 +842,7 @@ public class characterMovement : MonoBehaviour
                 currentRunMovement.y = groundedGravity;
 
             }
+
             else if (isFalling)
             {
                 float previousYVelocity = currentMovement.y;
@@ -866,7 +866,7 @@ public class characterMovement : MonoBehaviour
                 currentRunMovement.y = nextYVelocity;
 
                 animator.SetBool(isJumpingHash, false);
-                isGrounded = true;
+                //isGrounded = true;
 
 
             }
@@ -1137,11 +1137,11 @@ public class characterMovement : MonoBehaviour
 
 
 
-    public bool isGrounded = false;
+   
 
     void GroundCheck()
     {
-        float groundCheckDistance = distToGround + 0.2f;
+        float groundCheckDistance = 3f;
         RaycastHit hit;
 
         if (Physics.SphereCast(transform.position, characterController.radius, Vector3.down, out hit, groundCheckDistance))
