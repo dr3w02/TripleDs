@@ -13,10 +13,10 @@ using UnityEngine.UIElements;
 
 
 
-
+public enum CharacterState { Idle, Walking, Sprinting, Climbing, Pushing, Falling }
 public class characterMovement : MonoBehaviour
 {
-  
+    public CharacterState currentState;
     public Transform cam;
 
     public Animator animator;
@@ -55,6 +55,7 @@ public class characterMovement : MonoBehaviour
     //things for climb and swing
     public bool isClimbingLadder;
     public CharacterController characterController;
+    public LayerMask climbableLayer;
 
 
     Transform currentSwingable;
@@ -579,8 +580,10 @@ public class characterMovement : MonoBehaviour
             {
                
                 characterController.enabled = false;
-                rb.MovePosition(player.transform.position + Vector3.up * climbSpeed * Time.deltaTime);
+                //rb.MovePosition(player.transform.position + orientation.up * climbSpeed * Time.deltaTime);
+                rb.AddForce(Vector3.up, ForceMode.Impulse);
 
+                Debug.DrawRay(player.transform.position, Vector3.up * 100f, Color.yellow);
                 Debug.LogWarning("CLIMBING UP");
 
 
@@ -594,7 +597,8 @@ public class characterMovement : MonoBehaviour
                 characterController.enabled = false;
                 // rb.freezeRotation = true;
 
-                rb.MovePosition(player.transform.position + Vector3.down * climbSpeed * Time.deltaTime);
+                rb.MovePosition(Vector3.down * climbSpeed * Time.deltaTime);
+                
 
 
                 //characterController.transform.position += Vector3.up / climbSpeed;
@@ -616,6 +620,7 @@ public class characterMovement : MonoBehaviour
 
     private void DropLadder()
     {
+
         Debug.LogWarning("Drop");
 
         isClimbingLadder = false;
@@ -949,7 +954,33 @@ public class characterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        switch (currentState)
+        {
+            case CharacterState.Idle:
 
+
+                break;
+            case CharacterState.Walking:
+
+
+                break;
+            case CharacterState.Sprinting:
+
+
+                break;
+            case CharacterState.Climbing:
+
+
+                break;
+            case CharacterState.Pushing:
+
+
+                break;
+            case CharacterState.Falling:
+
+
+                break;
+        }
 
         float ladderGrabDistance = 10f;
         //float sphereRadius = 0.5f;
@@ -962,14 +993,11 @@ public class characterMovement : MonoBehaviour
 
         loadCheckPoints();
 
-
-        int climbableLayer = LayerMask.GetMask("Climbable");
-
-        var ray = new Ray(this.transform.position, this.transform.forward + climbRayOffset);
+        var ray = new Ray(this.transform.position, this.transform.forward);// + climbRayOffset);
 
         RaycastHit hitClimable;
 
-        Debug.DrawRay(this.transform.position, (this.transform.forward + climbRayOffset) * ladderGrabDistance, Color.red);
+        Debug.DrawRay(this.transform.position, this.transform.forward * ladderGrabDistance, Color.red);
         //Debug.Log("Climbable Layer Mask: " + climbableLayer);
         if (Physics.Raycast(ray, out hitClimable, ladderGrabDistance, climbableLayer))
         {
@@ -982,10 +1010,9 @@ public class characterMovement : MonoBehaviour
 
            // Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
 
-            OnDrawGizmosSelected();
+            //OnDrawGizmosSelected();
 
         }
-
         else
         {
             if (lastHit == null)
@@ -994,7 +1021,6 @@ public class characterMovement : MonoBehaviour
                 ClimableFound = false;
 
             }
-
 
             else
             {
@@ -1007,11 +1033,13 @@ public class characterMovement : MonoBehaviour
 
             if (isRunPressed)
             {
-                characterController.Move(currentRunMovement * Time.deltaTime);
+                if(characterController != null)
+                    characterController.Move(currentRunMovement * Time.deltaTime);
             }
             else
             {
-                characterController.Move(currentMovement * Time.deltaTime);
+                if(characterController != null)
+                    characterController.Move(currentMovement * Time.deltaTime);
             }
 
 
@@ -1020,16 +1048,16 @@ public class characterMovement : MonoBehaviour
             handleJump();
             handleCrouch();
 
-            // Incase player falls through ground
+        // Incase player falls through ground
 
-            //if (transform.position.y <= .10f) // checking players Y axsis
-            //{
-            //  RespawnPlayer();
-            //
-            //}
+        //if (transform.position.y <= .10f) // checking players Y axsis
+        //{
+        //  RespawnPlayer();
+        //
+        //}
 
-            //add unstuck button here?
-        
+        //add unstuck button here?
+
 
 
 
