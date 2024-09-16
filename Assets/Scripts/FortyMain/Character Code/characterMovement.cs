@@ -13,10 +13,10 @@ using UnityEngine.UIElements;
 
 
 
-public enum CharacterState { Idle, Walking, Sprinting, Climbing, Pushing, Falling }
+//public enum CharacterState { Idle, Walking, Sprinting, Climbing, Pushing, Falling }
 public class characterMovement : MonoBehaviour
 {
-    public CharacterState currentState;
+   // public CharacterState currentState;
     public Transform cam;
 
     public Animator animator;
@@ -97,7 +97,7 @@ public class characterMovement : MonoBehaviour
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
 
-    public bool isGrounded;
+    public bool isGrounded = false;
 
     //Jumping Varibles
 
@@ -193,13 +193,13 @@ public class characterMovement : MonoBehaviour
             _startingPoint = gameObject.transform.position; //no checkpoint current position of player
         }
 
-        PlayerPrefs.SetFloat("PlayerX", player.transform.position.x);
-        PlayerPrefs.SetFloat("PlayerY", player.transform.position.y);
-        PlayerPrefs.SetFloat("PlayerZ", player.transform.position.z);
+        //PlayerPrefs.SetFloat("PlayerX", player.transform.position.x);
+        //PlayerPrefs.SetFloat("PlayerY", player.transform.position.y);
+        //PlayerPrefs.SetFloat("PlayerZ", player.transform.position.z);
 
-        PlayerPrefs.SetFloat("PlayerXR", player.transform.rotation.x);
-        PlayerPrefs.SetFloat("PlayerYR", player.transform.rotation.y);
-        PlayerPrefs.SetFloat("PlayerZR", player.transform.rotation.z);
+        //PlayerPrefs.SetFloat("PlayerXR", player.transform.rotation.x);
+        //PlayerPrefs.SetFloat("PlayerYR", player.transform.rotation.y);
+        //PlayerPrefs.SetFloat("PlayerZR", player.transform.rotation.z);
 
     }
 
@@ -457,194 +457,128 @@ public class characterMovement : MonoBehaviour
 
 
 
-       // else if (ClimableFound == true)
-        //{
 
-            //Quaternion climbingRotation = transform.rotation;
+    }
+    private void Climables()
+    {
 
-            //climbingRotation.x = 0; 
 
-            //transform.rotation = climbingRotation;
+        Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * 1f, Color.magenta);
 
-           // return;
-       // }
+        //not climbing the ladder
+
+
+        if (isClimbingLadder)
+        {
+
+            isClimbingLadder = true;
+
+            if (currentMovementInput.y == -1)
+            {
+
+                ///myConstantForce.enabled = false;
+                //transform.position = currentSwingable.position;
+                currentMovementInput.x = 0;
+
+                Debug.Log("uppies!");
+                characterController.enabled = false;
+                //transform.Translate(Vector3.up * Time.deltaTime * 2f);
+                rb.MovePosition(transform.position + Vector3.up * 2 * Time.deltaTime);
+
+
+
+
+            }
+
+            else if (currentMovementInput.y == 0)
+            {
+                rb.velocity = Vector3.zero;
+
+            }
+
+
+            isGrounded = true;
+
+            if (currentMovementInput.y == 1)
+            {
+
+
+                Debug.Log("uppies!");
+                currentMovementInput.x = 0;
+                characterController.enabled = false;
+
+                rb.MovePosition(transform.position + Vector3.down * 2 * Time.deltaTime);
+            }
+
+            else if (currentMovementInput.y == 0)
+            {
+                rb.velocity = Vector3.zero;
+
+            }
+
+            if (Vector3.Dot(targetDirection, lastGrabLadderDirection) < 0)
+            {
+                float ladderFloorDropDistance = .1f;
+
+                Physics.Raycast(transform.position, Vector3.down, out RaycastHit floorRayraycastHit, ladderFloorDropDistance);
+                {
+                    DropLadder();
+                }
+
+
+            }
+        }
+
 
 
     }
-
 
     private void CheckForLadder()
     {
-  
-            if (lastHit != null || ClimableFound == true)
+
+        float ladderGrabDistance = .1f;
+
+        int climbableLayer = LayerMask.GetMask("Climbable");
+
+        Debug.DrawRay(orientation.position + raycastOffset, orientation.forward * ladderGrabDistance, Color.magenta);
+
+        if (Physics.Raycast(orientation.position + raycastOffset, orientation.forward, out RaycastHit hit, ladderGrabDistance, climbableLayer))
+        {
+            if (!isClimbingLadder && isPullPressed)
             {
-          
-                if (isPullPressed)
-                {
-
-                    //isGrounded = true;
-
-
-                    if (!isClimbingLadder)
-                    {
-
-                        AlignToLadder();
-                    
-                        isClimbingLadder = true;
-
-                        HandleClimbingMovement();
-                    }
-
-                 
-                }
-                
+                Debug.Log("Raycast hit " + hit.collider.name);
+                GrabLadder(hit.normal);
             }
-
-
-
-      
-
-
-       // else if (isClimbingLadder || ClimableFound == false)
-        //{
-         
-
-          //  isClimbingLadder = false;
-          //  DropLadder();
-      //  }
-    }
-
-    void AlignToLadder()
-    {
-        if (lastHit != null)
-        {
-            Vector3 ladderForward = lastHit.transform.forward;
-
-            //position
-
-
-            Vector3 lastHitPosition = lastHit.transform.position;
-            Vector3 newPosition = lastHitPosition + ClimbOffset;
-            //player.transform.position = newPosition;
-            this.transform.position = newPosition;
-
-
-            //Rotation
-
-
-
-            Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles.normalized;
-
-
-
-            float ladderXRotation = -ladderRotation.x;
-            float ladderZRotation = 0f;
-            float ladderYRotation = -ladderRotation.y;
-
-
-            Vector3 currentRotation = player.transform.rotation.eulerAngles;
-            Vector3 currentRotationThis = this.transform.rotation.eulerAngles;
-
-
-            this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotationThis.y, ladderZRotation).normalized;
-
-            player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation).normalized;
-            //player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
-
-
-            Debug.LogWarning(lastHit.transform.position);
-            Debug.Log(player.transform.position);
-            // player.transform.position = lasthit.point;
-
-
-            //this.transform.rotation = Quaternion.Euler(0f, ladderYRotation, 0f);
-
-           
+            else if (isClimbingLadder && (!isPullPressed || hit.collider == null))
+            {
+                DropLadder();
+            }
         }
-        else
+        else if (isClimbingLadder)
         {
-            Debug.LogError("No valid lastHitTransform! Cannot align to ladder.");
+            DropLadder();
         }
+
+
+
     }
 
 
 
-    private void HandleClimbingMovement()
+    private void GrabLadder(Vector3 lastGrabLadderDirection)
     {
-        if (lastHit != null || ClimableFound == true)
+
+        //rb.isKinematic = false;
+        isClimbingLadder = true;
+        this.lastGrabLadderDirection = lastGrabLadderDirection;
+        //currentMovement.x = 0f;
+        //currentMovement.y = climbSpeed;
+        //currentMovement.z = 0f;
+
+        if (gameObject.tag == "Vine")
         {
-
-           
-            // Move up if input is -1 climbing up
-            if (currentMovementInput.y == -1)
-            {
-                if (isMovementPressed)
-                {
-                    Vector3 climbDirection = Vector3.ProjectOnPlane(Vector3.up * climbSpeed, lastHitNormal);
-
-
-                    characterController.Move(climbDirection * Time.deltaTime);
-                    // rb.MovePosition(player.transform.position + orientation.up * climbSpeed * Time.deltaTime);
-                    //rb.AddForce(Vector3.up, ForceMode.Impulse);
-                    isClimbing = true;
-                    Debug.DrawRay(player.transform.position, Vector3.up * 100f, Color.yellow);
-                    Debug.LogWarning("CLIMBING UP");
-
-
-                }
-               
-
-
-            }
-            // Move down if input is 1 climbing down
-
-
-            else if (currentMovementInput.y == 1)
-            {
-                if (isMovementPressed)
-                {
-                    Vector3 climbDirection = Vector3.ProjectOnPlane(Vector3.down * climbSpeed, lastHitNormal);
-
-                    isClimbing = true;
-                    characterController.Move(climbDirection * Time.deltaTime);
-
-                    // characterController.enabled = false;
-                    // rb.freezeRotation = true;
-
-                    //rb.MovePosition(Vector3.down * climbSpeed * Time.deltaTime);
-
-
-
-                    //characterController.transform.position += Vector3.up / climbSpeed;
-                    Debug.LogWarning("CLIMBING DOWN");
-                }
-               
-            }
-
-            else
-            {
-                if (!isMovementPressed)
-                {
-                    Vector3 climbDirection = Vector3.ProjectOnPlane(Vector3.up * 0f, lastHitNormal);
-                }
-                if (isClimbing)
-                {
-                    DropLadder();
-                }
-
-                if (!isPullPressed)
-                {
-                    DropLadder();
-                }
-            }
-
-
-
-             if (gameObject.tag == "Vine")
-            {
-                RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
-                RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
-            }
+            RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
+            RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
 
         }
 
@@ -653,33 +587,17 @@ public class characterMovement : MonoBehaviour
 
     private void DropLadder()
     {
-        // Stop climbing and reset the climb state
-        isClimbing = false;
-
-        // Apply downward movement or gravity to simulate dropping
-        Vector3 dropDirection = Vector3.down * dropSpeed;
-
-        // Move the character down when dropping
-        characterController.Move(dropDirection * Time.deltaTime);
-
-        Debug.Log("Dropped from climbing.");
-
-        float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
-        float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
-        float playerZRotation = PlayerPrefs.GetFloat("PlayerZR");
-
-      
-        this.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
-
-        Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
-
-        //player.transform.rotation = playerRotation;
-
+        isClimbingLadder = false;
+        //rb.isKinematic = true;
+        Debug.Log("Falling off");
+        characterController.enabled = true;
+        rb.velocity = Vector3.zero;
+        handleGravity();
+        Debug.Log("DROPlADDER");
 
     }
 
 
-    
     void OnMovementInput(InputAction.CallbackContext context)
     {
      
@@ -718,7 +636,7 @@ public class characterMovement : MonoBehaviour
 
 
 
-
+    
     //CheckPonts
     private void OnTriggerEnter(Collider other)
     {
@@ -957,104 +875,13 @@ public class characterMovement : MonoBehaviour
     }
 
 
-    /*
-    private bool OnSlope()
-    {
-       
-        if (Physics.Raycast(player.transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
-        {
-           float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-           return angle < maxSlopeAngle && angle != 0;
 
-        }
-
-        if (Physics.Raycast(this.transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
-        {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
-        }
-
-
-        return false;
-    }
+   
     
 
-    private Vector3 GetSlopeMoveDirection()
-    {
-        return Vector3.ProjectOnPlane(currentMovement, slopeHit.normal).normalized;
-    }
-
-*/
-    public RaycastHit lastHitTemp;  
-    public Vector3 lastHitNormal;
-    Transform lastHit;
-
-
-    public float rayDistance = 3;
-   
-    void DetectClimbable()
-    {
-        RaycastHit hit;
-
-        // Perform the raycast and check if it hits an object
-        if (Physics.Raycast(transform.position, transform.forward, out hit, rayDistance, climbableLayer))
-        {
-
-            Debug.Log("Climbable object detected!");
-
-            // Store the hit information
-            lastHitNormal = hit.normal;
-            lastHit = hit.transform;
-
-            CheckForLadder();
-            ClimableFound = true;
-        }
-
-
-        else
-        {
-            Debug.LogWarning("Raycast did not hit anything.");
-
-
-            DropLadder();
-            lastHitNormal = Vector3.zero;
-            lastHit = null;
-        }
-    }
-
         private void FixedUpdate()
-    {
-        DetectClimbable();
-        //switch (currentState)
-        //{
-        //   case CharacterState.Idle:
-
-
-        //      break;
-        //  case CharacterState.Walking:
-
-
-        //      break;
-        //   case CharacterState.Sprinting:
-
-
-        //    break;
-        //    case CharacterState.Climbing:
-
-
-        //   break;
-        //  case CharacterState.Pushing:
-
-
-        //    break;
-        //  case CharacterState.Falling:
-
-
-        //   break;
-        // }
-
-        //float ladderGrabDistance = 10f;
-        //float sphereRadius = 0.5f;
+        {
+       
 
 
         handleRotation();
@@ -1063,45 +890,9 @@ public class characterMovement : MonoBehaviour
         
      
 
-        loadCheckPoints();
+ 
 
-        /*
-        var ray = new Ray(this.transform.position, this.transform.forward);
-
-        RaycastHit hitClimable;
-
-        Debug.DrawRay(this.transform.position, this.transform.forward * ladderGrabDistance, Color.red);
-
-        Debug.Log("Ray Origin: " + this.transform.position + ", Ray Direction: " + this.transform.forward * ladderGrabDistance);
-
-        if (Physics.Raycast(ray, out hitClimable, ladderGrabDistance))
-        {
-            if (hitClimable.collider.CompareTag("Ladder"))
-            {
-                lastHit = hitClimable.transform.gameObject;
-                collision = hitClimable.point;
-                ClimableFound = true;
-                Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
-
-            }
-
-            
-        }
-        else
-        {
-            if (lastHit == null)
-            {
-                Debug.LogWarning("Raycast did not hit anything and LastHit is null.");
-                ClimableFound = false;
-            }
-            else
-            {
-                ClimableFound = false;
-                Debug.LogWarning("Raycast did not hit anything but LastHit is not null.");
-            }
-        }
-
-        */
+      
 
         if (isRunPressed)
         {
@@ -1119,7 +910,8 @@ public class characterMovement : MonoBehaviour
             handleGravity();
             handleJump();
             handleCrouch();
-
+            CheckForLadder();
+            Climables();
         // Incase player falls through ground
 
         //if (transform.position.y <= .10f) // checking players Y axsis

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class Door : MonoBehaviour, IInteractable
     int DoorClosedHash;
     KeyHolder keyHolder;
     public Collider m_ObjectCollider;
+    public bool doorisopen;
 
     //KeyPickup keyPickup;
     //Inventory inventory;
@@ -26,6 +28,7 @@ public class Door : MonoBehaviour, IInteractable
         DoorOpenedHash = Animator.StringToHash("DoorOpen");
         DoorClosedHash = Animator.StringToHash("DoorClosed");
         keyHolder = FindObjectOfType<KeyHolder>();
+
     }
 
     public bool Interact(Interactor interactor)
@@ -50,7 +53,17 @@ public class Door : MonoBehaviour, IInteractable
         if (keyHolder.keyAmount <= 0)
         {
             Debug.Log("nokeyforyou");
-            m_ObjectCollider.isTrigger = false;
+
+            if (!doorisopen)
+            {
+                m_ObjectCollider.isTrigger = false;
+            }
+            else
+            {
+                m_ObjectCollider.isTrigger = true;
+            }
+        
+          
         }
 
 
@@ -58,7 +71,7 @@ public class Door : MonoBehaviour, IInteractable
         {
             Debug.Log("OpeningDoor");
             animator.SetBool(DoorOpenedHash, true);
-
+            doorisopen = true;
             AudioSource.PlayClipAtPoint(soundEffectDoor, transform.position);
 
             keyHolder.keyAmount --;
