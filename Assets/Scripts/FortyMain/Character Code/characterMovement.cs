@@ -66,6 +66,10 @@ public class characterMovement : MonoBehaviour
 
     public float climbSpeed = 2f;
 
+    public float dropSpeed = 9.8f;
+
+    private bool isClimbing = false;
+
     public Vector3 targetDirection;
     //bool swinging = false;
 
@@ -92,11 +96,6 @@ public class characterMovement : MonoBehaviour
     [Header("Gravity")]
     public float gravity = 9.8F;
     public float groundedGravity = -.05f;
-
-
-
-
-
 
 
     //Jumping Varibles
@@ -144,17 +143,17 @@ public class characterMovement : MonoBehaviour
 
     [Header("SlopeHandling")]
 
-   // public float maxSlopeAngle;
+    // public float maxSlopeAngle;
 
     //public float playerHeight = 0.3057787f;
 
-  
-   // private RaycastHit slopeHit;
+
+    // private RaycastHit slopeHit;
 
 
 
 
-
+    public bool gravityEnabled = true;
 
 
     [Header("Crouched")]
@@ -168,9 +167,9 @@ public class characterMovement : MonoBehaviour
 
     [Header("Climbing")]
 
-    private GameObject lastHit;
+   
     public bool ClimableFound;
-
+    
     public GameObject RopeBottom;
 
     public Vector3 climbRayOffset = new Vector3(0, 3f, 0);
@@ -458,8 +457,8 @@ public class characterMovement : MonoBehaviour
 
 
 
-        else if (ClimableFound == true)
-        {
+       // else if (ClimableFound == true)
+        //{
 
             //Quaternion climbingRotation = transform.rotation;
 
@@ -467,8 +466,8 @@ public class characterMovement : MonoBehaviour
 
             //transform.rotation = climbingRotation;
 
-            return;
-        }
+           // return;
+       // }
 
 
     }
@@ -476,79 +475,30 @@ public class characterMovement : MonoBehaviour
 
     private void CheckForLadder()
     {
-       
+  
             if (lastHit != null || ClimableFound == true)
             {
           
                 if (isPullPressed)
                 {
-                    
-                   
+
+                    gravityEnabled = false;
+                    isGrounded = true;
+
+
                     if (!isClimbingLadder)
                     {
-                        
-                      
-                        //Vector3 ladderForward = lastHit.transform.forward;
 
-                    //position
-
-                  
-                        Vector3 lastHitPosition = lastHit.transform.position;
-                        Vector3 newPosition = lastHitPosition + ClimbOffset;
-                        //player.transform.position = newPosition;
-                        this.transform.position = newPosition;
-                
-
-                    //Rotation
-
-
-                       
-                        Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles.normalized;
-                        
-
-
-                         float ladderXRotation = -ladderRotation.x ;
-                         float ladderZRotation =  0f;
-                         float ladderYRotation = -ladderRotation.y;
-
-        
-                        Vector3 currentRotation = player.transform.rotation.eulerAngles;
-                        Vector3 currentRotationThis = this.transform.rotation.eulerAngles;
-
-                        this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotationThis.y, ladderZRotation).normalized;
-
-                        player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation).normalized;
-                        //player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
-
-
-                        Debug.LogWarning(lastHit.transform.position);
-                        Debug.Log(player.transform.position);
-                        // player.transform.position = lasthit.point;
-
+                        AlignToLadder();
+                    
                         isClimbingLadder = true;
+
                         HandleClimbingMovement();
                     }
 
                  
                 }
-                else
-                {
-               
-                    if (isClimbingLadder)
-                    {
-
-                       
-                        isClimbingLadder = false;
-
-                        DropLadder();
-
-
-                    }
-
-                   
-
-                   
-                }
+                
             }
 
 
@@ -556,35 +506,94 @@ public class characterMovement : MonoBehaviour
       
 
 
-        else if (isClimbingLadder || ClimableFound == false)
-        {
+       // else if (isClimbingLadder || ClimableFound == false)
+        //{
          
 
-            isClimbingLadder = false;
-            DropLadder();
+          //  isClimbingLadder = false;
+          //  DropLadder();
+      //  }
+    }
+
+    void AlignToLadder()
+    {
+        if (lastHit != null)
+        {
+            Vector3 ladderForward = lastHit.transform.forward;
+
+            //position
+
+
+            Vector3 lastHitPosition = lastHit.transform.position;
+            Vector3 newPosition = lastHitPosition + ClimbOffset;
+            //player.transform.position = newPosition;
+            this.transform.position = newPosition;
+
+
+            //Rotation
+
+
+
+            Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles.normalized;
+
+
+
+            float ladderXRotation = -ladderRotation.x;
+            float ladderZRotation = 0f;
+            float ladderYRotation = -ladderRotation.y;
+
+
+            Vector3 currentRotation = player.transform.rotation.eulerAngles;
+            Vector3 currentRotationThis = this.transform.rotation.eulerAngles;
+
+
+            this.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotationThis.y, ladderZRotation).normalized;
+
+            player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation).normalized;
+            //player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, ladderZRotation);
+
+
+            Debug.LogWarning(lastHit.transform.position);
+            Debug.Log(player.transform.position);
+            // player.transform.position = lasthit.point;
+
+
+            //this.transform.rotation = Quaternion.Euler(0f, ladderYRotation, 0f);
+
+           
+        }
+        else
+        {
+            Debug.LogError("No valid lastHitTransform! Cannot align to ladder.");
         }
     }
 
 
-   
+
     private void HandleClimbingMovement()
     {
         if (lastHit != null || ClimableFound == true)
         {
-            //OnSlope();
 
-            characterController.enabled = false;
-          
+           
             // Move up if input is -1 climbing up
             if (currentMovementInput.y == -1)
             {
-               
-                characterController.enabled = false;
-                //rb.MovePosition(player.transform.position + orientation.up * climbSpeed * Time.deltaTime);
-                rb.AddForce(Vector3.up, ForceMode.Impulse);
+                if (isMovementPressed)
+                {
+                    Vector3 climbDirection = Vector3.ProjectOnPlane(Vector3.up * climbSpeed, lastHitNormal);
 
-                Debug.DrawRay(player.transform.position, Vector3.up * 100f, Color.yellow);
-                Debug.LogWarning("CLIMBING UP");
+
+                    characterController.Move(climbDirection * Time.deltaTime);
+                    // rb.MovePosition(player.transform.position + orientation.up * climbSpeed * Time.deltaTime);
+                    //rb.AddForce(Vector3.up, ForceMode.Impulse);
+                    isClimbing = true;
+                    Debug.DrawRay(player.transform.position, Vector3.up * 100f, Color.yellow);
+                    Debug.LogWarning("CLIMBING UP");
+
+
+                }
+               
 
 
             }
@@ -593,21 +602,46 @@ public class characterMovement : MonoBehaviour
 
             else if (currentMovementInput.y == 1)
             {
-                
-                characterController.enabled = false;
-                // rb.freezeRotation = true;
+                if (isMovementPressed)
+                {
+                    Vector3 climbDirection = Vector3.ProjectOnPlane(Vector3.down * climbSpeed, lastHitNormal);
 
-                rb.MovePosition(Vector3.down * climbSpeed * Time.deltaTime);
-                
+                    isClimbing = true;
+                    characterController.Move(climbDirection * Time.deltaTime);
+
+                    // characterController.enabled = false;
+                    // rb.freezeRotation = true;
+
+                    //rb.MovePosition(Vector3.down * climbSpeed * Time.deltaTime);
 
 
-                //characterController.transform.position += Vector3.up / climbSpeed;
-                Debug.LogWarning("CLIMBING DOWN");
+
+                    //characterController.transform.position += Vector3.up / climbSpeed;
+                    Debug.LogWarning("CLIMBING DOWN");
+                }
+               
             }
 
-            
+            else
+            {
+                if (!isMovementPressed)
+                {
+                    Vector3 climbDirection = Vector3.ProjectOnPlane(Vector3.up * 0f, lastHitNormal);
+                }
+                if (isClimbing)
+                {
+                    DropLadder();
+                }
 
-            if (gameObject.tag == "Vine")
+                if (!isPullPressed)
+                {
+                    DropLadder();
+                }
+            }
+
+
+
+                if (gameObject.tag == "Vine")
             {
                 RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.forward * currentMovement.y, ForceMode.Acceleration);
                 RopeBottom.GetComponent<Rigidbody>().AddForce(orientation.right * currentMovement.x, ForceMode.Acceleration);
@@ -620,18 +654,16 @@ public class characterMovement : MonoBehaviour
 
     private void DropLadder()
     {
+        // Stop climbing and reset the climb state
+        isClimbing = false;
 
-        Debug.LogWarning("Drop");
+        // Apply downward movement or gravity to simulate dropping
+        Vector3 dropDirection = Vector3.down * dropSpeed;
 
-        isClimbingLadder = false;
-       
-        characterController.enabled = true;
+        // Move the character down when dropping
+        characterController.Move(dropDirection * Time.deltaTime);
 
-        // Reset animations
-        //animator.SetBool(isLadderHash, false);
-        //animator.SetBool(isRopeHash, false);
-
-        //player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
+        Debug.Log("Dropped from climbing.");
 
         float playerXRotation = PlayerPrefs.GetFloat("PlayerXR");
         float playerYRotation = PlayerPrefs.GetFloat("PlayerYR");
@@ -788,55 +820,58 @@ public class characterMovement : MonoBehaviour
 
     void handleGravity()
     {
+        
+        
+            bool isFalling = currentMovement.y <= 0.0f || !isJumpPressed;
 
-        bool isFalling = currentMovement.y <= 0.0f || !isJumpPressed;
+            //larger the multiplier the steeper the fall
+            float fallMultiplier = 2.0f;
 
-        //larger the multiplier the steeper the fall
-        float fallMultiplier = 2.0f;
-
-        if (characterController.isGrounded && isGrounded)
-        {
-
-            if (isJumpAnimating)
+            if (characterController.isGrounded && isGrounded)
             {
-                animator.SetBool(isJumpingHash, false);
-                isJumpAnimating = false;
-                // Debug.Log("Jumpfalse");
+
+                if (isJumpAnimating)
+                {
+                    animator.SetBool(isJumpingHash, false);
+                    isJumpAnimating = false;
+                    // Debug.Log("Jumpfalse");
+
+                }
+
+                animator.SetBool("isJumping", false);
+                currentMovement.y = groundedGravity;
+                currentRunMovement.y = groundedGravity;
 
             }
+            else if (isFalling)
+            {
+                float previousYVelocity = currentMovement.y;
+                float newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
 
-            animator.SetBool("isJumping", false);
-            currentMovement.y = groundedGravity;
-            currentRunMovement.y = groundedGravity;
+                float nextYVelocity = Mathf.Max((previousYVelocity + newYVelocity) * .5f, -20.0f); //adding a max stops the character from fall too fast from high distances
+                currentMovement.y = nextYVelocity;
+                currentRunMovement.y = nextYVelocity;
 
-        }
-        else if (isFalling)
-        {
-            float previousYVelocity = currentMovement.y;
-            float newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
-          
-            float nextYVelocity = Mathf.Max((previousYVelocity + newYVelocity) * .5f, -20.0f); //adding a max stops the character from fall too fast from high distances
-            currentMovement.y = nextYVelocity;
-            currentRunMovement.y = nextYVelocity;
-
-            animator.SetBool(isJumpingHash, false);
+                animator.SetBool(isJumpingHash, false);
 
 
-            isGrounded = true;
-        }
-        else
-        {
-            float previousYVelocity = currentMovement.y;
-            float newYVlecocity = currentMovement.y + (gravity * Time.deltaTime);
-            float nextYVelocity = (previousYVelocity + newYVlecocity) * .5f;
-            currentMovement.y = nextYVelocity;
-            currentRunMovement.y = nextYVelocity;
+                isGrounded = true;
+            }
+            else
+            {
+                float previousYVelocity = currentMovement.y;
+                float newYVlecocity = currentMovement.y + (gravity * Time.deltaTime);
+                float nextYVelocity = (previousYVelocity + newYVlecocity) * .5f;
+                currentMovement.y = nextYVelocity;
+                currentRunMovement.y = nextYVelocity;
 
-            animator.SetBool(isJumpingHash, false);
-            isGrounded = true;
+                animator.SetBool(isJumpingHash, false);
+                isGrounded = true;
 
 
-        }
+            }
+        
+     
 
 
     }
@@ -950,89 +985,126 @@ public class characterMovement : MonoBehaviour
     }
 
 */
-  
+    public RaycastHit lastHitTemp;  
+    public Vector3 lastHitNormal;
+    Transform lastHit;
 
-    private void FixedUpdate()
+
+    public float rayDistance = 3;
+   
+    void DetectClimbable()
     {
-        switch (currentState)
+        RaycastHit hit;
+
+        // Perform the raycast and check if it hits an object
+        if (Physics.Raycast(transform.position, transform.forward, out hit, rayDistance, climbableLayer))
         {
-            case CharacterState.Idle:
 
+            Debug.Log("Climbable object detected!");
 
-                break;
-            case CharacterState.Walking:
+            // Store the hit information
+            lastHitNormal = hit.normal;
+            lastHit = hit.transform;
 
-
-                break;
-            case CharacterState.Sprinting:
-
-
-                break;
-            case CharacterState.Climbing:
-
-
-                break;
-            case CharacterState.Pushing:
-
-
-                break;
-            case CharacterState.Falling:
-
-
-                break;
+            CheckForLadder();
+            ClimableFound = true;
         }
 
-        float ladderGrabDistance = 10f;
+
+        else
+        {
+            Debug.LogWarning("Raycast did not hit anything.");
+
+
+            DropLadder();
+            lastHitNormal = Vector3.zero;
+            lastHit = null;
+        }
+    }
+
+        private void FixedUpdate()
+    {
+        DetectClimbable();
+        //switch (currentState)
+        //{
+        //   case CharacterState.Idle:
+
+
+        //      break;
+        //  case CharacterState.Walking:
+
+
+        //      break;
+        //   case CharacterState.Sprinting:
+
+
+        //    break;
+        //    case CharacterState.Climbing:
+
+
+        //   break;
+        //  case CharacterState.Pushing:
+
+
+        //    break;
+        //  case CharacterState.Falling:
+
+
+        //   break;
+        // }
+
+        //float ladderGrabDistance = 10f;
         //float sphereRadius = 0.5f;
-        
-       
+
+
         handleRotation();
+
         handleAnimation();
         
-        CheckForLadder();
+     
 
         loadCheckPoints();
 
-        var ray = new Ray(this.transform.position, this.transform.forward);// + climbRayOffset);
+        /*
+        var ray = new Ray(this.transform.position, this.transform.forward);
 
         RaycastHit hitClimable;
 
         Debug.DrawRay(this.transform.position, this.transform.forward * ladderGrabDistance, Color.red);
-        //Debug.Log("Climbable Layer Mask: " + climbableLayer);
-        if (Physics.Raycast(ray, out hitClimable, ladderGrabDistance, climbableLayer))
+
+        Debug.Log("Ray Origin: " + this.transform.position + ", Ray Direction: " + this.transform.forward * ladderGrabDistance);
+
+        if (Physics.Raycast(ray, out hitClimable, ladderGrabDistance))
         {
-            lastHit = hitClimable.transform.gameObject;
+            if (hitClimable.collider.CompareTag("Ladder"))
+            {
+                lastHit = hitClimable.transform.gameObject;
+                collision = hitClimable.point;
+                ClimableFound = true;
+                Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
 
-            collision = hitClimable.point;
+            }
 
-            ClimableFound = true;
-
-
-           // Debug.Log("Hit object: " + hitClimable.transform.gameObject.name);
-
-            //OnDrawGizmosSelected();
-
+            
         }
         else
         {
             if (lastHit == null)
             {
-                Debug.LogWarning("LastHitNULL");
+                Debug.LogWarning("Raycast did not hit anything and LastHit is null.");
                 ClimableFound = false;
-
             }
-
             else
             {
                 ClimableFound = false;
-
-                Debug.LogWarning("Raycast did not hit but LastHit is not null.");
+                Debug.LogWarning("Raycast did not hit anything but LastHit is not null.");
             }
         }
 
+        */
 
-            if (isRunPressed)
-            {
+        if (isRunPressed)
+        {
                 if(characterController != null)
                     characterController.Move(currentRunMovement * Time.deltaTime);
             }
@@ -1095,6 +1167,8 @@ public class characterMovement : MonoBehaviour
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawWireSphere(this.transform.position, 3);
+
+
     }
 
 
