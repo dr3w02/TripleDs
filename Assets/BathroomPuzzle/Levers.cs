@@ -33,7 +33,7 @@ namespace Platformer
         {
             if (_isLeverDown)
             {
-                // Reset the lever to the up position
+                // reset the lever to the up position
                 Debug.Log($"{leverType} Lever Up");
 
                 ResetAnimatorParameters();
@@ -43,7 +43,7 @@ namespace Platformer
 
                 PlaySoundEffect();
 
-                _isLeverDown = false; // Lever is now up
+                _isLeverDown = false; // lever is now up
             }
             else
             {
@@ -57,9 +57,9 @@ namespace Platformer
 
                 PlaySoundEffect();
 
-                _isLeverDown = true; // Lever is now down
+                _isLeverDown = true; // lever is now down
 
-                // Register the lever pull in the Bathroom script
+                // register the lever pull in the Bathroom script
                 Bathroom bathroom = FindObjectOfType<Bathroom>();
                 bathroom?.RegisterLeverPull(this);
             }
@@ -132,11 +132,11 @@ namespace Platformer
             Debug.Log($"{leverType} Lever Reset");
 
             ResetAnimatorParameters();
-            leverAnimator.SetTrigger(LeverUpHash); // Assuming the default state is up
+            leverAnimator.SetTrigger(LeverUpHash);
 
             leverCollider.isTrigger = false;
 
-            _isLeverDown = false; // Lever is reset to up state
+            _isLeverDown = false;
         }
     }
 }

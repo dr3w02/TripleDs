@@ -17,13 +17,13 @@ namespace Platformer
 
         private bool _electricWaterDestroyed = false;
 
-        private Queue<Levers> _leverSequence = new Queue<Levers>(); // Track the order of pulled levers
+        private Queue<Levers> _leverSequence = new Queue<Levers>(); // order of pulled levers
 
         private void Start()
         {
             PlayerDead.SetActive(false);
             BathroomDeathCam.SetActive(false);
-            SetElectricSystemActive(true); // Start with the electric system active
+            SetElectricSystemActive(true);
         }
 
         private void Update()
@@ -47,7 +47,7 @@ namespace Platformer
 
                 Debug.Log("Player entered electric collider while electric water is still active.");
 
-                // Proceed with killing the player
+                // proceed with killing the player
                 Character.SetActive(false);
                 PlayerDead.SetActive(true);
                 BathroomDeathCam.SetActive(true);
@@ -62,13 +62,13 @@ namespace Platformer
         public void RegisterLeverPull(Levers lever)
         {
             if (_electricWaterDestroyed)
-                return; // If the system is destroyed, no further action is needed
+                return; // if the system is destroyed, no further action is needed
 
-            // Add the lever to the sequence queue
+            // add the lever to the sequence queue
             _leverSequence.Enqueue(lever);
             Debug.Log($"{lever.GetLeverType()} pulled down. Sequence length: {_leverSequence.Count}");
 
-            // Check if we have reached three levers in the sequence
+            // check if we have reached three levers in the sequence
             if (_leverSequence.Count == 3)
             {
                 if (CheckLeverSequence())
@@ -86,26 +86,26 @@ namespace Platformer
 
         private bool CheckLeverSequence()
         {
-            // If less than 3 levers have been pulled, no need to check
+            // if less than 3 levers have been pulled, no need to check
             if (_leverSequence.Count < 3) return false;
 
-            // Extract the pulled levers
+            // extract the pulled levers
             Levers firstLever = _leverSequence.Dequeue();
             Levers secondLever = _leverSequence.Dequeue();
             Levers thirdLever = _leverSequence.Dequeue();
 
-            // Check if the sequence is exactly Lever4 -> Lever1 -> Lever5
+            // sequence is exactly Lever4 -> Lever1 -> Lever5
             if (firstLever == lever4Script && secondLever == lever1Script && thirdLever == lever5Script)
             {
-                return true; // Correct order
+                return true; // correct order
             }
 
-            return false; // Incorrect order
+            return false; // incorrect order
         }
 
         private void ResetAllLevers()
         {
-            // Reset all the levers to the up state
+            // reset all the levers to the up state
             if (lever4Script != null) lever1Script.ResetLeverState();
             if (lever1Script != null) lever2Script.ResetLeverState();
             if (lever5Script != null) lever3Script.ResetLeverState();
@@ -113,7 +113,7 @@ namespace Platformer
             if (lever1Script != null) lever5Script.ResetLeverState();
             if (lever5Script != null) lever6Script.ResetLeverState();
 
-            // Clear the sequence queue
+            // clear the sequence queue
             _leverSequence.Clear();
         }
 
@@ -122,7 +122,7 @@ namespace Platformer
             if (electricWater != null)
             {
                 electricWater.Stop();
-                _electricWaterDestroyed = true; // Mark the electric water as destroyed
+                _electricWaterDestroyed = true; // electric water destroyed
                 Debug.Log("Electric water stopped.");
             }
 
