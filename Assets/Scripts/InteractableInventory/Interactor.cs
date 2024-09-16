@@ -26,6 +26,7 @@ public class Interactor : MonoBehaviour
     private readonly Collider[] _colliders = new Collider[3];
 
     [SerializeField] private int _numFound;
+    List<Collider> interactableItems = new List<Collider>();
 
     private void Update()
     {
@@ -33,10 +34,12 @@ public class Interactor : MonoBehaviour
 
         if (_numFound > 0)
         {
-            var interactable = _colliders[0].GetComponent<IInteractable>();
+            Debug.Log(_colliders[0].name + " is the collider ");
+            var interactable = _colliders[0].gameObject.GetComponent<IInteractable>();
 
             if(interactable != null && Keyboard.current.eKey.wasPressedThisFrame) // how its done with new input system
             {
+                Debug.Log("Interacting");
                 interactable.Interact(this);
 
             }

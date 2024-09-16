@@ -107,7 +107,7 @@ namespace Platformer
 
         public void Sleeping()
         {
-            Debug.Log("Sleeping");
+            //Debug.Log("Sleeping");
 
             Vector3 destinationSleep = sleepingPoint.transform.position;
 
