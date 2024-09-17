@@ -7,6 +7,7 @@ namespace Platformer
 {
     public class PullingPushing : MonoBehaviour
     {
+
         public Transform boxAttachPoint;
         public Transform orientation;
         public float distance;
@@ -15,6 +16,7 @@ namespace Platformer
 
         GameObject box;
         public bool isAttached;
+        Rigidbody boxRigidbody;
 
         //Raycast out from the player
         //Look for 'pushable' layer.
@@ -24,12 +26,18 @@ namespace Platformer
 
         private void Update()
         {
-            HandleInput(); // Check for input and handle attaching/detaching the box
+            HandleInput(); // handle attaching/detaching the box
+            if (isAttached)
+            {
+                //boxRigidbody.velocity = Vector3.zero;
+
+               // box.transform.position = boxAttachPoint.position;
+            }
         }
 
         void HandleInput()
         {
-            // Check if the right mouse button is pressed down
+            // if the right mouse button is pressed down
             if (Mouse.current.rightButton.isPressed)
             {
                 if (!isAttached)
@@ -37,12 +45,12 @@ namespace Platformer
                     CheckForPushable(); // Try to attach a box if not already attached
                 }
             }
-            // Check if the right mouse button is released
+            // if the right mouse button is released
             else if (Mouse.current.rightButton.wasReleasedThisFrame)
             {
                 if (isAttached)
                 {
-                    UnattachBoxFromPlayer(); // Detach the box if already attached
+                    UnattachBoxFromPlayer(); // detach the box if already attached
                 }
             }
         }
@@ -59,7 +67,7 @@ namespace Platformer
             {
                 if (hit.collider != null)
                 {
-                    AttachBoxToPlayer(hit.collider.gameObject); // Attach the box if one is found
+                    AttachBoxToPlayer(hit.collider.gameObject); // attach the box if one is found
                 }
             }
         }
@@ -69,14 +77,17 @@ namespace Platformer
             isAttached = true;
 
             box = hit;
-            hit.transform.parent = transform;
+            
+            hit.transform.parent = boxAttachPoint;
             hit.transform.position = boxAttachPoint.position;
 
             Rigidbody rb = hit.GetComponent<Rigidbody>();
+            //boxRigidbody = rb;
             if (rb != null)
             {
-                rb.drag = 0f; // Adjust drag value as needed
-                rb.angularDrag = 0f; // Adjust angular drag value as needed
+                rb.velocity = Vector3.zero;
+                //rb.drag = 0f;
+                //rb.angularDrag = 0f;
             }
             //add rigidbody drag
             //play pull Animation
@@ -86,15 +97,16 @@ namespace Platformer
         {
             if (box == null) return;
 
-            // Remove the box from being a child of the player
+            // remove the box from being a child of the player
             box.transform.parent = null;
 
             // Reset Rigidbody drag
             Rigidbody rb = box.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.drag = 0f;
-                rb.angularDrag = 0.05f; // Reset to default or as needed
+                rb.velocity = Vector3.zero;
+                //rb.drag = 0f;
+                //rb.angularDrag = 0.05f; // Reset to default or as needed
             }
 
             // Play detach animation if needed

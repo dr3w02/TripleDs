@@ -86,12 +86,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3479632575324006349}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.02, z: 0.15}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0199999, z: 0.14999956}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7901477280858204300}
+  m_Father: {fileID: 3889798967974273305}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7401148648172895316
 GameObject:
@@ -3070,6 +3070,18 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: d750cb5ead028fe42a41d188686a8dc7, type: 2}
     - target: {fileID: 5866666021909216657, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
+        'mixamorig:LeftHandThumb2'\n\tTransform 'mixamorig:LeftHandIndex1'\n\tTransform
+        'mixamorig:LeftHandPinky2'\n\tTransform 'mixamorig:RightHandRing2'\n\tTransform
+        'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform 'mixamorig:LeftHandThumb3'\n\tTransform
+        'mixamorig:RightArm'\n\tand more ...\n\tFrom animation clip 'ClimbLadder'\n\tFrom
+        animation clip 'ClimbRope'\n\tFrom animation clip 'Sad Idle@Sleeping Idle'"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
+        type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
@@ -3655,6 +3667,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8242735929156858446}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7035466121853805516}
     - targetCorrespondingSourceObject: {fileID: 1852576806548013000, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       insertIndex: -1
@@ -5229,10 +5245,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3889798967974273305}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7035466121853805516}
     - targetCorrespondingSourceObject: {fileID: 1366278540751589237, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       insertIndex: -1
@@ -5289,27 +5301,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93bfacbc38c4ea44aed7cf6839e3622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RopeBottom: {fileID: 0}
   cam: {fileID: 0}
   animator: {fileID: 7141437260078283619}
   orientation: {fileID: 2249666526872762913}
+  collision: {x: 0, y: 0, z: 0}
   speed: 3
   distToGround: 1
+  isClimbingLadder: 0
   characterController: {fileID: 9152982377442879928}
+  climbableLayer:
+    serializedVersion: 2
+    m_Bits: 0
   vineVelocityWhenGrabbed: {x: 0, y: 0, z: -20}
   climbSpeed: 2
+  dropSpeed: 9.8
   targetDirection: {x: 0, y: 0, z: 0}
+  ClimbOffset: {x: 0, y: 0, z: -0.8}
   rotationFactorPerFrame: 15
   runMultiplier: 5
   gravity: 0
   groundedGravity: 1
+  isGrounded: 1
   initialJumpVelocity: 0
   maxJumpHeight: 1
   maxJumpTime: 0.75
-  crouchSpeed: 2
-  normalHeight: 0.35
-  crouchHeight: 0.19
-  offset: {x: 0, y: 0.05, z: 0}
   isSelectPressed: 0
   isRotating: 0
   player: {fileID: 3889798967974273305}
@@ -5323,7 +5338,14 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  isGrounded: 1
+  crouched: 0
+  crouchSpeed: 2
+  normalHeight: 0.35
+  crouchHeight: 0.19
+  offset: {x: 0, y: 0.05, z: 0}
+  ClimableFound: 0
+  RopeBottom: {fileID: 0}
+  climbRayOffset: {x: 0, y: 3, z: 0}
 --- !u!114 &5259313588709691103
 MonoBehaviour:
   m_ObjectHideFlags: 0
