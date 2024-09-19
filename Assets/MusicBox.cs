@@ -10,9 +10,9 @@ namespace Platformer
     public class MusicBox : MonoBehaviour
     {
         [SerializeField] Image radialImage;
-        public OrphanWaypointFollow orphan1;
-        public OrphanWaypointFollow orphan2;
-        public OrphanWaypointFollow orphan3;
+       // public OrphanWaypointFollow orphan1;
+       // public OrphanWaypointFollow orphan2;
+       // public OrphanWaypointFollow orphan3;
        // public OrphanWaypointFollow orphan4;
         //public OrphanWaypointFollow orphan5;
         public InputManager inputManager;

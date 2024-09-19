@@ -5,12 +5,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Cinemachine;
+using UnityEngine.UIElements.Experimental;
 
 namespace Platformer
 {
     public class OrphanWaypointFollow : MonoBehaviour
     {
         public List<GameObject> waypointsOrphan;
+    
         public float speed = 2;
         int index = 0;
         public bool isLoop = true;
@@ -72,12 +74,14 @@ namespace Platformer
             else if (!MusicPlay)
             {
                 running = true;
+                Chase = false;
             }
 
 
-            if (!MusicPlay && PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer() && Chase == true)
+            if (!MusicPlay && PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer())
             {
                     running = false; // Stop running and start chasing
+                    Chase = true;
                     Chasing();
                     Debug.Log("CHASING");
                    
@@ -93,13 +97,11 @@ namespace Platformer
                
             }
 
-            else if (!MusicPlay && !PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer() && running == true)
+            else if (!MusicPlay && !PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer())
             {
                 Debug.Log("Running");
-                Running();
+                running = true;
                 
-                Chase = true;
-
             }
 
 

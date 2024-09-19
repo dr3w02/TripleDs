@@ -14,7 +14,7 @@ namespace Platformer
         public bool interactable;
 
         [SerializeField] CameraManager cameraManager;
-        
+
 
         [Header("MainCharacter")]
 
@@ -23,19 +23,18 @@ namespace Platformer
         characterMovement characterMovement;
 
         public GameObject SleepCam;
-        public bool Sleeping;
+        public bool sleeping;
         public Animator mainAnim;
-
-
 
 
         [Header("BlackBeak")]
 
-        public Animator BlackBeakAnim;
-        public GameObject Bosscam;
-        public GameObject BB;
+        BlackBeackIntro bbIntro;
 
-    
+
+
+
+
 
 
         [Header("Fade")]
@@ -48,25 +47,18 @@ namespace Platformer
         [SerializeField] private float WaitTime = 0.5f;
         [SerializeField] private float WaitTimeBB = 2f;
 
-        void Start()
-        {
 
-            Bosscam.SetActive(false);
-            SleepCam.SetActive(false);
-        }
 
         public bool Interact(Interactor interactor)
         {
 
             if (interactable == false)
             {
-                mainAnim.SetBool("Sleeping", true);
-                SleepCam.SetActive(true);
 
-                StartCoroutine(SleepWait());
 
-                Sleeping = true;
-                BB.SetActive(false);
+                sleeping = true;
+
+
                 characterMain.TurnOffMovement();
 
 
@@ -75,8 +67,10 @@ namespace Platformer
             else
             {
                 SleepCam.SetActive(false);
-              
+
                 interactable = false;
+
+
             }
 
             return true;
@@ -88,11 +82,15 @@ namespace Platformer
         {
             yield return new WaitForSeconds(5f);
 
+            StartCoroutine(PanOut());
+
         }
-        private IEnumerator PanBack()
+
+
+        private IEnumerator PanOut()
         {
 
-          
+
             yield return new WaitForSeconds(WaitTime);
 
 
@@ -114,69 +112,30 @@ namespace Platformer
                 }
             }
 
-            //characterMain.RespawnPlayer();
-            //mCharacter.SetActive(false);
-            // Wait for the specified amount of time
-            BB.SetActive(true);
 
-            yield return new WaitForSeconds(fadeWaitTime);
+            bbIntro.BBPlays();
 
-            fadeOut = true;
-            while (fadeOut)
-            {
-                if (myUIGroup.alpha > 0)
-                {
-                    myUIGroup.alpha -= Time.deltaTime;
-                    yield return null; // Wait for the next frame
-                    Bosscam.SetActive(false);
-                    mCharacter.SetActive(true);
-                    characterMain.Enabled();
-
-                    mainAnim.SetBool("Sleeping", true);
-
-                    //GetComponent<NavMeshAgent>().isStopped = false;
-                }
-                else
-                {
-                    fadeOut = false;
-                }
-            }
 
         }
         public void Update()
         {
-            if(Sleeping == true)
+            if (sleeping == true)
             {
-                BossIntro();
+                mainAnim.SetBool("Sleeping", true);
+
+                SleepCam.SetActive(true);
+
+                StartCoroutine(SleepWait());
             }
 
-         
-         
-
-        }
-
-     
-        private IEnumerator BossIntro()
-        {
-            Bosscam.SetActive(true);
-
-            BlackBeakAnim.SetBool("walking", true);
-            BlackBeakAnim.SetBool("Evil", false);
-
-            yield return new WaitForSeconds(WaitTimeBB);
-
-            BlackBeakAnim.SetBool("walking", false);
-
-            BlackBeakAnim.SetBool("Evil", true);
-
-            
-            yield return new WaitForSeconds(WaitTime);
 
 
-            PanBack();
 
         }
     }
+
+     
+      
 }
 
 
