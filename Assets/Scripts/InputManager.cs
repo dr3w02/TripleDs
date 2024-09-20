@@ -26,20 +26,25 @@ public class InputManager : MonoBehaviour
             Instance = this;
         }
 
+        _playerInput = GetComponent<PlayerInput>();
+
         _menuOpenCloseAction = _playerInput.actions["MenuOpenClose"];
 
        
     }
 
-    public bool GetHold()
-    {
-        return charging;
-    }
 
     // Update is called once per frame
-    private void Update()
+    public void Update()
     {
         MenuOpenCloseInput = _menuOpenCloseAction.WasPressedThisFrame();
 
     }
+
+
+   public bool GetHold()
+    {
+        return charging;
+    }
+ 
 }

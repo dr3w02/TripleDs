@@ -77,7 +77,7 @@ namespace Platformer
 
 
         }
-
+   
         public IEnumerable WaitBetweenFadeInOutBB()
         {
             
@@ -104,7 +104,7 @@ namespace Platformer
                 }
 
 
-                enemy.characterMain.RespawnPlayer();
+                enemy.respawn.RespawnPlayer();
 
                 // Wait for the specified amount of time
                 yield return new WaitForSeconds(fadeWaitTime);
@@ -157,10 +157,11 @@ namespace Platformer
                 }
 
 
-                enemy.characterMain.RespawnPlayer();
 
-                // Wait for the specified amount of time
-                yield return new WaitForSeconds(fadeWaitTime);
+            enemy.respawn.RespawnPlayer();
+
+            // Wait for the specified amount of time
+            yield return new WaitForSeconds(fadeWaitTime);
 
                 fadeOut = true;
                 while (fadeOut)

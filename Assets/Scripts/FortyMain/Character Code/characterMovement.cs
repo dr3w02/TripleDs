@@ -22,7 +22,7 @@ public class characterMovement : MonoBehaviour
     public Animator animator;
 
     CustomInputs input; // calls to the input manager
-    InputManager inputManager;
+  
     public Transform orientation;
 
     Rigidbody rb;
@@ -130,12 +130,9 @@ public class characterMovement : MonoBehaviour
     /// </summary>
     // For CheckPoints
 
-    [SerializeField] private GameObject _checkpointsParents;
-    public GameObject[] _checkPointsArray;
+   
 
-    private Vector3 _startingPoint;
-
-    private const string SAVE_CHECKPOINT_INDEX = "Last_checkpoint_index";
+    
 
     //Dylan
     private bool isRightMouseButtonPressed;
@@ -178,21 +175,6 @@ public class characterMovement : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
 
-        //CheckPoint saver
-        Collider collider = GetComponent<Collider>();
-        int savedCheckPointIndex = -1;
-        savedCheckPointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
-
-        if (savedCheckPointIndex != -1)
-        {
-            _startingPoint = _checkPointsArray[savedCheckPointIndex].transform.position; //creates the new starting point for everey checkpoint walked through spawns player in right direction
-            RespawnPlayer();
-        }
-        else
-        {
-            _startingPoint = gameObject.transform.position; //no checkpoint current position of player
-        }
-
         //PlayerPrefs.SetFloat("PlayerX", player.transform.position.x);
         //PlayerPrefs.SetFloat("PlayerY", player.transform.position.y);
         //PlayerPrefs.SetFloat("PlayerZ", player.transform.position.z);
@@ -207,9 +189,6 @@ public class characterMovement : MonoBehaviour
     void Awake()
     {
         input = new CustomInputs();
-
-
-
 
 
         //characterController = GetComponent<CharacterController>();
@@ -308,31 +287,9 @@ public class characterMovement : MonoBehaviour
     }
     //Dylan
 
-    public void RespawnPlayer()
-    {
-        gameObject.transform.position = _startingPoint;
-        //TurnOffMovement();
-        //currentMovement = Vector3.zero;
-
-        //Debug.Log("WorkingReset");
+   
 
 
-
-    }
-
-    private void loadCheckPoints()
-    {
-        _checkPointsArray = new GameObject[_checkpointsParents.transform.childCount];
-
-        int index = 0;
-
-        foreach (Transform singleCheckpoint in _checkpointsParents.transform)
-        {
-            _checkPointsArray[index] = singleCheckpoint.gameObject;
-            index++;
-
-        }
-    }
 
 
     //Setting Up Jumping Physics
@@ -440,9 +397,6 @@ public class characterMovement : MonoBehaviour
         Quaternion currentRotation = transform.rotation;
 
 
-        
-
-      
 
         if (isMovementPressed)
         {
@@ -501,7 +455,6 @@ public class characterMovement : MonoBehaviour
 
             if (currentMovementInput.y == 1)
             {
-
 
                 Debug.Log("uppies!");
                 currentMovementInput.x = 0;
@@ -637,19 +590,7 @@ public class characterMovement : MonoBehaviour
 
 
     
-    //CheckPonts
-    private void OnTriggerEnter(Collider other)
-    {
-        int checkPointIndex = -1;
-        checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
-        if (checkPointIndex != -1)
-        {
-            PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
-            _startingPoint = other.gameObject.transform.position;
-            other.gameObject.SetActive(false);
-        }
-
-    }
+  
 
     public Vector3 CameraForward()
     {
@@ -687,7 +628,7 @@ public class characterMovement : MonoBehaviour
         if (isMovementPressed && !isWalking)
         {
             animator.SetBool(isWalkingHash, true);
-            Debug.Log("WalkingAnimatorPressed");
+            //Debug.Log("WalkingAnimatorPressed");
 
         }
 
@@ -695,7 +636,7 @@ public class characterMovement : MonoBehaviour
         else if (!isMovementPressed && isWalking)
         {
             animator.SetBool(isWalkingHash, false);
-            Debug.Log("WalkingAnimatorPressedoff");
+           // Debug.Log("WalkingAnimatorPressedoff");
 
         }
 
@@ -703,12 +644,12 @@ public class characterMovement : MonoBehaviour
         if ((isMovementPressed && isRunPressed) && !isRunning)
         {
             animator.SetBool(isRunningHash, true);
-            Debug.Log("RunningAnimatorPressed");
+            //Debug.Log("RunningAnimatorPressed");
         }
         else if ((!isMovementPressed || !isRunPressed) && isRunning)
         {
             animator.SetBool(isRunningHash, false);
-            Debug.Log("RunningAnimatorPressedoff");
+          //  Debug.Log("RunningAnimatorPressedoff");
         }
 
 
@@ -887,13 +828,8 @@ public class characterMovement : MonoBehaviour
         handleRotation();
 
         handleAnimation();
-        
-     
-
- 
 
       
-
         if (isRunPressed)
         {
                 if(characterController != null)
@@ -958,7 +894,8 @@ public class characterMovement : MonoBehaviour
         // Draw a yellow sphere at the transform's position
         Gizmos.color = Color.yellow;
 
-        Gizmos.DrawWireSphere(this.transform.position, 3);
+      
+        Gizmos.DrawWireSphere(this.transform.position, 1f);
 
 
     }

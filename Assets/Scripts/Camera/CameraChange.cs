@@ -38,7 +38,7 @@ public class CameraChange : MonoBehaviour
             {
                 if (CameraManager.cameraInstance.ActiveCamera != cam)
                 {
-                    Debug.Log("SwitchCamera" + cam);
+                    //Debug.Log("SwitchCamera" + cam);
                     CameraManager.cameraInstance.SwitchCamera(cam);
 
                 }

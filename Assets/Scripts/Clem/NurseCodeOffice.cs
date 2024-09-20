@@ -37,7 +37,8 @@ namespace Platformer
         CountdownTimer attackTimer;
 
         EnemyWanderState enemyWanderState;
-      
+
+        public Respawn respawn;
 
         /// <summary>
         /// //Main Scripts
@@ -69,7 +70,7 @@ namespace Platformer
             At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
             At(attackState, chaseState, new FuncPredicate(() => !playerDetector.CanAttackPlayer()));
 
-            Debug.Log("Wonder and chase");
+            //Debug.Log("Wonder and chase");
 
 
             stateMachine.SetState(wanderState);

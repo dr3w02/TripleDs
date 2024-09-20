@@ -98,6 +98,15 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MenuOpenClose"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9d539b7-d749-497d-a6b3-74473e38fb9c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -287,27 +296,10 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Climb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""PauseMenu"",
-            ""id"": ""cb810987-3473-4c2f-be76-a91730f221f9"",
-            ""actions"": [
-                {
-                    ""name"": ""MenuOpenClose"",
-                    ""type"": ""Button"",
-                    ""id"": ""ba2544fc-d733-4d45-a045-30b4073dce69"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""409aad42-9270-46d5-806c-102cb8c4a683"",
+                    ""id"": ""6cd442f6-fbcd-4d5a-9a75-509f637da84d"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -318,7 +310,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""003bb7fa-6d19-420f-8efc-cfd41d5d06ad"",
+                    ""id"": ""e64d1457-7560-48c2-96ec-6b4fc6465aa2"",
                     ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -330,7 +322,30 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""KeyBoard"",
+            ""bindingGroup"": ""KeyBoard"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": true,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""GamePad"",
+            ""bindingGroup"": ""GamePad"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": true,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // CharacterControls
         m_CharacterControls = asset.FindActionMap("CharacterControls", throwIfNotFound: true);
@@ -342,9 +357,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         m_CharacterControls_Select = m_CharacterControls.FindAction("Select", throwIfNotFound: true);
         m_CharacterControls_Climb = m_CharacterControls.FindAction("Climb", throwIfNotFound: true);
         m_CharacterControls_Hold = m_CharacterControls.FindAction("Hold", throwIfNotFound: true);
-        // PauseMenu
-        m_PauseMenu = asset.FindActionMap("PauseMenu", throwIfNotFound: true);
-        m_PauseMenu_MenuOpenClose = m_PauseMenu.FindAction("MenuOpenClose", throwIfNotFound: true);
+        m_CharacterControls_MenuOpenClose = m_CharacterControls.FindAction("MenuOpenClose", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -414,6 +427,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Select;
     private readonly InputAction m_CharacterControls_Climb;
     private readonly InputAction m_CharacterControls_Hold;
+    private readonly InputAction m_CharacterControls_MenuOpenClose;
     public struct CharacterControlsActions
     {
         private @CustomInputs m_Wrapper;
@@ -426,6 +440,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         public InputAction @Select => m_Wrapper.m_CharacterControls_Select;
         public InputAction @Climb => m_Wrapper.m_CharacterControls_Climb;
         public InputAction @Hold => m_Wrapper.m_CharacterControls_Hold;
+        public InputAction @MenuOpenClose => m_Wrapper.m_CharacterControls_MenuOpenClose;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -459,6 +474,9 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Hold.started += instance.OnHold;
             @Hold.performed += instance.OnHold;
             @Hold.canceled += instance.OnHold;
+            @MenuOpenClose.started += instance.OnMenuOpenClose;
+            @MenuOpenClose.performed += instance.OnMenuOpenClose;
+            @MenuOpenClose.canceled += instance.OnMenuOpenClose;
         }
 
         private void UnregisterCallbacks(ICharacterControlsActions instance)
@@ -487,6 +505,9 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Hold.started -= instance.OnHold;
             @Hold.performed -= instance.OnHold;
             @Hold.canceled -= instance.OnHold;
+            @MenuOpenClose.started -= instance.OnMenuOpenClose;
+            @MenuOpenClose.performed -= instance.OnMenuOpenClose;
+            @MenuOpenClose.canceled -= instance.OnMenuOpenClose;
         }
 
         public void RemoveCallbacks(ICharacterControlsActions instance)
@@ -504,52 +525,24 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         }
     }
     public CharacterControlsActions @CharacterControls => new CharacterControlsActions(this);
-
-    // PauseMenu
-    private readonly InputActionMap m_PauseMenu;
-    private List<IPauseMenuActions> m_PauseMenuActionsCallbackInterfaces = new List<IPauseMenuActions>();
-    private readonly InputAction m_PauseMenu_MenuOpenClose;
-    public struct PauseMenuActions
+    private int m_KeyBoardSchemeIndex = -1;
+    public InputControlScheme KeyBoardScheme
     {
-        private @CustomInputs m_Wrapper;
-        public PauseMenuActions(@CustomInputs wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MenuOpenClose => m_Wrapper.m_PauseMenu_MenuOpenClose;
-        public InputActionMap Get() { return m_Wrapper.m_PauseMenu; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PauseMenuActions set) { return set.Get(); }
-        public void AddCallbacks(IPauseMenuActions instance)
+        get
         {
-            if (instance == null || m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Add(instance);
-            @MenuOpenClose.started += instance.OnMenuOpenClose;
-            @MenuOpenClose.performed += instance.OnMenuOpenClose;
-            @MenuOpenClose.canceled += instance.OnMenuOpenClose;
-        }
-
-        private void UnregisterCallbacks(IPauseMenuActions instance)
-        {
-            @MenuOpenClose.started -= instance.OnMenuOpenClose;
-            @MenuOpenClose.performed -= instance.OnMenuOpenClose;
-            @MenuOpenClose.canceled -= instance.OnMenuOpenClose;
-        }
-
-        public void RemoveCallbacks(IPauseMenuActions instance)
-        {
-            if (m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IPauseMenuActions instance)
-        {
-            foreach (var item in m_Wrapper.m_PauseMenuActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_PauseMenuActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            if (m_KeyBoardSchemeIndex == -1) m_KeyBoardSchemeIndex = asset.FindControlSchemeIndex("KeyBoard");
+            return asset.controlSchemes[m_KeyBoardSchemeIndex];
         }
     }
-    public PauseMenuActions @PauseMenu => new PauseMenuActions(this);
+    private int m_GamePadSchemeIndex = -1;
+    public InputControlScheme GamePadScheme
+    {
+        get
+        {
+            if (m_GamePadSchemeIndex == -1) m_GamePadSchemeIndex = asset.FindControlSchemeIndex("GamePad");
+            return asset.controlSchemes[m_GamePadSchemeIndex];
+        }
+    }
     public interface ICharacterControlsActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -560,9 +553,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         void OnSelect(InputAction.CallbackContext context);
         void OnClimb(InputAction.CallbackContext context);
         void OnHold(InputAction.CallbackContext context);
-    }
-    public interface IPauseMenuActions
-    {
         void OnMenuOpenClose(InputAction.CallbackContext context);
     }
 }

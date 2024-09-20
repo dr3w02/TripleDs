@@ -40,12 +40,11 @@ namespace Platformer
         [Header("Fade")]
 
         [SerializeField] private bool fadeIn = false;
-        [SerializeField] private bool fadeOut = true;
+
         [SerializeField] public CanvasGroup myUIGroup;
-        [SerializeField] private float fadeWaitTime = 4f;
+
 
         [SerializeField] private float WaitTime = 0.5f;
-        [SerializeField] private float WaitTimeBB = 2f;
 
 
 

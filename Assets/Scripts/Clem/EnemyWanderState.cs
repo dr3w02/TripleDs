@@ -48,7 +48,7 @@ namespace Platformer
             }
 
 
-            Debug.Log("Enemy wander state initialized.");
+           // Debug.Log("Enemy wander state initialized.");
             animator.CrossFade(WalkHash, crossFadeDuration);
         }
 

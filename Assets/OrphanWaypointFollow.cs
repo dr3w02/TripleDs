@@ -47,7 +47,7 @@ namespace Platformer
 
         public bool Chase;
 
-
+        public Respawn respawn;
         // Music Box Logic
         public bool MusicPlay;
     
@@ -142,7 +142,7 @@ namespace Platformer
         {
             if (running == true)
             {
-                Debug.Log("Running");
+                //Debug.Log("Running");
                 Vector3 destination = waypointsOrphan[index].transform.position;
                 Vector3 newPos = Vector3.MoveTowards(transform.position, waypointsOrphan[index].transform.position, speed * Time.deltaTime);
 
@@ -264,7 +264,7 @@ namespace Platformer
                 }
             }
 
-            characterMain.RespawnPlayer();
+            respawn.RespawnPlayer();
             FourtySix.SetActive(false);
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);

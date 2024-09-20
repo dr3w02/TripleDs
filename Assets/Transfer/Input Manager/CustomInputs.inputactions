@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MenuOpenClose",
+                    "type": "Button",
+                    "id": "a9d539b7-d749-497d-a6b3-74473e38fb9c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -265,27 +274,10 @@
                     "action": "Climb",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "PauseMenu",
-            "id": "cb810987-3473-4c2f-be76-a91730f221f9",
-            "actions": [
-                {
-                    "name": "MenuOpenClose",
-                    "type": "Button",
-                    "id": "ba2544fc-d733-4d45-a045-30b4073dce69",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "409aad42-9270-46d5-806c-102cb8c4a683",
+                    "id": "6cd442f6-fbcd-4d5a-9a75-509f637da84d",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
@@ -296,7 +288,7 @@
                 },
                 {
                     "name": "",
-                    "id": "003bb7fa-6d19-420f-8efc-cfd41d5d06ad",
+                    "id": "e64d1457-7560-48c2-96ec-6b4fc6465aa2",
                     "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
@@ -308,5 +300,28 @@
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "KeyBoard",
+            "bindingGroup": "KeyBoard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": true,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "GamePad",
+            "bindingGroup": "GamePad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": true,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }

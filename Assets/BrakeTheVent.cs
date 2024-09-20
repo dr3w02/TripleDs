@@ -21,7 +21,7 @@ namespace Platformer
 
         public ScrewDriver screw;
 
-    
+        public Respawn respawn;
 
         public Collider ventOutskirts;
 
@@ -130,7 +130,8 @@ namespace Platformer
                 }
             }
 
-            characterMain.RespawnPlayer();
+            respawn.RespawnPlayer();
+
             //mCharacter.SetActive(false);
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);

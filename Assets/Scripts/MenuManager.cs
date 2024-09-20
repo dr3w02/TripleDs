@@ -1,15 +1,14 @@
+using Platformer;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
-
 public class MenuManager : MonoBehaviour
 {
 
     [Header("Menu Objects")]
     [SerializeField] private GameObject _mainMenuCanvas;
     [SerializeField] private GameObject _settingsMenuCanvas;
-    [SerializeField] private GameObject _creidtsCanvas;
+  
     [SerializeField] private GameObject _gamePadCanvas;
     [SerializeField] private GameObject _keyboardCanvas;
     [SerializeField] private GameObject _UnstuckCanvas;
@@ -19,17 +18,20 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private characterMovement _player;
     //[SerializeField] private CharacterController _player;
 
+
     [Header("First Selected Options")]
     [SerializeField] private GameObject _mainMenuFirst;
     [SerializeField] private GameObject _settingsMenuFirst;
-    //[SerializeField] private GameObject _creditsMenuFirst;
-    //[SerializeField] private GameObject _gamePadMenuFirst;
-    //[SerializeField] private GameObject _keyboardMenuFirst;
+
+    [SerializeField] private GameObject _gamePadMenuFirst;
+    [SerializeField] private GameObject _keyboardMenuFirst;
 
     private bool isPaused;
     private bool playerRested;
-    public characterMovement characterMovement;
 
+    public Respawn respawn;
+
+    public GameObject player;
     private void Start()
     {
         _mainMenuCanvas.SetActive(false);
@@ -50,30 +52,47 @@ public class MenuManager : MonoBehaviour
                 Unpause();
             }
         }
+
+        if (playerRested)
+        {
+            Unpause();
+            playerRested = false;
+        }
     }
 
 
     public void Pause()
     {
+        Debug.LogWarning("Paused");
+
         isPaused = true;
 
         Time.timeScale = 0f;
 
-        _player.enabled = false;
+
+        player.SetActive(false);
 
         Cursor.lockState = CursorLockMode.Confined;
+
         OpenMainMenu();
+
+        _player.TurnOffMovement();
     }
 
     public void Unpause()
     {
+
+        Debug.LogWarning("unPaused");
         isPaused = false;
+
+        player.SetActive(true);
 
         Time.timeScale = 1f;
 
-        _player.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         CloseAllMenus();
+
+        _player.Enabled();
 
 
     }
@@ -89,12 +108,13 @@ public class MenuManager : MonoBehaviour
     //Canvas Activations / Deactivations
     private void OpenMainMenu()
     {
+        _UnstuckCanvas.SetActive(true);
         _mainMenuCanvas.SetActive(true);
         _settingsMenuCanvas.SetActive(false);
-        _creidtsCanvas.SetActive(false);
+        //_creidtsCanvas.SetActive(false);
         _gamePadCanvas.SetActive(false);
         _keyboardCanvas.SetActive(false);
-        _UnstuckCanvas.SetActive(true);
+        
 
         EventSystem.current.SetSelectedGameObject(_mainMenuFirst);
     }
@@ -104,10 +124,12 @@ public class MenuManager : MonoBehaviour
     {
         _mainMenuCanvas.SetActive(false);
         _settingsMenuCanvas.SetActive(false);
-        _creidtsCanvas.SetActive(false);
+        //_creidtsCanvas.SetActive(false);
         _gamePadCanvas.SetActive(false);
         _keyboardCanvas.SetActive(false);
         _UnstuckCanvas.SetActive(false);
+
+
         EventSystem.current.SetSelectedGameObject(null);
     }
 
@@ -123,25 +145,23 @@ public class MenuManager : MonoBehaviour
         Unpause();
     }
 
-    public void OnCreditsPress()
-    {
-        OpenCreditsMenuHandle();
-
-    }
+   // public void OnCreditsPress()
+    //{
+    //    OpenCreditsMenuHandle();
+//
+//
+//}
     private IEnumerator coroutine;
 
     public void OnUnStuckPress()
     {
-        Debug.Log("ButtonPressed");
+        Debug.Log("Respawn ButtonPressed");
 
-        characterMovement.RespawnPlayer();
         playerRested = true;
 
-        if (playerRested)
-        {
-            Unpause();
-            playerRested = false;
-        }
+        respawn.RespawnPlayer();
+
+        
     }
 
     public void OnGamePadPress()
@@ -155,38 +175,38 @@ public class MenuManager : MonoBehaviour
     }
 
 
-    private void OpenCreditsMenuHandle()
-    {
-        _settingsMenuCanvas.SetActive(false);
-        _mainMenuCanvas.SetActive(false);
-        _creidtsCanvas.SetActive(true);
-        _gamePadCanvas.SetActive(false);
-        _keyboardCanvas.SetActive(false);
+    //private void OpenCreditsMenuHandle()
+    //{
+     //   _settingsMenuCanvas.SetActive(false);
+      //  _mainMenuCanvas.SetActive(false);
+        //_creidtsCanvas.SetActive(true);
+       // _gamePadCanvas.SetActive(false);
+       // _keyboardCanvas.SetActive(false);
 
         // EventSystem.current.SetSelectedGameObject(_creditsMenuFirst);
-    }
+   // }
 
     private void OpenGamePadHandle()
     {
         _settingsMenuCanvas.SetActive(false);
         _mainMenuCanvas.SetActive(false);
-        _creidtsCanvas.SetActive(false);
+       // _creidtsCanvas.SetActive(false);
         _gamePadCanvas.SetActive(true);
         _keyboardCanvas.SetActive(false);
 
-        //EventSystem.current.SetSelectedGameObject(_gamePadMenuFirst);
+        EventSystem.current.SetSelectedGameObject(_gamePadMenuFirst);
     }
 
     private void OpenKeyboardHandle()
     {
         _settingsMenuCanvas.SetActive(false);
         _mainMenuCanvas.SetActive(false);
-        _creidtsCanvas.SetActive(false);
+       // _creidtsCanvas.SetActive(false);
         _gamePadCanvas.SetActive(false);
         _keyboardCanvas.SetActive(true);
 
 
-        // EventSystem.current.SetSelectedGameObject(_keyboardMenuFirst);
+        EventSystem.current.SetSelectedGameObject(_keyboardMenuFirst);
     }
 
     //////BackButton//////////////////
@@ -194,6 +214,7 @@ public class MenuManager : MonoBehaviour
     public void OnSettingsBackPressed()
     {
         OpenMainMenu();
+
     }
 
 
