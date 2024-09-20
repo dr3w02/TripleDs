@@ -29,11 +29,7 @@ namespace Platformer
 
         [Header("BlackBeak")]
 
-        BlackBeackIntro bbIntro;
-
-
-
-
+        public BlackBeackIntro bbIntro;
 
 
 
@@ -43,10 +39,17 @@ namespace Platformer
 
         [SerializeField] public CanvasGroup myUIGroup;
 
+        [SerializeField] private bool fadeOut = true;
+       
+        [SerializeField] private float fadeWaitTime = 4f;
+
 
         [SerializeField] private float WaitTime = 0.5f;
 
-
+        public void Start()
+        {
+            SleepCam.SetActive(false);
+        }
 
         public bool Interact(Interactor interactor)
         {
@@ -90,6 +93,7 @@ namespace Platformer
         {
 
 
+            //mCharacter.SetActive(false);
             yield return new WaitForSeconds(WaitTime);
 
 
@@ -111,8 +115,33 @@ namespace Platformer
                 }
             }
 
+          
 
-            bbIntro.BBPlays();
+            //mCharacter.SetActive(false);
+            // Wait for the specified amount of time
+            yield return new WaitForSeconds(fadeWaitTime);
+
+            fadeOut = true;
+            while (fadeOut)
+            {
+                if (myUIGroup.alpha > 0)
+                {
+                    myUIGroup.alpha -= Time.deltaTime;
+                    yield return null; // Wait for the next frame
+                  
+                    mCharacter.SetActive(true);
+                    characterMain.Enabled();
+                    //GetComponent<NavMeshAgent>().isStopped = false;
+
+                    sleeping = false;
+                    bbIntro.StartBlackBeakIntro();
+                }
+                else
+                {
+                    fadeOut = false;
+                }
+            }
+
 
 
         }
