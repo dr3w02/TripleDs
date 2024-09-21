@@ -18,6 +18,10 @@ namespace Platformer
 
         [Header("MainCharacter")]
 
+
+        public Transform SleepPoint;
+
+
         public GameObject mCharacter;/// <summary>
         public characterMovement characterMain;
         characterMovement characterMovement;
@@ -46,6 +50,10 @@ namespace Platformer
 
         [SerializeField] private float WaitTime = 0.5f;
 
+        public float speed = 0.5f;
+
+
+
         public void Start()
         {
             SleepCam.SetActive(false);
@@ -56,13 +64,23 @@ namespace Platformer
 
             if (interactable == false)
             {
-
-
-                sleeping = true;
-
-
                 characterMain.TurnOffMovement();
 
+                mainAnim.SetBool("isWalking", true);
+                mCharacter.transform.position = Vector3.MoveTowards(mCharacter.transform.position, SleepPoint.transform.position, speed * Time.deltaTime);
+
+                if (Vector3.Distance(mCharacter.transform.position, SleepPoint.transform.position) == 0f)
+                {
+                    mainAnim.SetBool("isWalking", false);
+                    mainAnim.SetBool("Sleeping", true);
+
+                    SleepCam.SetActive(true);
+
+                    StartCoroutine(SleepWait());
+
+                    StartCoroutine(PanOut());
+                }
+               
 
             }
 
@@ -84,8 +102,7 @@ namespace Platformer
         {
             yield return new WaitForSeconds(5f);
 
-            StartCoroutine(PanOut());
-
+          
         }
 
 
@@ -147,14 +164,7 @@ namespace Platformer
         }
         public void Update()
         {
-            if (sleeping == true)
-            {
-                mainAnim.SetBool("Sleeping", true);
-
-                SleepCam.SetActive(true);
-
-                StartCoroutine(SleepWait());
-            }
+            
 
 
 

@@ -15,7 +15,8 @@ namespace Platformer
         public CinemachineVirtualCamera VirtualCam;
         private CinemachineBasicMultiChannelPerlin perlinNoise;
 
-     
+        public Transform A;
+        public Transform B;
 
         public GameObject SleepCam;
 
@@ -25,9 +26,9 @@ namespace Platformer
         public GameObject Bosscam;
         public GameObject BB;
 
-        [Header("WayPoint")]
-        public List<GameObject> waypointsbbIntro;
-        int index = 0;
+      
+        
+        
         public float speed = 0.5f;
 
         [Header("Fade")]
@@ -43,7 +44,7 @@ namespace Platformer
 
         [Header("CameraShake")]
         [SerializeField] private float shakeIntensity = 5f;
-        [SerializeField] private float shakeTime = 2f;
+        [SerializeField] private float shakeTime = 5f;
 
 
        [Header("MainCharacter")]
@@ -67,7 +68,7 @@ namespace Platformer
 
             Bosscam.SetActive(false);
            
-            BB.transform.position = waypointsbbIntro[index].transform.position;
+            BB.transform.position = A.transform.position;
 
             BB.SetActive(false);
         }
@@ -77,24 +78,29 @@ namespace Platformer
             ShakeCamera(shakeIntensity, shakeTime);
         }
 
+
         public void StartBlackBeakIntro()
         {
-            // Disable sleeping script and show BlackBeak
-            SleepScript.enabled = false;
+            Debug.LogWarning("StartingAgain!!!");
+           // SleepScript.enabled = false;
             BB.SetActive(true);
             Bosscam.SetActive(true);
             SleepCam.SetActive(false);
 
-            // Start BlackBeak movement and animation
+        
             StartCoroutine(MoveToCheckpoint());
         }
 
         public void ShakeCamera(float intensity, float shakeTime)
         {
+
+
             if (CamShake == true)
             {
                 perlinNoise.m_AmplitudeGain = intensity;
             }
+
+
 
             else if (CamShake == false)
             {
@@ -103,30 +109,30 @@ namespace Platformer
             
 
         }
-
+    
         private IEnumerator MoveToCheckpoint()
         {
 
             //yield return new WaitForSeconds(WaitTime);
 
 
-            BlackBeakAnim.SetBool("walking", true);
 
          
-            while (index < waypointsbbIntro.Count)
-            {
-                Vector3 destination = waypointsbbIntro[index].transform.position;
+                Vector3 destination = B.position;
 
-                while (Vector3.Distance(BB.transform.position, destination) > 0.1f)
+                while (Vector3.Distance(BB.transform.position, destination) == 0f)
                 {
+
+                    BlackBeakAnim.SetBool("walking", true);
+
                     BB.transform.position = Vector3.MoveTowards(BB.transform.position, destination, speed * Time.deltaTime);
+
                     yield return null;
                 }
 
-                index++;
+            
 
-                if (index == waypointsbbIntro.Count)
-                {
+               
                     BlackBeakAnim.SetBool("walking", false);
 
                     BlackBeakAnim.SetBool("Evil", true);
@@ -137,16 +143,15 @@ namespace Platformer
 
                     CamShake = true;
 
-                    yield return new WaitForEndOfFrame();
 
 
-                    
+            yield return new WaitForEndOfFrame();
+
+
+            StartCoroutine(FadeInOut());
                    
-
-                    StartCoroutine(FadeInOut());
-                    yield break;
-                }
-            }
+                
+            
         }
 
 
@@ -156,9 +161,7 @@ namespace Platformer
         private IEnumerator FadeInOut()
         {
 
-            CamShake = false;
-            BB.SetActive(false);
-            Bosscam.SetActive(false);
+      
 
             Debug.Log("Switch Camera");
 
@@ -169,7 +172,7 @@ namespace Platformer
                 if (myUIGroup.alpha < 1)
                 {
                     myUIGroup.alpha += Time.deltaTime;
-                    yield return null; // Wait for the next frame
+                    //yield return null; // Wait for the next frame
                 }
                 else
                 {
@@ -177,10 +180,14 @@ namespace Platformer
                 }
             }
 
-            
+            CamShake = false;
+            BB.SetActive(false);
+            Bosscam.SetActive(false);
+
+            mainAnim.SetBool("Sleeping", false);
 
             //mCharacter.SetActive(false);
-            // Wait for the specified amount of time
+
             yield return new WaitForSeconds(fadeWaitTime);
 
             fadeOut = true;
@@ -191,7 +198,7 @@ namespace Platformer
                     myUIGroup.alpha -= Time.deltaTime;
                     yield return null; // Wait for the next frame
                     
-                    mCharacter.SetActive(true);
+                  
                    
                     //GetComponent<NavMeshAgent>().isStopped = false;
 
