@@ -19,6 +19,8 @@ namespace Platformer
 
         private Queue<Levers> _leverSequence = new Queue<Levers>(); // order of pulled levers
 
+        //public Respawn respawn;
+
         private void Start()
         {
             PlayerDead.SetActive(false);
@@ -51,6 +53,9 @@ namespace Platformer
                 Character.SetActive(false);
                 PlayerDead.SetActive(true);
                 BathroomDeathCam.SetActive(true);
+
+                //StartCoroutine(WaitBetweenFadeInOut());
+                ResetAllLevers();
 
                 if (characterMain != null)
                 {
