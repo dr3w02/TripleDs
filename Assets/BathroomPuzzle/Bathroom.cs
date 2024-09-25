@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace Platformer
 {
@@ -19,7 +20,12 @@ namespace Platformer
 
         private Queue<Levers> _leverSequence = new Queue<Levers>(); // order of pulled levers
 
-        //public Respawn respawn;
+        public Respawn respawn;
+        [SerializeField] private float WaitTime = 20f;
+        [SerializeField] private bool fadeIn = false;
+        [SerializeField] private bool fadeOut = true;
+        [SerializeField] public CanvasGroup myUIGroup;
+        [SerializeField] private float fadeWaitTime = 4f;
 
         private void Start()
         {
@@ -37,24 +43,26 @@ namespace Platformer
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider ElectricColliderTrigger)
         {
-            if (other.CompareTag("Player"))
+            if (ElectricColliderTrigger.CompareTag("Player"))
             {
                 if (_electricWaterDestroyed)
                 {
-                    Debug.Log("Player entered electric collider but electric water is off. No action taken.");
+                    Debug.Log("player entered electric collider but electric water is off. No action taken.");
                     return; // If electric water is off, no further action is needed
                 }
 
-                Debug.Log("Player entered electric collider while electric water is still active.");
 
                 // proceed with killing the player
+                Debug.Log("start fade");
+
+                StartCoroutine(WaitBetweenFadeInOut());
+
+
                 Character.SetActive(false);
                 PlayerDead.SetActive(true);
                 BathroomDeathCam.SetActive(true);
-
-                //StartCoroutine(WaitBetweenFadeInOut());
                 ResetAllLevers();
 
                 if (characterMain != null)
@@ -148,6 +156,52 @@ namespace Platformer
             if (ElectricColliderTrigger != null)
             {
                 ElectricColliderTrigger.enabled = isActive;
+            }
+        }
+
+        public IEnumerator WaitBetweenFadeInOut()
+        {
+
+            yield return new WaitForSeconds(WaitTime);
+
+            fadeIn = true;
+
+            while (fadeIn)
+            {
+                if (myUIGroup.alpha < 1)
+                {
+                    myUIGroup.alpha += Time.deltaTime;
+                    yield return null; // Wait for the next frame
+                }
+                else
+                {
+                    fadeIn = false;
+                }
+            }
+
+            //respawn.RespawnPlayer();
+
+            // Wait for the specified amount of time
+            yield return new WaitForSeconds(fadeWaitTime);
+
+            fadeOut = true;
+            while (fadeOut)
+            {
+                if (myUIGroup.alpha > 0)
+                {
+                    myUIGroup.alpha -= Time.deltaTime;
+                    yield return null; // Wait for the next frame
+                    BathroomDeathCam.SetActive(false);
+                    Character.SetActive(true);
+                    characterMain.Enabled();
+
+                    ResetAllLevers();
+                    PlayerDead.SetActive(false);
+                }
+                else
+                {
+                    fadeOut = false;
+                }
             }
         }
     }
