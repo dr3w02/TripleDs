@@ -84,7 +84,7 @@ namespace Platformer
 
             gameObject.transform.position = _startingPoint;
 
-            playerscript.Enabled();
+            //playerscript.Enabled();
             playerscript.enabled = true;
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;

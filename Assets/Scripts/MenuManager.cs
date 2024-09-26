@@ -15,7 +15,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("Player Scripts to deactivate on Pause")]
 
-    [SerializeField] private characterMovement _player;
+    [SerializeField] private RBController _player;
     //[SerializeField] private CharacterController _player;
 
 

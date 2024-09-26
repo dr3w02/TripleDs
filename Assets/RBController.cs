@@ -21,7 +21,9 @@ namespace Platformer
         [Header("Floats")]
         public float speed, maxForce, jumpForce;
 
-
+        // calls to the input manager
+      
+        PlayerInput action;
         //private float lookRotation;
 
 
@@ -60,7 +62,6 @@ namespace Platformer
 
         public Animator animator;
 
-        CustomInputs input;
 
         public float rotationFactorPerFrame = 15.0f;
 
@@ -110,7 +111,8 @@ namespace Platformer
         private void Awake()
         {
             playersCapsuleCollider = GetComponent<CapsuleCollider>();
-            input = new CustomInputs();
+
+        
 
             isWalkingHash = Animator.StringToHash("isWalking");
             isRunningHash = Animator.StringToHash("isRunning");
@@ -120,6 +122,8 @@ namespace Platformer
             // isRopeHash = Animator.StringToHash("isRope");
             //isLadderHash = Animator.StringToHash("isLadder");
 
+
+         
         }
         public void FixedUpdate()
         {
@@ -136,7 +140,7 @@ namespace Platformer
             handleAnimation();
             handleCrouch();
 
-
+        
 
             if (HasJumped = true && grounded)
             {
@@ -397,6 +401,23 @@ namespace Platformer
             }
         }
 
+
+        public void Enabled()
+        {
+            action.enabled = true;
+        
+
+
+        }
+
+        public void TurnOffMovement()
+        {
+
+            action.enabled = false;
+        
+        }
+
+
         void handleCrouch()
         {
 
@@ -493,20 +514,10 @@ namespace Platformer
         {
             grounded = state;
         }
+
+
     }
 
-
-    //public void Enabled()
-   // {
-    //    input.Enable();
-
-   // }
-
-   // public void TurnOffMovement()
-    //{
-     //   input.Disable();
-
-    //}
    
 
 }
