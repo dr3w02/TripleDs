@@ -18,7 +18,7 @@ namespace Platformer
 
         private const string SAVE_CHECKPOINT_INDEX = "Last_checkpoint_index";
 
-        public characterMovement playerscript;
+        public RBController playerscript;
         public Rigidbody _rigidbody;
 
         
