@@ -60,15 +60,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Climb",
-                    "type": "Button",
-                    "id": "9e3f3ee1-e919-44d8-83d9-038c00012a7e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Hold",
                     "type": "Button",
                     "id": "2b4a0780-d30b-4be2-985e-3206610d0b0f",
@@ -261,17 +252,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Hold",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e9e221b6-fe48-49d1-80ac-4c154457a092",
-                    "path": "<Keyboard>/capsLock",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Climb",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

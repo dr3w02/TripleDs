@@ -82,15 +82,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Climb"",
-                    ""type"": ""Button"",
-                    ""id"": ""9e3f3ee1-e919-44d8-83d9-038c00012a7e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Hold"",
                     ""type"": ""Button"",
                     ""id"": ""2b4a0780-d30b-4be2-985e-3206610d0b0f"",
@@ -288,17 +279,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e9e221b6-fe48-49d1-80ac-4c154457a092"",
-                    ""path"": ""<Keyboard>/capsLock"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Climb"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""6cd442f6-fbcd-4d5a-9a75-509f637da84d"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
@@ -355,7 +335,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         m_CharacterControls_Crouch = m_CharacterControls.FindAction("Crouch", throwIfNotFound: true);
         m_CharacterControls_Pull = m_CharacterControls.FindAction("Pull", throwIfNotFound: true);
         m_CharacterControls_Select = m_CharacterControls.FindAction("Select", throwIfNotFound: true);
-        m_CharacterControls_Climb = m_CharacterControls.FindAction("Climb", throwIfNotFound: true);
         m_CharacterControls_Hold = m_CharacterControls.FindAction("Hold", throwIfNotFound: true);
         m_CharacterControls_MenuOpenClose = m_CharacterControls.FindAction("MenuOpenClose", throwIfNotFound: true);
     }
@@ -425,7 +404,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Crouch;
     private readonly InputAction m_CharacterControls_Pull;
     private readonly InputAction m_CharacterControls_Select;
-    private readonly InputAction m_CharacterControls_Climb;
     private readonly InputAction m_CharacterControls_Hold;
     private readonly InputAction m_CharacterControls_MenuOpenClose;
     public struct CharacterControlsActions
@@ -438,7 +416,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_CharacterControls_Crouch;
         public InputAction @Pull => m_Wrapper.m_CharacterControls_Pull;
         public InputAction @Select => m_Wrapper.m_CharacterControls_Select;
-        public InputAction @Climb => m_Wrapper.m_CharacterControls_Climb;
         public InputAction @Hold => m_Wrapper.m_CharacterControls_Hold;
         public InputAction @MenuOpenClose => m_Wrapper.m_CharacterControls_MenuOpenClose;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
@@ -468,9 +445,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Select.started += instance.OnSelect;
             @Select.performed += instance.OnSelect;
             @Select.canceled += instance.OnSelect;
-            @Climb.started += instance.OnClimb;
-            @Climb.performed += instance.OnClimb;
-            @Climb.canceled += instance.OnClimb;
             @Hold.started += instance.OnHold;
             @Hold.performed += instance.OnHold;
             @Hold.canceled += instance.OnHold;
@@ -499,9 +473,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Select.started -= instance.OnSelect;
             @Select.performed -= instance.OnSelect;
             @Select.canceled -= instance.OnSelect;
-            @Climb.started -= instance.OnClimb;
-            @Climb.performed -= instance.OnClimb;
-            @Climb.canceled -= instance.OnClimb;
             @Hold.started -= instance.OnHold;
             @Hold.performed -= instance.OnHold;
             @Hold.canceled -= instance.OnHold;
@@ -551,7 +522,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnPull(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
-        void OnClimb(InputAction.CallbackContext context);
         void OnHold(InputAction.CallbackContext context);
         void OnMenuOpenClose(InputAction.CallbackContext context);
     }

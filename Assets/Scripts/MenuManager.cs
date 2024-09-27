@@ -76,7 +76,7 @@ public class MenuManager : MonoBehaviour
 
         OpenMainMenu();
 
-        _player.TurnOffMovement();
+      //  _player.TurnOffMovement();
     }
 
     public void Unpause()
@@ -92,7 +92,7 @@ public class MenuManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         CloseAllMenus();
 
-        _player.Enabled();
+        //_player.Enabled();
 
 
     }

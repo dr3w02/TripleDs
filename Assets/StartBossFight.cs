@@ -23,8 +23,8 @@ namespace Platformer
 
 
         public GameObject mCharacter;/// <summary>
-        public characterMovement characterMain;
-        characterMovement characterMovement;
+        public RBController characterMain;
+       
 
         public GameObject SleepCam;
         public bool sleeping;
@@ -67,6 +67,7 @@ namespace Platformer
                 characterMain.TurnOffMovement();
 
                 mainAnim.SetBool("isWalking", true);
+
                 mCharacter.transform.position = Vector3.MoveTowards(mCharacter.transform.position, SleepPoint.transform.position, speed * Time.deltaTime);
 
                 if (Vector3.Distance(mCharacter.transform.position, SleepPoint.transform.position) == 0f)

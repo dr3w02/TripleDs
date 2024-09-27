@@ -15,10 +15,12 @@ namespace Platformer
         [SerializeField, Self] NavMeshAgent agent;
         [SerializeField, Self] PlayerDetector playerDetector;
         [SerializeField, Child] Animator animator;
-        public characterMovement characterMain;
+        public RBController characterMain;
 
         
         NavMeshAgent navMeshAgent; 
+
+
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 
         [SerializeField] float timeBetweenAttacks = 1f;
@@ -36,8 +38,6 @@ namespace Platformer
 
         CountdownTimer attackTimer;
 
-        EnemyWanderState enemyWanderState;
-
         public Respawn respawn;
 
         /// <summary>
@@ -45,7 +45,6 @@ namespace Platformer
         /// </summary>
         /// 
 
-    
 
 
         void OnValidate() => this.ValidateRefs();
@@ -75,7 +74,7 @@ namespace Platformer
 
             stateMachine.SetState(wanderState);
 
-
+       
             navMeshAgent = GetComponent<NavMeshAgent>();
 
 
@@ -84,13 +83,12 @@ namespace Platformer
 
         }
 
-
+     
 
         void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
         void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
 
-    
-       
+
 
 
         void Update()
