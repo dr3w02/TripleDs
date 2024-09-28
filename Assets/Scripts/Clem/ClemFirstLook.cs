@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 
 
@@ -38,15 +39,28 @@ public class ClemFirstLook : MonoBehaviour
 
             Grone.Play();
 
-            ClemMove();
+            moving = true;
 
-           
+
+
         }
 
     }
+    public bool moving;
 
+    public void Update()
+    {
+        if (moving)
+        {
+            ClemMove();
+        }
+        if (!moving)
+        {
+            myAnimationController.SetBool("ClemMove", false);
+            myAnimationController.SetBool("ClemIdel", true);
+        }
 
-
+    }
     public void ClemMove()
     {
 
@@ -61,22 +75,25 @@ public class ClemFirstLook : MonoBehaviour
 
             myAnimationController.SetBool("ClemMove", true);
 
+            myAnimationController.SetBool("ClemIdel", false);
+
             Clem.transform.position = Vector3.MoveTowards(Clem.transform.position, destination, speed * Time.deltaTime);
             Clem.transform.rotation = targetRotation;
 
         }
 
-        else if (Vector3.Distance(Clem.transform.position, destination) == 0f)
+        else 
         {
 
             myAnimationController.SetBool("ClemMove", false);
+            myAnimationController.SetBool("ClemIdel", true);
             Grone.Stop();
 
             Clem.SetActive(false);
             Debug.Log("ByeClem");
             DoorClose.SetActive(false);
 
-            
+            moving = false;
         }
     }
 
