@@ -128,26 +128,31 @@ namespace Platformer
         }
         public void FixedUpdate()
         {
-
-            Move();
+            if (CanMove)
+            {
+                Move();
+            }
+         
 
 
         }
 
         private void LateUpdate()
         {
+            if (CanMove)
+            {
+                handleRotation();
+                handleAnimation();
+                handleCrouch();
 
-            handleRotation();
-            handleAnimation();
-            handleCrouch();
-
-        
+            }
 
             if (HasJumped = true && grounded)
             {
                 animator.SetBool(isJumpingHash, false);
                 HasJumped = false;
             }
+
 
             //animator.SetBool(isJumpingHash, false);
         }
@@ -168,10 +173,10 @@ namespace Platformer
 
 
         public Vector2 currentMovementInput;
+
         public void Move()
         {
-            if (CanMove)
-            {
+            
 
                 Vector3 moveDirection = CameraForward() + CameraRight();
 
@@ -226,7 +231,7 @@ namespace Platformer
                     characterClimb.HandleClimbingMovement();
 
                 }
-            }
+            
 
 
 
