@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
@@ -23,9 +24,9 @@ namespace Platformer
 
         // calls to the input manager
       
-        PlayerInput action;
+      
         //private float lookRotation;
-
+        public bool CanMove = true;
 
         [Header("Grounded")]
         public bool grounded;
@@ -169,64 +170,69 @@ namespace Platformer
         public Vector2 currentMovementInput;
         public void Move()
         {
-
-
-            Vector3 moveDirection = CameraForward() + CameraRight();
-
-
-            //FindTargetVelocity
-            Vector3 currentVelocity = rb.velocity;
-
-
-            Vector3 targetVelocity = new Vector3(currentMovementInput.x, 0, currentMovementInput.y);
-
-
-            targetVelocity = moveDirection * speed;
-
-            //Align Direction
-
-            targetVelocity.x = moveDirection.x * currentMovementInput.x * speed;
-
-            targetVelocity.z = moveDirection.z * currentMovementInput.y * speed;
-
-            currentMovement.x = targetVelocity.x;
-
-            currentMovement.z = targetVelocity.z;
-
-            currentRunMovement.x = targetVelocity.x * runMultiplier;
-
-            currentRunMovement.z = targetVelocity.z * runMultiplier;
-
-
-            // = transform.TransformDirection(targetVelocity);
-
-
-            //Calculate forces
-
-            Vector3 velocityChange = (targetVelocity - currentVelocity);
-            velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
-
-            Vector3.ClampMagnitude(velocityChange, maxForce);
-
-            rb.AddForce(velocityChange, ForceMode.VelocityChange);
-
-
-
-
-            if (isRunPressed)
+            if (CanMove)
             {
-                rb.MovePosition(rb.position + currentRunMovement * Time.deltaTime);
-            }
-            else
-            {
-                rb.MovePosition(rb.position + currentMovement * Time.deltaTime);
+
+                Vector3 moveDirection = CameraForward() + CameraRight();
+
+
+                //FindTargetVelocity
+                Vector3 currentVelocity = rb.velocity;
+
+
+                Vector3 targetVelocity = new Vector3(currentMovementInput.x, 0, currentMovementInput.y);
+
+
+                targetVelocity = moveDirection * speed;
+
+                //Align Direction
+
+                targetVelocity.x = moveDirection.x * currentMovementInput.x * speed;
+
+                targetVelocity.z = moveDirection.z * currentMovementInput.y * speed;
+
+                currentMovement.x = targetVelocity.x;
+
+                currentMovement.z = targetVelocity.z;
+
+                currentRunMovement.x = targetVelocity.x * runMultiplier;
+
+                currentRunMovement.z = targetVelocity.z * runMultiplier;
+
+
+                // = transform.TransformDirection(targetVelocity);
+
+
+                //Calculate forces
+
+                Vector3 velocityChange = (targetVelocity - currentVelocity);
+                velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
+
+                Vector3.ClampMagnitude(velocityChange, maxForce);
+
+                rb.AddForce(velocityChange, ForceMode.VelocityChange);
+
+                if (isRunPressed)
+                {
+                    rb.MovePosition(rb.position + currentRunMovement * Time.deltaTime);
+                }
+                else
+                {
+                    rb.MovePosition(rb.position + currentMovement * Time.deltaTime);
+                }
+
+                if (characterClimb.isClimbingLadder)
+                {
+                    characterClimb.HandleClimbingMovement();
+
+                }
             }
 
-            if (characterClimb.isClimbingLadder)
-            {
-                characterClimb.HandleClimbingMovement();
 
-            }
+
+
+
+          
 
         }
 
@@ -404,16 +410,16 @@ namespace Platformer
 
         public void Enabled()
         {
-            action.enabled = true;
-        
 
+
+            CanMove = true;
 
         }
 
         public void TurnOffMovement()
         {
 
-            action.enabled = false;
+            CanMove = false;
         
         }
 
