@@ -82,15 +82,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Hold"",
-                    ""type"": ""Button"",
-                    ""id"": ""2b4a0780-d30b-4be2-985e-3206610d0b0f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""MenuOpenClose"",
                     ""type"": ""Button"",
                     ""id"": ""a9d539b7-d749-497d-a6b3-74473e38fb9c"",
@@ -235,45 +226,12 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""14f6dc15-a4db-42ff-98cd-6af95bbf2df5"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pull"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bd21795e-22da-427e-a5bb-6222f73db514"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pull"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""6e12c499-2486-4214-8a29-40dc58614744"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9c71d79b-9852-4bde-a651-eb0e8db6c8a7"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Hold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -298,34 +256,22 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""action"": ""MenuOpenClose"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31681036-3589-4b78-bf76-6068548e62a3"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pull"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
-    ""controlSchemes"": [
-        {
-            ""name"": ""KeyBoard"",
-            ""bindingGroup"": ""KeyBoard"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": true,
-                    ""isOR"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""GamePad"",
-            ""bindingGroup"": ""GamePad"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Gamepad>"",
-                    ""isOptional"": true,
-                    ""isOR"": false
-                }
-            ]
-        }
-    ]
+    ""controlSchemes"": []
 }");
         // CharacterControls
         m_CharacterControls = asset.FindActionMap("CharacterControls", throwIfNotFound: true);
@@ -335,7 +281,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         m_CharacterControls_Crouch = m_CharacterControls.FindAction("Crouch", throwIfNotFound: true);
         m_CharacterControls_Pull = m_CharacterControls.FindAction("Pull", throwIfNotFound: true);
         m_CharacterControls_Select = m_CharacterControls.FindAction("Select", throwIfNotFound: true);
-        m_CharacterControls_Hold = m_CharacterControls.FindAction("Hold", throwIfNotFound: true);
         m_CharacterControls_MenuOpenClose = m_CharacterControls.FindAction("MenuOpenClose", throwIfNotFound: true);
     }
 
@@ -404,7 +349,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Crouch;
     private readonly InputAction m_CharacterControls_Pull;
     private readonly InputAction m_CharacterControls_Select;
-    private readonly InputAction m_CharacterControls_Hold;
     private readonly InputAction m_CharacterControls_MenuOpenClose;
     public struct CharacterControlsActions
     {
@@ -416,7 +360,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         public InputAction @Crouch => m_Wrapper.m_CharacterControls_Crouch;
         public InputAction @Pull => m_Wrapper.m_CharacterControls_Pull;
         public InputAction @Select => m_Wrapper.m_CharacterControls_Select;
-        public InputAction @Hold => m_Wrapper.m_CharacterControls_Hold;
         public InputAction @MenuOpenClose => m_Wrapper.m_CharacterControls_MenuOpenClose;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
@@ -445,9 +388,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Select.started += instance.OnSelect;
             @Select.performed += instance.OnSelect;
             @Select.canceled += instance.OnSelect;
-            @Hold.started += instance.OnHold;
-            @Hold.performed += instance.OnHold;
-            @Hold.canceled += instance.OnHold;
             @MenuOpenClose.started += instance.OnMenuOpenClose;
             @MenuOpenClose.performed += instance.OnMenuOpenClose;
             @MenuOpenClose.canceled += instance.OnMenuOpenClose;
@@ -473,9 +413,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @Select.started -= instance.OnSelect;
             @Select.performed -= instance.OnSelect;
             @Select.canceled -= instance.OnSelect;
-            @Hold.started -= instance.OnHold;
-            @Hold.performed -= instance.OnHold;
-            @Hold.canceled -= instance.OnHold;
             @MenuOpenClose.started -= instance.OnMenuOpenClose;
             @MenuOpenClose.performed -= instance.OnMenuOpenClose;
             @MenuOpenClose.canceled -= instance.OnMenuOpenClose;
@@ -496,24 +433,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         }
     }
     public CharacterControlsActions @CharacterControls => new CharacterControlsActions(this);
-    private int m_KeyBoardSchemeIndex = -1;
-    public InputControlScheme KeyBoardScheme
-    {
-        get
-        {
-            if (m_KeyBoardSchemeIndex == -1) m_KeyBoardSchemeIndex = asset.FindControlSchemeIndex("KeyBoard");
-            return asset.controlSchemes[m_KeyBoardSchemeIndex];
-        }
-    }
-    private int m_GamePadSchemeIndex = -1;
-    public InputControlScheme GamePadScheme
-    {
-        get
-        {
-            if (m_GamePadSchemeIndex == -1) m_GamePadSchemeIndex = asset.FindControlSchemeIndex("GamePad");
-            return asset.controlSchemes[m_GamePadSchemeIndex];
-        }
-    }
     public interface ICharacterControlsActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -522,7 +441,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnPull(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
-        void OnHold(InputAction.CallbackContext context);
         void OnMenuOpenClose(InputAction.CallbackContext context);
     }
 }

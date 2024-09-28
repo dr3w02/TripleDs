@@ -103,7 +103,7 @@ namespace Platformer
         {
 
             isPullPressed = context.ReadValueAsButton();
-            ///Debug.Log("PullPressed");
+            Debug.Log("PullPressed");
 
         }
 

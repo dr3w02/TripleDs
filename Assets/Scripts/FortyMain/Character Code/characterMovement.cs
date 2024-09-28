@@ -245,8 +245,8 @@ public class characterMovement : MonoBehaviour
         input.CharacterControls.Select.canceled += onSelect;
 
         // this is to charge up the music box might change my interacables to match this control?
-        input.CharacterControls.Hold.performed += onHolding;
-        input.CharacterControls.Hold.canceled += onNotHolding;
+        //input.CharacterControls.Hold.performed += onHolding;
+        //input.CharacterControls.Hold.canceled += onNotHolding;
 
         input.Enable();
 

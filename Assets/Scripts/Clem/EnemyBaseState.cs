@@ -29,7 +29,7 @@ namespace Platformer
         {
             this.enemy = enemy;
             this.animator = animator;
-            Debug.Log("Base");
+            //Debug.Log("Base");
             
         }
 
