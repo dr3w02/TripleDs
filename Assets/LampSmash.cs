@@ -22,6 +22,7 @@ namespace Platformer
             {
 
                 ShakedCount++;
+                Debug.Log("Interacted");
                 LampAnimator.SetBool("Rocking", true);
 
                 if (ShakedCount == 3)

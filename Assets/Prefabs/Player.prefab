@@ -3135,7 +3135,7 @@ PrefabInstance:
     - target: {fileID: 5465940246521907071, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.009753601
+      value: -0.009753644
       objectReference: {fileID: 0}
     - target: {fileID: 5465940246521907071, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
@@ -4015,17 +4015,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.632
+      value: 6.361
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.185
+      value: 1.0662
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.65
+      value: 6.885
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3f7b1ffad4bf635458a8985f83e64c2c,
         type: 3}
@@ -5599,7 +5599,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7416442416773673526}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 881680d798b6eeb45bdb9b5d42bca22b, type: 3}
   m_Name: 
@@ -5684,9 +5684,10 @@ MonoBehaviour:
   playersCapsuleCollider: {fileID: 3505514276433231252}
   cam: {fileID: 0}
   player: {fileID: 7901477280858204300}
-  speed: 4
+  speed: 2
   maxForce: 1
-  jumpForce: 3
+  jumpForce: 2
+  CanMove: 1
   grounded: 0
   isPullPressed: 0
   HasJumped: 0
@@ -5747,7 +5748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac43cfd8d2ff60a42ad53808909c85ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckDistance: 5.41
+  groundCheckDistance: 2.6
   orentation: {fileID: 2249666526872762913}
   rbController: {fileID: 3667459883003098423}
 --- !u!114 &780123686528090842
@@ -5886,41 +5887,9 @@ MonoBehaviour:
     m_ActionName: CharacterControls/Select[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 9e3f3ee1-e919-44d8-83d9-038c00012a7e
-    m_ActionName: CharacterControls/Climb[/Keyboard/capsLock]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3667459883003098423}
-        m_TargetAssemblyTypeName: Platformer.RBController, Assembly-CSharp
-        m_MethodName: OnHolding
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3667459883003098423}
-        m_TargetAssemblyTypeName: Platformer.RBController, Assembly-CSharp
-        m_MethodName: OnNotHolding
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 2b4a0780-d30b-4be2-985e-3206610d0b0f
-    m_ActionName: CharacterControls/Hold[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: a9d539b7-d749-497d-a6b3-74473e38fb9c
     m_ActionName: CharacterControls/MenuOpenClose[/Keyboard/escape]
-  m_NeverAutoSwitchControlSchemes: 0
+  m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: CharacterControls
   m_SplitScreenIndex: -1
