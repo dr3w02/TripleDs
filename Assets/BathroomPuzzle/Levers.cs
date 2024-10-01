@@ -11,6 +11,7 @@ namespace Platformer
 
         [SerializeField] private string _prompt = "Pull Lever";
         public string InteractionPrompt => _prompt;
+        public GameObject InteractionImagePrompt => null;
 
         public Animator leverAnimator;
         public Collider leverCollider;

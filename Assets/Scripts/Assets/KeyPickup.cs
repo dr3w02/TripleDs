@@ -17,7 +17,7 @@ public class KeyPickup : MonoBehaviour, IInteractable
     public KeyHolder keyHolder;
     public string InteractionPrompt => _prompt;
 
-
+    public GameObject InteractionImagePrompt => null;
 
     public bool Interact(Interactor interactor)
     {

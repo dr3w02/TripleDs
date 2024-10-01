@@ -10,6 +10,7 @@ namespace Platformer
         [Header("Interactables")]
 
         [SerializeField] private string _prompt;
+        public GameObject InteractionImagePrompt => null;
         public string InteractionPrompt => _prompt;
         public bool interactable;
 

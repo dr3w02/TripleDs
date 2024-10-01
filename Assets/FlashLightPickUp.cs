@@ -9,6 +9,7 @@ namespace Platformer
     public class FlashLightPickUp : MonoBehaviour, IInteractable
     {
         [SerializeField] private string _prompt;
+        public GameObject InteractionImagePrompt => null;
 
         public GameObject pickedUpFlashLight;
 
