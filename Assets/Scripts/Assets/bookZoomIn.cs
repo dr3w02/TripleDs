@@ -11,11 +11,14 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 {
     [SerializeField] characterMovement characterMove;
     public string InteractionPrompt => "LookAtBook";
-   
+
+    public GameObject InteractionImagePrompt => BookPromptCanvas;
+
     //public GameObject character;
     public GameObject BookCam;
+    public GameObject BookPromptCanvas;
 
-    private bool isZoomedIn = false;
+    public bool isZoomedIn;
 
     private void OnValidate()
     {
@@ -34,52 +37,36 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
     public bool Interact(Interactor interactor)
     {
-        Debug.Log("OpeningBook");
+        isZoomedIn = !isZoomedIn;
 
         if (!isZoomedIn)
         {
             ZoomInOnBook();
+            return true;
         }
         else
         {
             ZoomOut();
+            return true;
         }
-
-        return true;
     }
 
 
     private void ZoomInOnBook()
     {
+        //isZoomedIn = true;
         BookCam.SetActive(true);
 
         characterMove.TurnOffMovement();
+        //change this to can move is false
 
-        isZoomedIn = true;
-
-        //StartCoroutine(TurnOffCharacterAfterDelay());
     }
 
     private void ZoomOut()
     {
         BookCam.SetActive(false);
+
         characterMove.Enabled();
-
-        //StartCoroutine(TurnOnCharacterAfterDelay());
-        isZoomedIn = false;
-    }
-
-
-    private IEnumerator TurnOffCharacterAfterDelay()
-    {
-        yield return new WaitForSeconds(2f); 
-        //character.SetActive(false);
-    }
-
-    private IEnumerator TurnOnCharacterAfterDelay()
-    {
-        yield return new WaitForSeconds(0.5f);  
-        //character.SetActive(true);
     }
 }
 

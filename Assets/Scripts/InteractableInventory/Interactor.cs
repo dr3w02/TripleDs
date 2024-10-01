@@ -21,31 +21,58 @@ public class Interactor : MonoBehaviour
     [SerializeField] private float _interactionPointRadius = 0.5f;
     [SerializeField] private LayerMask _interactableMask;
 
-    
+    public IInteractable currentInteractable;
 
     private readonly Collider[] _colliders = new Collider[3];
 
     [SerializeField] private int _numFound;
     List<Collider> interactableItems = new List<Collider>();
 
+    bool currentlyInteracting = false;
+
     private void Update()
     {
         _numFound = Physics.OverlapSphereNonAlloc(_interactionPoint.position, _interactionPointRadius, _colliders,_interactableMask);
+        Debug.Log(currentInteractable);
 
         if (_numFound > 0)
         {
             //Debug.Log(_colliders[0].name + " is the collider ");
             var interactable = _colliders[0].gameObject.GetComponent<IInteractable>();
 
-            if(interactable != null && Keyboard.current.eKey.wasPressedThisFrame) // how its done with new input system
+            if(interactable != null) // how its done with new input system
             {
-                Debug.Log("Interacting");
-                interactable.Interact(this);
+                currentInteractable = interactable;
 
+                if(!currentlyInteracting)
+                    currentInteractable.InteractionImagePrompt.SetActive(true);
+
+                if (Keyboard.current.eKey.wasPressedThisFrame)
+                {
+                    Debug.Log("Interacting");
+
+                    currentlyInteracting = true;
+                    currentInteractable.InteractionImagePrompt.SetActive(false);
+                    currentInteractable.Interact(this);
+
+                }
             }
+            else
+            {
+                if(currentInteractable != null)
+                    currentInteractable.InteractionImagePrompt.SetActive(false);
 
+                currentlyInteracting = false;
+                currentInteractable = null;
+            }
+        }
+        else
+        {
+            if (currentInteractable != null)
+                currentInteractable.InteractionImagePrompt.SetActive(false);
 
-
+            currentlyInteracting = false;
+            currentInteractable = null;
         }
     }
 

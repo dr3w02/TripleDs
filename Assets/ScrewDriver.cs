@@ -8,6 +8,7 @@ namespace Platformer
     public class ScrewDriver : MonoBehaviour, IInteractable
     {
         [SerializeField] private string _prompt;
+        public GameObject InteractionImagePrompt => null;
 
         public GameObject pickedUpScrew;
         public GameObject holdingScrew;

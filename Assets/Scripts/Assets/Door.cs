@@ -19,6 +19,7 @@ public class Door : MonoBehaviour, IInteractable
     //KeyPickup keyPickup;
     //Inventory inventory;
     public string InteractionPrompt => _prompt;
+    public GameObject InteractionImagePrompt => null;
 
     public AudioClip soundEffectDoor;
 
