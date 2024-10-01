@@ -42,6 +42,7 @@ namespace Platformer
         public bool HasJumped;
         bool isJumping = false;
         int isJumpingHash;
+        bool isJumpPressed;
 
         [Header("Movement")]
         bool isMovementPressed;
@@ -92,6 +93,9 @@ namespace Platformer
 
         public void OnJump(InputAction.CallbackContext context)
         {
+            isJumpPressed = context.ReadValueAsButton();
+
+
             Jump();
         }
 
@@ -104,7 +108,7 @@ namespace Platformer
         {
 
             isPullPressed = context.ReadValueAsButton();
-            Debug.Log("PullPressed");
+           // Debug.Log("PullPressed");
 
         }
 
@@ -147,7 +151,8 @@ namespace Platformer
 
             }
 
-            if (HasJumped = true && grounded)
+       
+            if ( grounded)
             {
                 animator.SetBool(isJumpingHash, false);
                 HasJumped = false;
@@ -157,7 +162,29 @@ namespace Platformer
             //animator.SetBool(isJumpingHash, false);
         }
 
+        void Jump()
+        {
+            if (isJumpPressed && HasJumped == false)
+            {
+                Debug.Log("Jumping");
 
+                Vector3 jumpForces = Vector3.zero;
+
+                Debug.Log("jumping");
+                if (grounded)
+                {
+                    jumpForces = Vector3.up * jumpForce;
+                    animator.SetBool(isJumpingHash, true);
+
+                }
+
+                rb.AddForce(jumpForces, ForceMode.VelocityChange);
+                HasJumped = true;
+            }
+           
+         
+
+        }
         public void OnNotHolding(InputAction.CallbackContext context)
         {
 
@@ -176,9 +203,12 @@ namespace Platformer
 
         public void Move()
         {
-            
+            if (characterClimb.isClimbingLadder)
+            {
+                return;
+            }
 
-                Vector3 moveDirection = CameraForward() + CameraRight();
+            Vector3 moveDirection = CameraForward() + CameraRight();
 
 
                 //FindTargetVelocity
@@ -229,6 +259,7 @@ namespace Platformer
                 if (characterClimb.isClimbingLadder)
                 {
                     characterClimb.HandleClimbingMovement();
+                    
 
                 }
             
@@ -286,9 +317,13 @@ namespace Platformer
             Quaternion currentRotation = transform.rotation;
 
 
-
+            
             if (isMovementPressed)
             {
+                if(characterClimb.isClimbingLadder)
+                {
+                    return;
+                }
 
                 Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
 
@@ -301,31 +336,14 @@ namespace Platformer
 
 
 
+
         }
 
 
 
 
 
-        void Jump()
-        {
-            Debug.Log("Jumping");
 
-            Vector3 jumpForces = Vector3.zero;
-
-            animator.SetBool(isJumpingHash, true);
-
-            if (grounded)
-            {
-                jumpForces = Vector3.up * jumpForce;
-
-            }
-
-
-            rb.AddForce(jumpForces, ForceMode.VelocityChange);
-
-            HasJumped = true;
-        }
 
 
 
@@ -379,7 +397,7 @@ namespace Platformer
 
                 animator.SetBool(isPullingHash, true);
 
-                Debug.Log("Pull animator on");
+                //Debug.Log("Pull animator on");
 
 
             }
@@ -387,7 +405,7 @@ namespace Platformer
             else if ((!isPullPressed) && isPulling)
             {
                 animator.SetBool(isPullingHash, false);
-                Debug.Log("Pull Animator off");
+                //Debug.Log("Pull Animator off");
             }
         }
 
@@ -449,7 +467,7 @@ namespace Platformer
 
                     isCrouching = false;
 
-                    Debug.Log("CROUCHEDAGAIN");
+                    //Debug.Log("CROUCHEDAGAIN");
 
                     animator.SetBool(isCrouchingHash, false);
 
@@ -467,7 +485,7 @@ namespace Platformer
 
                 if (isMovementPressed)
                 {
-                    Debug.LogWarning("pepeppeepp");
+                   // Debug.LogWarning("pepeppeepp");
                     animator.SetFloat("crouchSpeed", 1);
                 }
                 else

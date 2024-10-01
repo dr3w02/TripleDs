@@ -112,8 +112,8 @@ public class MenuManager : MonoBehaviour
         _mainMenuCanvas.SetActive(true);
         _settingsMenuCanvas.SetActive(false);
         //_creidtsCanvas.SetActive(false);
-        _gamePadCanvas.SetActive(false);
-        _keyboardCanvas.SetActive(false);
+        //_gamePadCanvas.SetActive(false);
+        //_keyboardCanvas.SetActive(false);
         
 
         EventSystem.current.SetSelectedGameObject(_mainMenuFirst);
@@ -125,8 +125,8 @@ public class MenuManager : MonoBehaviour
         _mainMenuCanvas.SetActive(false);
         _settingsMenuCanvas.SetActive(false);
         //_creidtsCanvas.SetActive(false);
-        _gamePadCanvas.SetActive(false);
-        _keyboardCanvas.SetActive(false);
+        //_gamePadCanvas.SetActive(false);
+        //_keyboardCanvas.SetActive(false);
         _UnstuckCanvas.SetActive(false);
 
 

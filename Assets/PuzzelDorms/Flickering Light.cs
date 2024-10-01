@@ -12,11 +12,11 @@ namespace Platformer
 
         void Update()
         {
-            if (isFlickering == false)
-            {
-                StartCoroutine(LightFlicker());
+            //if (isFlickering == false)
+            //{
+            //    StartCoroutine(LightFlicker());
 
-            }
+            //}
 
             
 

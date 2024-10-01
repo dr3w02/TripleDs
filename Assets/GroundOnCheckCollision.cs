@@ -56,7 +56,7 @@ namespace Platformer
             {
                 //isGrounded = false;
                 rbController.SetGrounded(false);
-                Debug.Log("Raycast did not hit anything");
+               // Debug.Log("Raycast did not hit anything");
 
             }
 

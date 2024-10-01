@@ -235,7 +235,7 @@ namespace Platformer
 
              StartCoroutine(WaitBetweenFadeInOut());
 
-             Debug.Log("Switch Camera");
+             ///Debug.Log("Switch Camera");
             
         }
 
@@ -247,7 +247,7 @@ namespace Platformer
 
             
 
-            Debug.Log("Switch Camera");
+           // Debug.Log("Switch Camera");
 
             fadeIn = true;
 

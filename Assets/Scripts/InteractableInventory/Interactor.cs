@@ -34,7 +34,7 @@ public class Interactor : MonoBehaviour
 
         if (_numFound > 0)
         {
-            Debug.Log(_colliders[0].name + " is the collider ");
+            //Debug.Log(_colliders[0].name + " is the collider ");
             var interactable = _colliders[0].gameObject.GetComponent<IInteractable>();
 
             if(interactable != null && Keyboard.current.eKey.wasPressedThisFrame) // how its done with new input system
