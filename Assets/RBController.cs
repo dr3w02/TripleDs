@@ -471,8 +471,7 @@ namespace Platformer
 
                     animator.SetBool(isCrouchingHash, false);
 
-
-
+                    
 
                 }
 

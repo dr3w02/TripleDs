@@ -10,13 +10,19 @@ namespace Platformer
         public bool isFlickering = false;
         public float timeDelay;
 
-        void Update()
+        public void Start()
         {
-            //if (isFlickering == false)
-            //{
-            //    StartCoroutine(LightFlicker());
+            if (isFlickering == false)
+            {
+                StartFlicker();
+            }
+        }
+        void StartFlicker()
+        {
+         
+             StartCoroutine(LightFlicker());
 
-            //}
+          
 
             
 

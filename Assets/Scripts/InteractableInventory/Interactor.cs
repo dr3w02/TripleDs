@@ -44,7 +44,7 @@ public class Interactor : MonoBehaviour
             {
                 currentInteractable = interactable;
 
-                if(!currentlyInteracting)
+                if(!currentlyInteracting && currentInteractable.InteractionImagePrompt != null)
                     currentInteractable.InteractionImagePrompt.SetActive(true);
 
                 if (Keyboard.current.eKey.wasPressedThisFrame)
@@ -52,14 +52,17 @@ public class Interactor : MonoBehaviour
                     Debug.Log("Interacting");
 
                     currentlyInteracting = true;
-                    currentInteractable.InteractionImagePrompt.SetActive(false);
+
+                    if(currentInteractable.InteractionImagePrompt != null)
+                        currentInteractable.InteractionImagePrompt.SetActive(false);
+
                     currentInteractable.Interact(this);
 
                 }
             }
             else
             {
-                if(currentInteractable != null)
+                if(currentInteractable != null && currentInteractable.InteractionImagePrompt != null)
                     currentInteractable.InteractionImagePrompt.SetActive(false);
 
                 currentlyInteracting = false;
@@ -68,7 +71,7 @@ public class Interactor : MonoBehaviour
         }
         else
         {
-            if (currentInteractable != null)
+            if (currentInteractable != null && currentInteractable.InteractionImagePrompt != null)
                 currentInteractable.InteractionImagePrompt.SetActive(false);
 
             currentlyInteracting = false;
