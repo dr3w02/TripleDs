@@ -1,5 +1,7 @@
-﻿using Unity.VisualScripting;
+﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 namespace Platformer
@@ -7,10 +9,10 @@ namespace Platformer
     public class PlayerDetector : MonoBehaviour
     {
         [SerializeField] float detectionAngle = 60f; //detection cone in front of ememy
-        [SerializeField] float detectionRadius = 10f; // cone distance from enemy
-        [SerializeField] float innerDetectionRadius = 5f; // small circle around enemy ot know if player is behind 
+        [SerializeField] public float detectionRadius = 10f; // cone distance from enemy
+        [SerializeField] public float innerDetectionRadius = 5f; // small circle around enemy ot know if player is behind 
         [SerializeField] float detectionCooldown = 1f; // ives the player a break between attacks 
-        [SerializeField] float attackRange = 2f; // Distance from enemy to player attack 
+        [SerializeField] public float attackRange = 2f; // Distance from enemy to player attack 
 
 
         public Transform Player { get; private set; }
@@ -18,8 +20,8 @@ namespace Platformer
         CountdownTimer detectionTimer;
 
         IDetectionStrategy detectionStrategy;
-        
 
+     
 
         void Awake()
         {
@@ -35,9 +37,11 @@ namespace Platformer
             detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
         }
 
+
+
         private void Update() => detectionTimer.Tick(Time.deltaTime);
 
-
+            
         public bool CanDetectPlayer()
         {
        
@@ -48,6 +52,9 @@ namespace Platformer
         {
             var directionToPlayer = Player.position - transform.position;
             return directionToPlayer.magnitude <= attackRange;
+
+
+
         }
 
 

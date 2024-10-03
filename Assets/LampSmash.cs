@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 
@@ -26,7 +27,12 @@ namespace Platformer
         public bool Smashed = false;
         public LamSpawn LampSpawn;
 
+        public NavMeshAgent agent;
+        public Transform player;
+        public NurseCodeOffice enemy;
+        public PlayerDetector Detector;
 
+    
 
         private void OnValidate()
         {
@@ -42,7 +48,7 @@ namespace Platformer
         public void Start()
         {
             LampAnimator.SetBool("Idel", true);
-          
+
 
         }
       
@@ -59,7 +65,7 @@ namespace Platformer
 
             }
 
-
+            
             if (ShakedCount == 3)
             {
                 Smashed = true;
@@ -73,13 +79,40 @@ namespace Platformer
                 ShakedCount = 0;
             }
 
+            if (ShakedCount == 2)
+            {
+                if (enemy.CompareTag("EnemyBB"))
+                {
+                    Debug.Log("MadeANoise") ;
+                    StartCoroutine(Noisettack());
 
-            
-            return false;
+                }
+
+
+            }
+
+            return true;
 
         }
 
-       
+     
+
+
+        private IEnumerator Noisettack()
+        {
+
+            agent.SetDestination(player.position);
+
+            Detector.detectionRadius = 20f;
+            Detector.innerDetectionRadius = 10f;
+            Detector.attackRange = 10f;
+            
+            yield return new WaitForSeconds(5f);
+
+            Detector.detectionRadius = 3.01f;
+            Detector.attackRange = 2f;
+            Detector.innerDetectionRadius = 1.62f;
+        }
 
       
      

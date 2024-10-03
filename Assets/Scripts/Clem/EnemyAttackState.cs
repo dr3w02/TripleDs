@@ -19,6 +19,8 @@ namespace Platformer
         [SerializeField] private float clemWaitTime = 3f;
         [SerializeField] private float BBWaitTime = 3f;
 
+        
+
         public EnemyAttackState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player) : base(enemy, animator)
         {
             this.agent = agent;
@@ -26,6 +28,9 @@ namespace Platformer
 
             enemy.clemDeathCam.SetActive(false);
             enemy.BlackBeackDeathCam.SetActive(false);
+
+          
+
 
         }
 
@@ -43,6 +48,7 @@ namespace Platformer
             // }
 
             enemy.characterMain.TurnOffMovement();
+
 
             if (enemy.CompareTag("EnemyBB"))
             {
