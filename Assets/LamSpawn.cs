@@ -7,27 +7,45 @@ namespace Platformer
     public class LamSpawn : MonoBehaviour
     {
 
-
-       
-        public List<GameObject> objectsToSpawn;
-        List<GameObject> itemLocations;
+        // List to store GameObjects
+        public List<GameObject> gameObjects;
 
 
         void Start()
         {
-            generateNewObj();
-        }
        
+            ActivateRandomObject();
 
-        public void generateNewObj()
+        }
+
+        public void ActivateRandomObject()
         {
-            for (int i = itemLocations.Count; i > 0; i--)
+         
+            if (gameObjects.Count == 0)
             {
-                GameObject newObject = Instantiate(objectsToSpawn[Random.Range(0, objectsToSpawn.Count)], itemLocations[i].transform.position, Quaternion.identity);
-
-                Destroy(itemLocations[i]);
-                newObject.SetActive(true);
+                Debug.LogError("No GameObjects in list");
+                return;
             }
+
+         
+            foreach (GameObject obj in gameObjects)
+            {
+                obj.SetActive(false);
+            }
+
+            int randomIndex = Random.Range(0, gameObjects.Count);
+
+     
+            gameObjects[randomIndex].SetActive(true);
+
+
+            gameObjects.RemoveAt(randomIndex);
+
+            if (gameObjects.Count == 0)
+            {
+                Debug.Log("Winner!");
+            }
+
         }
     }
 }

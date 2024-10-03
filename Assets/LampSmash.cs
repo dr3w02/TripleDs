@@ -8,21 +8,36 @@ using UnityEngine.EventSystems;
 
 namespace Platformer
 {
-    public class LampSmash : MonoBehaviour,IInteractable
+    public class LampSmash : MonoBehaviour, IInteractable
     {
+     
+
         [Header("Interactables")]
 
         [SerializeField] private string _prompt;
-        public string InteractionPrompt => _prompt;
+        public string InteractionPrompt => "LAMPHIT";
 
         public GameObject InteractionImagePrompt => null;
 
         public Animator LampAnimator;
 
-        public static int ShakedCount;
+        public int ShakedCount;
 
-        public bool Smashed;
-        LamSpawn LampSpawn;
+        public bool Smashed = false;
+        public LamSpawn LampSpawn;
+
+
+
+        private void OnValidate()
+        {
+            if (gameObject.layer != LayerMask.NameToLayer("Interactable"))
+            {
+                gameObject.layer = LayerMask.NameToLayer("Interactable");
+                gameObject.AddComponent<BoxCollider>();
+            }
+
+        }
+
 
         public void Start()
         {
@@ -30,9 +45,10 @@ namespace Platformer
           
 
         }
+      
         public bool Interact(Interactor interactor)
         {
-            if (!Smashed)
+            if (Smashed == false)
             {
                 ShakedCount += 1;
 
@@ -46,17 +62,20 @@ namespace Platformer
 
             if (ShakedCount == 3)
             {
-               LampAnimator.SetBool("Rocking", false);
+                Smashed = true;
+
+                LampAnimator.SetBool("Rocking", false);
                LampAnimator.SetBool("Smashed", true);
-               Smashed = true;
-               
-                LampSpawn.generateNewObj();
 
+                    
+               LampSpawn.ActivateRandomObject();
 
+                ShakedCount = 0;
             }
 
+
             
-            return true;
+            return false;
 
         }
 
