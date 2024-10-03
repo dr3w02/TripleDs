@@ -11,9 +11,9 @@ namespace Platformer
 
         [SerializeField] private string _prompt;
         public GameObject InteractionImagePrompt => null;
-        public string InteractionPrompt => _prompt;
-        public bool interactable;
 
+        public string InteractionPrompt => _prompt;
+    
         [SerializeField] CameraManager cameraManager;
 
 
@@ -57,14 +57,14 @@ namespace Platformer
 
         public void Start()
         {
+
             SleepCam.SetActive(false);
+
         }
 
         public bool Interact(Interactor interactor)
         {
 
-            if (interactable == false)
-            {
                 characterMain.TurnOffMovement();
 
                 mainAnim.SetBool("isWalking", true);
@@ -84,13 +84,13 @@ namespace Platformer
                 }
                
 
-            }
+            
 
             else
             {
                 SleepCam.SetActive(false);
 
-                interactable = false;
+                
 
 
             }
@@ -108,6 +108,7 @@ namespace Platformer
         }
 
 
+
         private IEnumerator PanOut()
         {
 
@@ -122,6 +123,7 @@ namespace Platformer
             fadeIn = true;
 
             while (fadeIn)
+
             {
                 if (myUIGroup.alpha < 1)
                 {
