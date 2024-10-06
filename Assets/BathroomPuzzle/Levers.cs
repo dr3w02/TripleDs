@@ -16,6 +16,7 @@ namespace Platformer
         public Animator leverAnimator;
         public Collider leverCollider;
         public AudioClip leverSoundEffect;
+        //public AudioClip resetSoundEffect;
 
         public int LeverDownHash { get; private set; }
         public int LeverUpHash { get; private set; }
@@ -35,7 +36,7 @@ namespace Platformer
             if (_isLeverDown)
             {
                 // reset the lever to the up position
-                Debug.Log($"{leverType} Lever Up");
+                //Debug.Log($"{leverType} Lever Up");
 
                 ResetAnimatorParameters();
                 leverAnimator.SetTrigger(LeverUpHash);
@@ -49,7 +50,7 @@ namespace Platformer
             else
             {
                 // Pull the lever down
-                Debug.Log($"{leverType} Lever Down");
+                //Debug.Log($"{leverType} Lever Down");
 
                 ResetAnimatorParameters();
                 leverAnimator.SetTrigger(LeverDownHash);
@@ -130,7 +131,7 @@ namespace Platformer
         // New method to reset lever state
         public void ResetLeverState()
         {
-            Debug.Log($"{leverType} Lever Reset");
+            //Debug.Log($"{leverType} Lever Reset");
 
             ResetAnimatorParameters();
             leverAnimator.SetTrigger(LeverUpHash);
@@ -138,6 +139,17 @@ namespace Platformer
             leverCollider.isTrigger = false;
 
             _isLeverDown = false;
+
+            /*
+            if (resetSoundEffect != null)
+            {
+                AudioSource.PlayClipAtPoint(resetSoundEffect, transform.position);
+            }
+            else
+            {
+                PlaySoundEffect();
+            }
+            */
         }
     }
 }
