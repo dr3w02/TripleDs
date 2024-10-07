@@ -40,6 +40,10 @@ namespace Platformer
 
         public Respawn respawn;
 
+        public float speed;
+    
+
+
         /// <summary>
         /// //Main Scripts
         /// </summary>
@@ -83,7 +87,18 @@ namespace Platformer
 
         }
 
-     
+
+        public bool smashed = false;
+        public void OnPlayerSmashed()
+        {
+            smashed = true;
+        }
+
+        private void ResetSmashed()
+        {
+            smashed = false;
+        }
+
 
         void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
         void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);

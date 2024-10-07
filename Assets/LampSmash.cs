@@ -24,14 +24,14 @@ namespace Platformer
 
         public int ShakedCount;
 
-        public bool Smashed = false;
+    
         public LamSpawn LampSpawn;
 
-        public NavMeshAgent agent;
-        public Transform player;
+    
+      
         public NurseCodeOffice enemy;
-        public PlayerDetector Detector;
 
+        public bool lampSway;
     
 
         private void OnValidate()
@@ -54,7 +54,7 @@ namespace Platformer
       
         public bool Interact(Interactor interactor)
         {
-            if (Smashed == false)
+            if (lampSway == false)
             {
                 ShakedCount += 1;
 
@@ -68,9 +68,10 @@ namespace Platformer
             
             if (ShakedCount == 3)
             {
-                Smashed = true;
 
-                LampAnimator.SetBool("Rocking", false);
+                lampSway = true;
+
+               LampAnimator.SetBool("Rocking", false);
                LampAnimator.SetBool("Smashed", true);
 
                     
@@ -79,10 +80,13 @@ namespace Platformer
                 ShakedCount = 0;
             }
 
-            if (ShakedCount == 2)
+
+            if (ShakedCount > 1)
             {
                 if (enemy.CompareTag("EnemyBB"))
                 {
+                    enemy.smashed = true;
+
                     Debug.Log("MadeANoise") ;
                     StartCoroutine(Noisettack());
 
@@ -101,17 +105,10 @@ namespace Platformer
         private IEnumerator Noisettack()
         {
 
-            agent.SetDestination(player.position);
-
-            Detector.detectionRadius = 20f;
-            Detector.innerDetectionRadius = 10f;
-            Detector.attackRange = 10f;
-            
+         
             yield return new WaitForSeconds(5f);
+            enemy.smashed = false;
 
-            Detector.detectionRadius = 3.01f;
-            Detector.attackRange = 2f;
-            Detector.innerDetectionRadius = 1.62f;
         }
 
       

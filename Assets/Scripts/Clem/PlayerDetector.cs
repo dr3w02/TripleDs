@@ -8,12 +8,19 @@ namespace Platformer
 {
     public class PlayerDetector : MonoBehaviour
     {
-        [SerializeField] float detectionAngle = 60f; //detection cone in front of ememy
-        [SerializeField] public float detectionRadius = 10f; // cone distance from enemy
-        [SerializeField] public float innerDetectionRadius = 5f; // small circle around enemy ot know if player is behind 
-        [SerializeField] float detectionCooldown = 1f; // ives the player a break between attacks 
+        [SerializeField] float detectionAngle = 0f; //detection cone in front of ememy
+        [SerializeField] public float detectionRadius = 3f; // cone distance from enemy
+        [SerializeField] public float innerDetectionRadius = 1.6f; // small circle around enemy ot know if player is behind 
+        [SerializeField] float detectionCooldown = 1.5f; // ives the player a break between attacks 
         [SerializeField] public float attackRange = 2f; // Distance from enemy to player attack 
 
+        [SerializeField] public float detectionRadiusSmashed = 12f;
+        [SerializeField] public float innerDetectionRadiusSmashed = 4.8f;
+        /// <summary>
+        /// //////////////////
+        /// </summary>
+        [SerializeField] float smashedAttackRange = 5f;
+       
 
         public Transform Player { get; private set; }
 
@@ -21,7 +28,7 @@ namespace Platformer
 
         IDetectionStrategy detectionStrategy;
 
-     
+        public NurseCodeOffice enemy;
 
         void Awake()
         {
@@ -34,7 +41,7 @@ namespace Platformer
         void Start()
         {
             detectionTimer = new CountdownTimer(detectionCooldown);
-            detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
+            //detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
         }
 
 
@@ -44,8 +51,31 @@ namespace Platformer
             
         public bool CanDetectPlayer()
         {
-       
+            if (enemy.smashed)
+            {
+                detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadiusSmashed, innerDetectionRadiusSmashed);
+        
+                Debug.Log("Smashed Detection - Cone Angle: " + detectionAngle +
+                 ", Detection Radius: " + detectionRadiusSmashed +
+                 ", Inner Detection Radius: " + innerDetectionRadiusSmashed);
+            }
+
+            else
+            {
+                detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
+
+
+
+                Debug.Log("Normal Detection - Cone Angle: " + detectionAngle +
+               ", Detection Radius: " + detectionRadius +
+               ", Inner Detection Radius: " + innerDetectionRadius);
+
+            }
+
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
+
+   
+
         }
 
         public bool CanAttackPlayer()
@@ -57,6 +87,8 @@ namespace Platformer
 
         }
 
+
+      
 
         public void SetDetectionStrategy(IDetectionStrategy detectionStrategy) => this.detectionStrategy = detectionStrategy;
 

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TextCore.Text;
 
 namespace Platformer
 {
@@ -11,7 +13,7 @@ namespace Platformer
        // private readonly WayPoints Wait;
        private readonly Vector3 startpoint;
         private readonly float wanderRadius;
-        private PlayerDetector playerDetector;
+
 
         public bool isStopped;
         private Vector3 destination;
@@ -22,7 +24,6 @@ namespace Platformer
 
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
-           
 
             if (enemy == null)
             {
@@ -31,6 +32,7 @@ namespace Platformer
             }
 
             this.agent = agent;
+
             this.startpoint = enemy.transform.position;
             this.wanderRadius = wanderRadius;
 
@@ -47,8 +49,8 @@ namespace Platformer
                 return;
             }
 
-
-           // Debug.Log("Enemy wander state initialized.");
+           
+            // Debug.Log("Enemy wander state initialized.");
             animator.CrossFade(WalkHash, crossFadeDuration);
         }
 
@@ -59,35 +61,58 @@ namespace Platformer
           //  agent.enabled = true;
            // agent.SetDestination(destination);
         //}
-
+       
         public void WalkingBB()
         {
             if (wayPoints.Count == 0) return;
 
-            agent.speed = 3;
-
+      
+            
             float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
 
-            if (distanceToWayPoint <= 3f)
+            if (!enemy.smashed)
             {
-                currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
-                //Debug.Log("Changing waypoint");
+                agent.speed = enemy.speed;
 
-          
-          
+                if (distanceToWayPoint <= 3f)
+                {
+
+                    currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
+                    //Debug.Log("Changing waypoint");
+
+                }
+
+                agent.SetDestination(wayPoints[currentWayPointIndex].position);
+
+                Vector3 directionToTarget = wayPoints[currentWayPointIndex].position - agent.transform.position;
+
+                directionToTarget.y = 0;
+
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+                agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
             }
 
+           
 
+           else if (enemy.smashed)
+            {
+                //agent.SetDestination(enemy.mCharacter.transform.position);
+                //Debug.Log("im coming for you");
+                //agent.transform.position = Vector3.MoveTowards(agent.transform.position, enemy.mCharacter.transform.position, agent.speed * Time.deltaTime);
 
-            agent.SetDestination(wayPoints[currentWayPointIndex].position);
+                // Vector3 directionToTarget = enemy.mCharacter.transform.position - agent.transform.position;
 
-            Vector3 directionToTarget = wayPoints[currentWayPointIndex].position - agent.transform.position;
+                //directionToTarget.y = 0;
 
-            directionToTarget.y = 0;
+                // Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
 
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                // agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
 
-            agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
+                agent.speed = 6;
+
+                agent.SetDestination(enemy.mCharacter.transform.position);
+            }
         }
 
       
@@ -126,7 +151,7 @@ namespace Platformer
 
         private void WanderRandom()
         {
-            agent.speed = 1;
+            agent.speed = enemy.speed;
 
             if (HasReachedDestination())
             {
