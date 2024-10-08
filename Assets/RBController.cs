@@ -200,7 +200,6 @@ namespace Platformer
 
 
         public Vector2 currentMovementInput;
-
         public void Move()
         {
             if (characterClimb.isClimbingLadder)
@@ -209,59 +208,61 @@ namespace Platformer
             }
 
             Vector3 moveDirection = CameraForward() + CameraRight();
+            Vector3 currentVelocity = rb.velocity;
+            Vector3 targetVelocity = new Vector3(currentMovementInput.x, 0, currentMovementInput.y);
 
 
-                //FindTargetVelocity
-                Vector3 currentVelocity = rb.velocity;
+            targetVelocity = moveDirection * speed;
 
+            //Align Direction
 
-                Vector3 targetVelocity = new Vector3(currentMovementInput.x, 0, currentMovementInput.y);
-
-
-                targetVelocity = moveDirection * speed;
-
-                //Align Direction
-
+            if (!invertInputs)
+            {
                 targetVelocity.x = moveDirection.x * currentMovementInput.x * speed;
-
                 targetVelocity.z = moveDirection.z * currentMovementInput.y * speed;
+            }
+            else
+            {
+                targetVelocity.x = moveDirection.x * currentMovementInput.y * speed;
+                targetVelocity.z = moveDirection.z * currentMovementInput.x * speed;
+            }
 
-                currentMovement.x = targetVelocity.x;
+            currentMovement.x = targetVelocity.x;
 
-                currentMovement.z = targetVelocity.z;
+            currentMovement.z = targetVelocity.z;
 
-                currentRunMovement.x = targetVelocity.x * runMultiplier;
+            currentRunMovement.x = targetVelocity.x * runMultiplier;
 
-                currentRunMovement.z = targetVelocity.z * runMultiplier;
-
-
-                // = transform.TransformDirection(targetVelocity);
+            currentRunMovement.z = targetVelocity.z * runMultiplier;
 
 
-                //Calculate forces
+            // = transform.TransformDirection(targetVelocity);
 
-                Vector3 velocityChange = (targetVelocity - currentVelocity);
-                velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
 
-                Vector3.ClampMagnitude(velocityChange, maxForce);
+            //Calculate forces
 
-                rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            Vector3 velocityChange = (targetVelocity - currentVelocity);
+            velocityChange = new Vector3(velocityChange.x, 0, velocityChange.z);
 
-                if (isRunPressed)
-                {
-                    rb.MovePosition(rb.position + currentRunMovement * Time.deltaTime);
-                }
-                else
-                {
-                    rb.MovePosition(rb.position + currentMovement * Time.deltaTime);
-                }
+            Vector3.ClampMagnitude(velocityChange, maxForce);
 
-                if (characterClimb.isClimbingLadder)
-                {
-                    characterClimb.HandleClimbingMovement();
+            rb.AddForce(velocityChange, ForceMode.VelocityChange);
+
+            if (isRunPressed)
+            {
+                rb.MovePosition(rb.position + currentRunMovement * Time.deltaTime);
+            }
+            else
+            {
+                rb.MovePosition(rb.position + currentMovement * Time.deltaTime);
+            }
+
+            if (characterClimb.isClimbingLadder)
+            {
+                characterClimb.HandleClimbingMovement();
                     
 
-                }
+            }
             
 
 
@@ -303,20 +304,13 @@ namespace Platformer
 
         void handleRotation()
         {
-
-
             Vector3 positionToLookAt;
-
-
 
             positionToLookAt.x = currentMovement.x;
             positionToLookAt.y = 0;
             positionToLookAt.z = currentMovement.z;
 
-
             Quaternion currentRotation = transform.rotation;
-
-
             
             if (isMovementPressed)
             {
@@ -327,35 +321,21 @@ namespace Platformer
 
                 Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
 
+                //if (invertInputs)
+                //    targetRotation.eulerAngles = targetRotation.eulerAngles + new Vector3(0, 90, 0);
 
                 transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
-
             }
-
-
-
-
-
 
         }
 
-
-
-
-
-
-
-
+        public bool invertInputs;
 
         void handleAnimation()
         {
-
-
             bool isWalking = animator.GetBool(isWalkingHash);
             bool isRunning = animator.GetBool(isRunningHash);
             bool isPulling = animator.GetBool(isPullingHash);
-
-
 
             //Walking Controls-------------------------------
             if (isMovementPressed && !isWalking)
