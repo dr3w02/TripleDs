@@ -51,6 +51,9 @@ namespace Platformer
             
         public bool CanDetectPlayer()
         {
+            if (enemy == null)
+                return false;
+
             if (enemy.smashed)
             {
                 detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadiusSmashed, innerDetectionRadiusSmashed);

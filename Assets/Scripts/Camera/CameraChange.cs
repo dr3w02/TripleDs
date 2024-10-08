@@ -1,4 +1,5 @@
 using Cinemachine;
+using Platformer;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -11,37 +12,33 @@ using UnityEngine.Windows.WebCam;
 public class CameraChange : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera cam;
-    [SerializeField] public CameraManager cameraManager;
-
-   
     public BoxCollider box;
+
+    public bool invertPlayerControls;
 
     private void Awake()
     {
         box = GetComponent<BoxCollider>();
-
         box.isTrigger = true;
-        
-        
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.gameObject.CompareTag("Player"))
         {
-            Rigidbody playerRb = other.GetComponent<Rigidbody>();
-
-            // playerRb.isKinematic = true;
-           
-            if (playerRb != null)
+            RBController playerRb = other.GetComponent<RBController>();
+            if (playerRb.rb != null)
             {
                 if (CameraManager.cameraInstance.ActiveCamera != cam)
                 {
                     //Debug.Log("SwitchCamera" + cam);
                     CameraManager.cameraInstance.SwitchCamera(cam);
-
                 }
+
+                if (invertPlayerControls)
+                    playerRb.invertInputs = true;
+                else
+                    playerRb.invertInputs = false;
             }
 
         }
@@ -51,26 +48,22 @@ public class CameraChange : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Rigidbody playerRb = other.GetComponent<Rigidbody>();
-
-            // playerRb.isKinematic = true;
-
-            if (playerRb != null)
+            RBController playerRb = other.GetComponent<RBController>();
+            if (playerRb.rb != null)
             {
                 if (CameraManager.cameraInstance.ActiveCamera != cam)
                 {
-               
                     CameraManager.cameraInstance.SwitchCamera(cam);
-
                 }
+
+                if (invertPlayerControls)
+                    playerRb.invertInputs = true;
+                else
+                    playerRb.invertInputs = false;
             }
 
         }
     }
-    //private void OnTriggerExit(Collider other)
-    //{
-    // CameraManager.cameraInstance.ResetCamera(cam);
-    //}
 
 
 
