@@ -8,12 +8,15 @@ namespace Platformer
 {
     public class Respawn : MonoBehaviour
     {
-
+        public bool respawnStart;
 
         [SerializeField] private GameObject _checkpointsParent;
         public GameObject[] _checkPointsArray;
 
+        public int savedCheckpointIndex = -1;
+
         private Vector3 _startingPoint;
+        public GameObject _startingPointGameobject;
 
 
         private const string SAVE_CHECKPOINT_INDEX = "Last_checkpoint_index";
@@ -31,22 +34,22 @@ namespace Platformer
 
         // Start is called before the first frame update
         void Start()
-        {
-            int savedCheckpointIndex = -1;
+        {     
             savedCheckpointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
             if (savedCheckpointIndex != -1)
             {
                 _startingPoint = _checkPointsArray[savedCheckpointIndex].transform.position;
-                
-                
+                _startingPointGameobject = _checkPointsArray[savedCheckpointIndex];
             }
             else
             {
                 _startingPoint = gameObject.transform.position;
+                _startingPointGameobject = null;
                 Debug.Log("NoCheckpoint");
             }
 
-            RespawnPlayer();
+            if(respawnStart)
+                RespawnPlayer();
         }
 
 
@@ -81,8 +84,7 @@ namespace Platformer
 
         public void RespawnPlayer()
         {
-
-            gameObject.transform.position = _startingPoint;
+            transform.position = _startingPoint;
 
             //playerscript.Enabled();
             playerscript.enabled = true;
@@ -101,14 +103,14 @@ namespace Platformer
         {
             if (other.gameObject.CompareTag("CheckPoint"))
             {
-                int checkPointIndex = -1;
-                checkPointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
+                savedCheckpointIndex = Array.FindIndex(_checkPointsArray, match => match == other.gameObject);
 
-                if (checkPointIndex != -1)
+                if (savedCheckpointIndex != -1)
                 {
-                    PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, checkPointIndex);
-                    _startingPoint = other.gameObject.transform.position;
-                    other.gameObject.SetActive(false);
+                    PlayerPrefs.SetInt(SAVE_CHECKPOINT_INDEX, savedCheckpointIndex);
+                    _startingPoint = _checkPointsArray[savedCheckpointIndex].transform.position;
+                    _startingPointGameobject = _checkPointsArray[savedCheckpointIndex];
+                    // other.gameObject.SetActive(false);
 
 
                     Debug.Log("ChangedChckpoint");

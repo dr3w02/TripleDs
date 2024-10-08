@@ -175,6 +175,7 @@ namespace Platformer
                 {
                     jumpForces = Vector3.up * jumpForce;
                     animator.SetBool(isJumpingHash, true);
+                    grounded = false;
 
                 }
 

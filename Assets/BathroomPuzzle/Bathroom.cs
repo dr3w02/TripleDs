@@ -71,6 +71,7 @@ namespace Platformer
                 {
                     characterMain.enabled = false;
                 }
+                
             }
         }
 
@@ -185,7 +186,7 @@ namespace Platformer
                 }
             }
 
-            //respawn.RespawnPlayer();
+            respawn.RespawnPlayer();
 
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
@@ -199,7 +200,15 @@ namespace Platformer
                     yield return null; // Wait for the next frame
                     BathroomDeathCam.SetActive(false);
                     Character.SetActive(true);
-                    characterMain.Enabled();
+                    if (characterMain != null)
+                    {
+                        characterMain.Enabled();
+                    }
+                    if (characterMain == null)
+                    {
+                        Debug.Log("DSFHDSHGFHKSDGHKFKHGDHGDSFHKKKG");
+                    }
+                   
 
                     ResetAllLevers();
                     PlayerDead.SetActive(false);

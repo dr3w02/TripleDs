@@ -12,11 +12,16 @@ namespace Platformer
 
         public void Update()
         {
-            
-             LightFlicker();
-            
+
+            if (isFlickering == false)
+            {
+                StartCoroutine(LightFlicker());
+
+            }
+
+
         }
-      
+
 
         IEnumerator LightFlicker()
         {

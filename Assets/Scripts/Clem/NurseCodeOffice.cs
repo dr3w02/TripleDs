@@ -43,7 +43,6 @@ namespace Platformer
         public float speed;
     
 
-
         /// <summary>
         /// //Main Scripts
         /// </summary>
@@ -78,7 +77,9 @@ namespace Platformer
 
             stateMachine.SetState(wanderState);
 
-       
+           
+
+
             navMeshAgent = GetComponent<NavMeshAgent>();
 
 
@@ -111,6 +112,7 @@ namespace Platformer
 
             stateMachine.Update();
 
+           
             attackTimer = new CountdownTimer(timeBetweenAttacks);
 
 
