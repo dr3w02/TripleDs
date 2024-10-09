@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Windows.WebCam;
@@ -15,6 +16,12 @@ public class CameraChange : MonoBehaviour
     public BoxCollider box;
 
     public bool invertPlayerControls;
+
+    public float enterPlayer = 1f;
+    public float invertDelay = 0.2f;
+
+    public float exitPlayer = 1f;
+    public float returnInvert = 0.2f;
 
     private void Awake()
     {
@@ -36,11 +43,10 @@ public class CameraChange : MonoBehaviour
                 }
 
                 if (invertPlayerControls)
-                    playerRb.invertInputs = true;
+                    StartCoroutine(EnterPlayer(playerRb));
                 else
-                    playerRb.invertInputs = false;
+                    StartCoroutine(ExitPlayer(playerRb));
             }
-
         }
     }
 
@@ -57,14 +63,35 @@ public class CameraChange : MonoBehaviour
                 }
 
                 if (invertPlayerControls)
-                    playerRb.invertInputs = true;
+                    StartCoroutine(EnterPlayer(playerRb));
                 else
-                    playerRb.invertInputs = false;
+                    StartCoroutine(ExitPlayer(playerRb));
             }
-
         }
     }
+    private IEnumerator EnterPlayer(RBController playerRb)
+    {
+        yield return new WaitForSeconds(enterPlayer);
+        StartCoroutine(InvertControls(playerRb));
 
+    }
 
+    private IEnumerator InvertControls(RBController playerRb)
+    {
+        yield return new WaitForSeconds(invertDelay);
+        playerRb.invertInputs = true;
 
+    }
+
+    private IEnumerator ExitPlayer(RBController playerRb)
+    {
+        yield return new WaitForSeconds(exitPlayer);
+        StartCoroutine(ReturnInvert(playerRb));
+    }
+
+    private IEnumerator ReturnInvert(RBController playerRb)
+    {
+        yield return new WaitForSeconds(returnInvert);
+        playerRb.invertInputs = false;
+    }
 }

@@ -265,13 +265,6 @@ namespace Platformer
 
             }
             
-
-
-
-
-
-          
-
         }
 
 
