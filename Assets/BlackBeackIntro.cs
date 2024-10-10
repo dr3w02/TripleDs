@@ -9,7 +9,7 @@ namespace Platformer
 {
     public class BlackBeackIntro : MonoBehaviour
     {
-        StartBossFight StartSequence;
+       public  StartBossFight StartSequence;
 
 
         public CinemachineVirtualCamera VirtualCam;
@@ -50,7 +50,7 @@ namespace Platformer
        [Header("MainCharacter")]
 
         public GameObject mCharacter;/// <summary>
-
+        
         public StartBossFight SleepScript;
         public Animator mainAnim;
         public bool CamShake;
@@ -131,7 +131,6 @@ namespace Platformer
                 }
 
             
-
                
                     BlackBeakAnim.SetBool("walking", false);
 
@@ -183,7 +182,7 @@ namespace Platformer
             CamShake = false;
             BB.SetActive(false);
             Bosscam.SetActive(false);
-
+            StartSequence.BossBlackBeack.SetActive(true);
             mainAnim.SetBool("Sleeping", false);
 
             //mCharacter.SetActive(false);

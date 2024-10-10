@@ -36,6 +36,7 @@ namespace Platformer
 
         public BlackBeackIntro bbIntro;
 
+        public GameObject BossBlackBeack;
 
 
         [Header("Fade")]
@@ -57,7 +58,7 @@ namespace Platformer
 
         public void Start()
         {
-
+            BossBlackBeack.SetActive(false);
             SleepCam.SetActive(false);
 
         }
