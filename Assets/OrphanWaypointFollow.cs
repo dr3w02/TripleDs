@@ -28,7 +28,7 @@ namespace Platformer
         /// //check you!!!!!!!!!!!!!!!!!!!!!!!!
         /// </summary>
         // Script
-        public characterMovement characterMain;
+        public RBController characterMain;
         // Player
 
         // Handle the fade out and in
