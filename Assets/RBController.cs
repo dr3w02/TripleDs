@@ -74,7 +74,7 @@ namespace Platformer
         private bool isRightMouseButtonPressed;
         //Dylan
 
-
+        public PlayerInput input;
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -135,23 +135,22 @@ namespace Platformer
             if (CanMove)
             {
                 Move();
+                handleRotation();
+                handleAnimation();
+                handleCrouch();
+
             }
-         
+            else if (!CanMove)
+            {
+                return;
+            }
 
 
         }
 
         private void LateUpdate()
         {
-            if (CanMove)
-            {
-                handleRotation();
-                handleAnimation();
-                handleCrouch();
-
-            }
-
-       
+         
             if ( grounded)
             {
                 animator.SetBool(isJumpingHash, false);
@@ -159,7 +158,6 @@ namespace Platformer
             }
 
 
-            //animator.SetBool(isJumpingHash, false);
         }
 
         void Jump()
@@ -407,8 +405,7 @@ namespace Platformer
 
         public void Enabled()
         {
-
-
+            input.ActivateInput();
             CanMove = true;
 
         }
@@ -416,6 +413,7 @@ namespace Platformer
         public void TurnOffMovement()
         {
 
+            input.DeactivateInput();
             CanMove = false;
         
         }
