@@ -33,13 +33,16 @@ namespace Platformer
 
         [Header("CameraShake")]
         public CinemachineVirtualCamera VirtualCam;
+        public CinemachineVirtualCamera MainVirtualCam;
         private CinemachineBasicMultiChannelPerlin perlinNoise;
+        private CinemachineBasicMultiChannelPerlin MainperlinNoise;
 
 
-        [SerializeField] private float shakeIntensity = 5f;
+        [SerializeField] private float shakeIntensity = 2f;
         [SerializeField] private float shakeTime = 5f;
         public bool CamShake;
 
+        private bool MainCamShake;
 
         [Header("MainCharacter")]
 
@@ -62,11 +65,11 @@ namespace Platformer
         public GameObject Bosscam;
         public GameObject BB;
         public GameObject BossFight;
-
+        public float speedBB = 3f;
 
         public GameObject Lamps;
 
-        public Transform A;
+      
         public Transform B;
 
 
@@ -79,6 +82,8 @@ namespace Platformer
         public bool PlayingAnim;
 
         public bool movePlayer;
+
+        public bool Reset;
 
         public void Start()
         {
@@ -94,12 +99,15 @@ namespace Platformer
             if (VirtualCam != null)
             {
                 perlinNoise = VirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+                MainperlinNoise = MainVirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+       
             }
 
         }
 
-    
-
+   
     private void Update()
         {
             if (movePlayer)
@@ -107,17 +115,33 @@ namespace Platformer
                 Movement();
 
             }
-        
 
-           
-            
-             ShakeCamera(shakeIntensity, shakeTime);
-            
 
+            if (MainCamShake)
+            {
+                MainShakeCamera(shakeIntensity);
+            }
+          
+
+
+
+            if (CamShake)
+            {
+                ShakeCamera(shakeIntensity, shakeTime);
+            }
+            else
+            {
+                perlinNoise.m_AmplitudeGain = 0f;
+            }
+
+            if (PlayingAnim)
+            {
+                MoveToCheckpoint();
+            }
 
             if (Reset)
             {
-                StartCoroutine(ResetForFight());
+               StartCoroutine(ResetForFight());
             }
 
 
@@ -132,31 +156,24 @@ namespace Platformer
           
             Debug.Log("Moving!");
 
-            //Vector3 destination = SleepPoint.transform.position;
-
-
-            //Vector3 newPos = Vector3.MoveTowards(mCharacter.transform.position, SleepPoint.transform.position, speed * Time.deltaTime);
-
-
-            //mCharacter.transform.position = newPos;
-
-
-            //loat distance = Vector3.Distance(mCharacter.transform.position, destination);
-
-
-
             Vector3 destination = new Vector3(SleepPoint.transform.position.x, mCharacter.transform.position.y, SleepPoint.transform.position.z);
 
             Vector3 newPos = Vector3.MoveTowards(mCharacter.transform.position, destination, speed * Time.deltaTime);
 
             mCharacter.transform.position = newPos;
 
-            // Now check the distance, but only for the X and Z axes (ignore Y)
-            float distance = Vector3.Distance(new Vector3(mCharacter.transform.position.x, 0, mCharacter.transform.position.z),
+         
+            float distance = Vector3.Distance(new Vector3(mCharacter.transform.position.x, 0, mCharacter.transform.position.z), new Vector3(SleepPoint.transform.position.x, 0, SleepPoint.transform.position.z));
 
-                                              new Vector3(SleepPoint.transform.position.x, 0, SleepPoint.transform.position.z));
+            //comparing the distance between without using the y axis 
 
 
+            Vector3 directionToTarget = SleepPoint.transform.position - mCharacter.transform.position;
+            directionToTarget.y = 0;
+
+            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+            mCharacter.transform.rotation = Quaternion.RotateTowards(mCharacter.transform.rotation, targetRotation, Time.deltaTime * 300f);
 
 
             if (distance <= 0.1f) 
@@ -169,19 +186,15 @@ namespace Platformer
                 SleepCam.SetActive(true);
 
                 StartCoroutine(SleepWait());
+                StartCoroutine(WaitBetweenFadeInOut());
 
                 movePlayer = false;
-              
+
+               
             }
 
-            //Debug.Log("Character Position: " + mCharacter.transform.position);
-            //Debug.Log("SleepPoint Position: " + SleepPoint.transform.position);
 
-            Vector3 directionToTarget = SleepPoint.transform.position - mCharacter.transform.position;
-            directionToTarget.y = 0;
 
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-            mCharacter.transform.rotation = Quaternion.RotateTowards(mCharacter.transform.rotation, targetRotation, Time.deltaTime * 300f);
         }
 
         public bool Interact(Interactor interactor)
@@ -211,30 +224,23 @@ namespace Platformer
             // SleepScript.enabled = false;
 
 
-
-            PlayingAnim = true;
-
-            StartCoroutine(MoveToCheckpoint());
-
-
-           
-          
-
-
         }
 
     
 
 
-        public bool Reset;
-        private IEnumerator MoveToCheckpoint()
+
+        private void MoveToCheckpoint()
         {
+           
             if (PlayingAnim)
             {
+
+                Debug.Log("bbMove");
                 Vector3 destination = B.position;
 
 
-                Vector3 newPos = Vector3.MoveTowards(BB.transform.position, destination, speed * Time.deltaTime);
+                Vector3 newPos = Vector3.MoveTowards(BB.transform.position, destination, speedBB * Time.deltaTime);
 
 
                 BB.transform.position = newPos;
@@ -246,26 +252,30 @@ namespace Platformer
                 Debug.Log("Character Position: " + BB.transform.position);
                 Debug.Log("SleepPoint Position: " + destination);
 
+               
 
                 if (distanceBB == 0)
                 {
+                    Debug.Log("Made it");
                     PlayingAnim = false;
 
                     BlackBeakAnim.SetBool("walking", false);
 
+                 
+
                     BlackBeakAnim.SetBool("Evil", true);
 
 
-                    CamShake = true;
 
-                    yield return new WaitForEndOfFrame();
+                    StartCoroutine(WaitForAnimationPlayShakeCam());
 
+                    MainCamShake = true;
 
-                    StartCoroutine(WaitBetweenFadeInOut());
-
-
-                    Reset = true;
                 
+
+
+               
+
                 }
 
                 else
@@ -285,21 +295,30 @@ namespace Platformer
         public void ShakeCamera(float intensity, float shakeTime)
         {
 
+          perlinNoise.m_AmplitudeGain = intensity;
+            
 
-            if (CamShake == true)
-            {
-                 perlinNoise.m_AmplitudeGain = intensity;
-            }
+        }
+        public void MainShakeCamera(float intensity)
+        {
 
-
-
-            else if (CamShake == false)
-            {
-                perlinNoise.m_AmplitudeGain = 0f;
-            }
+            MainperlinNoise.m_AmplitudeGain = intensity;
 
 
         }
+
+        public IEnumerator WaitForAnimationPlayShakeCam()
+        {
+            yield return new WaitForSeconds(2f);
+
+            CamShake = true;
+
+            yield return new WaitForSeconds(3f);
+
+            Reset = true;
+
+        }
+       
 
 
         public IEnumerator WaitBetweenFadeInOut()
@@ -358,7 +377,12 @@ namespace Platformer
 
         public IEnumerator ResetForFight()
         {
-           
+            
+            StartCoroutine(WaitBetweenFadeInOut());
+
+
+            yield return new WaitForSeconds(4);
+
             BB.SetActive(false);
             Bosscam.SetActive(false);
             BossFight.SetActive(true);
@@ -373,6 +397,11 @@ namespace Platformer
             FourtySixAnims.SetBool("isSleeping", false);
 
             mainScript.Enabled();
+
+            Reset = false;
+
+ 
+
 
         }
 
