@@ -14,12 +14,7 @@ namespace Platformer
         [SerializeField] float detectionCooldown = 1.5f; // ives the player a break between attacks 
         [SerializeField] public float attackRange = 2f; // Distance from enemy to player attack 
 
-        [SerializeField] public float detectionRadiusSmashed = 12f;
-        [SerializeField] public float innerDetectionRadiusSmashed = 4.8f;
-        /// <summary>
-        /// //////////////////
-        /// </summary>
-        [SerializeField] float smashedAttackRange = 5f;
+        
        
 
         public Transform Player { get; private set; }
@@ -54,26 +49,10 @@ namespace Platformer
             if (enemy == null)
                 return false;
 
-            if (enemy.smashed)
-            {
-                detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadiusSmashed, innerDetectionRadiusSmashed);
-        
-                Debug.Log("Smashed Detection - Cone Angle: " + detectionAngle +
-                 ", Detection Radius: " + detectionRadiusSmashed +
-                 ", Inner Detection Radius: " + innerDetectionRadiusSmashed);
-            }
+          
+            detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
 
-            else
-            {
-                detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
-
-
-
-                Debug.Log("Normal Detection - Cone Angle: " + detectionAngle +
-               ", Detection Radius: " + detectionRadius +
-               ", Inner Detection Radius: " + innerDetectionRadius);
-
-            }
+            
 
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
 

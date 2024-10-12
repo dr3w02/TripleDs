@@ -48,12 +48,13 @@ namespace Platformer
                 Debug.LogError("No waypoints found!");
                 return;
             }
+          
 
-           
             // Debug.Log("Enemy wander state initialized.");
             animator.CrossFade(WalkHash, crossFadeDuration);
         }
 
+        
         //public void MoveToPoint(Vector3 destination)
         //{
           //  this.destination = destination;
@@ -97,25 +98,24 @@ namespace Platformer
 
            else if (enemy.smashed)
             {
-                //agent.SetDestination(enemy.mCharacter.transform.position);
-                //Debug.Log("im coming for you");
-                //agent.transform.position = Vector3.MoveTowards(agent.transform.position, enemy.mCharacter.transform.position, agent.speed * Time.deltaTime);
-
-                // Vector3 directionToTarget = enemy.mCharacter.transform.position - agent.transform.position;
-
-                //directionToTarget.y = 0;
-
-                // Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-
-                // agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
-
-                agent.speed = 6;
-
-                agent.SetDestination(enemy.mCharacter.transform.position);
+                heardANoise();
             }
         }
 
-      
+        private IEnumerator heardANoise()
+        {
+            agent.SetDestination(enemy.transform.position);
+
+            animator.SetBool("Looking",true);
+
+            yield return new WaitForEndOfFrame();
+
+            animator.SetBool("Looking", false);
+
+            agent.speed = 6;
+
+            agent.SetDestination(enemy.mCharacter.transform.position);
+        }
 
         public override void Update()
         {

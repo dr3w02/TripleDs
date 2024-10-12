@@ -24,7 +24,7 @@ namespace Platformer
 
         public int ShakedCount;
 
-    
+        public Animator BBAnimator;
         public LamSpawn LampSpawn;
 
     
@@ -85,6 +85,7 @@ namespace Platformer
             {
                 if (enemy.CompareTag("EnemyBB"))
                 {
+
                     enemy.smashed = true;
 
                     Debug.Log("MadeANoise") ;
@@ -105,8 +106,9 @@ namespace Platformer
         private IEnumerator Noisettack()
         {
 
-         
+      
             yield return new WaitForSeconds(5f);
+    
             enemy.smashed = false;
 
         }

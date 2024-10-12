@@ -115,7 +115,7 @@ namespace Platformer
            
             attackTimer = new CountdownTimer(timeBetweenAttacks);
 
-
+       
             //Tried to make the animator speed fit with the speed of my gameobject
             //float speed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
             //animator.SetFloat("Speed", speed);

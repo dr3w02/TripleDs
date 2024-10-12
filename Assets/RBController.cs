@@ -162,23 +162,32 @@ namespace Platformer
 
         void Jump()
         {
-            if (isJumpPressed && HasJumped == false)
+            if (CanMove)
             {
-                Debug.Log("Jumping");
-
-                Vector3 jumpForces = Vector3.zero;
-
-                Debug.Log("jumping");
-                if (grounded)
+                if (isJumpPressed && HasJumped == false)
                 {
-                    jumpForces = Vector3.up * jumpForce;
-                    animator.SetBool(isJumpingHash, true);
-                    grounded = false;
+                    Debug.Log("Jumping");
 
+                    Vector3 jumpForces = Vector3.zero;
+
+                    Debug.Log("jumping");
+
+                    if (grounded)
+                    {
+                        jumpForces = Vector3.up * jumpForce;
+                        animator.SetBool(isJumpingHash, true);
+                        grounded = false;
+
+                    }
+
+                    rb.AddForce(jumpForces, ForceMode.VelocityChange);
+                    HasJumped = true;
                 }
-
-                rb.AddForce(jumpForces, ForceMode.VelocityChange);
-                HasJumped = true;
+            }
+            
+            else if (!CanMove)
+            {
+                return;
             }
            
          

@@ -20,6 +20,8 @@ namespace Platformer
 
         protected static readonly int DieHash = Animator.StringToHash(name: "Die");
 
+  
+
         //finish animations here 
 
 
