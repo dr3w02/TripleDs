@@ -414,7 +414,7 @@ namespace Platformer
 
         public void Enabled()
         {
-            input.ActivateInput();
+
             CanMove = true;
 
         }
@@ -422,7 +422,7 @@ namespace Platformer
         public void TurnOffMovement()
         {
 
-            input.DeactivateInput();
+            
             CanMove = false;
         
         }

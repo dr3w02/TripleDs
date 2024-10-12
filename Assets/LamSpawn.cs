@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Platformer
 {
@@ -9,6 +10,20 @@ namespace Platformer
 
         // List to store GameObjects
         public List<GameObject> gameObjects;
+        public GameObject BB;
+        public GameObject DeathCamBB;
+
+        public Animator BlackBeakAnim;
+
+        public NavMeshAgent agent;
+
+        [Header("Fade")]
+
+        [SerializeField] private bool fadeIn = false;
+
+        [SerializeField] public CanvasGroup myUIGroup;
+
+        [SerializeField] private float fadeWaitTime = 4f;
 
 
         void Start()
@@ -43,8 +58,44 @@ namespace Platformer
 
             if (gameObjects.Count == 0)
             {
-                Debug.Log("Winner!");
+                agent.enabled = false;
+
+                DeathCamBB.SetActive(true);
+
+                BlackBeakAnim.SetBool("Die", true);
+
+                StartCoroutine(FadeIn());
             }
+
+        }
+
+        private IEnumerator FadeIn()
+        {
+
+
+            Debug.Log("Switch Camera");
+
+            fadeIn = true;
+
+            while (fadeIn)
+            {
+                if (myUIGroup.alpha < 1)
+                {
+                    myUIGroup.alpha += Time.deltaTime;
+                    //yield return null; // Wait for the next frame
+                }
+                else
+                {
+                    fadeIn = false;
+                }
+            }
+
+            //mCharacter.SetActive(false);
+
+            yield return new WaitForSeconds(fadeWaitTime);
+
+          //Switch scenes here to you win /credits!!!!!!!!!!!!!!!!!!!!!!!!!
+            
 
         }
     }
