@@ -28,7 +28,7 @@ namespace Platformer
         [SerializeField] private float fadeWaitTime = 2f;
 
         public AudioSource staticElectricity;
-        public AudioSource playerDeadSound;
+        public AudioSource electrocutedSound;
 
         private void Start()
         {
@@ -67,7 +67,7 @@ namespace Platformer
                 PlayerDead.SetActive(true);
                 BathroomDeathCam.SetActive(true);
                 ResetAllLevers();
-                playerDead.Play();
+                electrocutedSound.Play();
 
                 if (characterMain != null)
                 {
