@@ -25,9 +25,10 @@ namespace Platformer
         [SerializeField] private bool fadeIn = false;
         [SerializeField] private bool fadeOut = true;
         [SerializeField] public CanvasGroup myUIGroup;
-        [SerializeField] private float fadeWaitTime = 4f;
+        [SerializeField] private float fadeWaitTime = 2f;
 
         public AudioSource staticElectricity;
+        public AudioSource playerDeadSound;
 
         private void Start()
         {
@@ -66,6 +67,7 @@ namespace Platformer
                 PlayerDead.SetActive(true);
                 BathroomDeathCam.SetActive(true);
                 ResetAllLevers();
+                playerDead.Play();
 
                 if (characterMain != null)
                 {

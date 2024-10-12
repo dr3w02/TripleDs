@@ -7,9 +7,9 @@ namespace Platformer
 {
     public class FallingClock : MonoBehaviour
     {
-      
-            public AudioSource ClockFallSound;
-            public AudioSource GlassSmash;
+        public AudioSource tickingClock;
+        public AudioSource clockFall;
+        public AudioSource grandfatherClock;
 
         [Header("CameraShake")]
         [SerializeField] private float shakeIntensity = 20f;
@@ -65,24 +65,36 @@ namespace Platformer
 
         private void OnTriggerExit(Collider other)
         {
+            Debug.Log("in trigger");
+            if (other.CompareTag("Player"))
+            {
 
-                Debug.Log("in trigger");
-                if (other.CompareTag("Player"))
-                {
 
+                ClockAnim.SetBool("FallingClock", true);
 
-                    ClockAnim.SetBool("FallingClock", true);
-                
+                StartCoroutine(ClockFallingSound());
 
-                    ClockFallSound.Play();
-                    
+                StartCoroutine(GrandfatherClockSound());
 
-                    GlassSmash.Play();
+                tickingClock.Stop();
 
-                   StartCoroutine(ShakeWait());
-                    //Destroy(ScriptableObject);
-                }
+                StartCoroutine(ShakeWait());
+                //Destroy(ScriptableObject);
+            }
+        }
 
+        private IEnumerator ClockFallingSound()
+        {
+            yield return new WaitForSeconds(1.4f);
+
+            clockFall.Play();
+        }
+
+        private IEnumerator GrandfatherClockSound()
+        {
+            yield return new WaitForSeconds(1.5f);
+
+            grandfatherClock.Play();
         }
 
         private IEnumerator ShakeWait()
