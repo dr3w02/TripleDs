@@ -43,6 +43,13 @@ namespace Platformer
        
         public GameObject VentDeathCam;
 
+        public AudioSource ventFan;
+        public AudioSource playerVentDeath;
+        public AudioSource ventBreak1;
+        public AudioSource ventBreak2;
+
+        private bool hasVentBreak1Played = false;
+        private bool hasVentBreak2Played = false;
 
         private void Start()
         {
@@ -76,6 +83,18 @@ namespace Platformer
                     VentBroken.SetActive(true);
                     VentDeathCam.SetActive(false);
                     screw.holdingScrew.gameObject.SetActive(true);
+                    ventFan.Stop();
+
+                    if (!hasVentBreak1Played)
+                    {
+                        ventBreak1.Play();
+                        hasVentBreak1Played = true;
+                    }
+                    if (!hasVentBreak2Played)
+                    {
+                        ventBreak2.Play();
+                        hasVentBreak2Played = true;
+                    }
                 }
             }
 
@@ -91,9 +110,10 @@ namespace Platformer
                     mCharacter.SetActive(false);
 
 
-                   PlayerDead.SetActive(true);
+                    PlayerDead.SetActive(true);
 
-                   StartCoroutine(WaitBetweenFadeInOut());
+                    StartCoroutine(WaitBetweenFadeInOut());
+                    playerVentDeath.Play();
                 }
 
             }
