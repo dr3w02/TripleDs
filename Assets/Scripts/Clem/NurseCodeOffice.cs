@@ -30,6 +30,7 @@ namespace Platformer
         //[SerializeField] float speed;
         public GameObject clemDeathCam;
 
+        public GameObject BlackBeackKillCam;
         public GameObject BlackBeackDeathCam;
 
         public GameObject mCharacter;
@@ -82,8 +83,9 @@ namespace Platformer
 
             navMeshAgent = GetComponent<NavMeshAgent>();
 
-
-
+            clemDeathCam.SetActive(false);
+            BlackBeackDeathCam.SetActive(false);
+            BlackBeackKillCam.SetActive(false);
 
 
         }

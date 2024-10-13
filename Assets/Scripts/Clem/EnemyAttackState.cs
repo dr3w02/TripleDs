@@ -26,14 +26,10 @@ namespace Platformer
             this.agent = agent;
             this.player = player;
 
-            enemy.clemDeathCam.SetActive(false);
-            enemy.BlackBeackDeathCam.SetActive(false);
-
-          
-
 
         }
 
+       
         public override void OnEnter()
         {
 

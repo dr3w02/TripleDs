@@ -24,7 +24,7 @@ namespace Platformer
 
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
-
+            Debug.Log("Wander");
             if (enemy == null)
             {
                 Debug.LogError("Enemy is null");
@@ -35,6 +35,15 @@ namespace Platformer
 
             this.startpoint = enemy.transform.position;
             this.wanderRadius = wanderRadius;
+
+
+            // Debug.Log("Enemy wander state initialized.");
+            animator.CrossFade(WalkHash, crossFadeDuration);
+        }
+
+
+        public void Start()
+        {
 
             Transform wayPointsObject = GameObject.FindGameObjectWithTag("Waypoint").transform;
 
@@ -48,27 +57,16 @@ namespace Platformer
                 Debug.LogError("No waypoints found!");
                 return;
             }
-          
 
-            // Debug.Log("Enemy wander state initialized.");
-            animator.CrossFade(WalkHash, crossFadeDuration);
         }
 
-        
-        //public void MoveToPoint(Vector3 destination)
-        //{
-          //  this.destination = destination;
-          //  agent.isStopped = false;
-          //  agent.enabled = true;
-           // agent.SetDestination(destination);
-        //}
-       
+     
+
         public void WalkingBB()
         {
             if (wayPoints.Count == 0) return;
 
       
-            
             float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
 
             if (!enemy.smashed)
@@ -95,11 +93,10 @@ namespace Platformer
             }
 
            
-
-           else if (enemy.smashed)
-            {
-                heardANoise();
-            }
+           //else if (enemy.smashed)
+           //{
+           //     heardANoise();
+          // }
         }
 
         private IEnumerator heardANoise()
@@ -117,13 +114,10 @@ namespace Platformer
             agent.SetDestination(enemy.mCharacter.transform.position);
         }
 
+
         public override void Update()
         {
-            Vector3 direction = agent.transform.TransformDirection(destination);
-
-            float distance = Vector3.Distance(agent.transform.position, destination);
-
-            //FOR THE SMOOTH MOVEMENT^^^
+            
 
             if (enemy.CompareTag("EnemyBB"))
             {
@@ -137,15 +131,7 @@ namespace Platformer
             }
 
 
-            //if (distance > 0.1)
-            //{
-            //    //LookToward(destination, distance);
-            //    float distanceBasedSpeedModifier = 1.0f;
-                
-            
-            //    Vector3 movement = agent.transform.forward * Time.deltaTime * distanceBasedSpeedModifier;
-               // agent.Move(movement);
-           // }
+        
         }
 
 
@@ -165,23 +151,23 @@ namespace Platformer
         }
 
 
-        private IEnumerator WaitAtCheckpoint()
-        {
-            // Stop the enemys movement
-            agent.isStopped = true;
-           
-            // Wait for seconds
-            yield return new WaitForSeconds(2f);
-            Debug.Log("waiting");
+       // private IEnumerator WaitAtCheckpoint()
+       // {
+         //   Stop the enemys movement
+         //   agent.isStopped = true;
 
-            Quaternion lookDir = Quaternion.LookRotation(wayPoints[currentWayPointIndex].position);
+         //   Wait for seconds
+         //  yield return new WaitForSeconds(2f);
+          //  Debug.Log("waiting");
+
+         //   Quaternion lookDir = Quaternion.LookRotation(wayPoints[currentWayPointIndex].position);
 
 
-            // Resume the movement to the next waypoint
-            agent.isStopped = false;
-            currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
-            agent.SetDestination(wayPoints[currentWayPointIndex].position);
-        }
+         //   Resume the movement to the next waypoint
+         //   agent.isStopped = false;
+          //  currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
+          //  agent.SetDestination(wayPoints[currentWayPointIndex].position);
+        //}
 
 
         private bool HasReachedDestination()

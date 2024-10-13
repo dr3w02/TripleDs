@@ -23,7 +23,7 @@ namespace Platformer
 
         IDetectionStrategy detectionStrategy;
 
-        public NurseCodeOffice enemy;
+
 
         void Awake()
         {
@@ -36,7 +36,9 @@ namespace Platformer
         void Start()
         {
             detectionTimer = new CountdownTimer(detectionCooldown);
-            //detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
+                      
+            detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
+
         }
 
 
@@ -46,13 +48,7 @@ namespace Platformer
             
         public bool CanDetectPlayer()
         {
-            if (enemy == null)
-                return false;
-
-          
-            detectionStrategy = new ConeDetectionStrategy(detectionAngle, detectionRadius, innerDetectionRadius);
-
-            
+           
 
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
 
