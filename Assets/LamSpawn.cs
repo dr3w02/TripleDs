@@ -10,7 +10,7 @@ namespace Platformer
 
         // List to store GameObjects
         public List<GameObject> gameObjects;
-        public GameObject BB;
+
         public GameObject DeathCamBB;
 
         public Animator BlackBeakAnim;
@@ -20,10 +20,11 @@ namespace Platformer
         [Header("Fade")]
 
         [SerializeField] private bool fadeIn = false;
-
+        [SerializeField] private bool fadeOut = true;
         [SerializeField] public CanvasGroup myUIGroup;
-
         [SerializeField] private float fadeWaitTime = 4f;
+
+        [SerializeField] private float WaitTime = 2f;
 
 
         void Start()
@@ -64,13 +65,17 @@ namespace Platformer
 
                 BlackBeakAnim.SetBool("Die", true);
 
-                StartCoroutine(FadeIn());
+                StartCoroutine(WaitBetweenFadeInOut());
             }
 
         }
 
-        private IEnumerator FadeIn()
+        public IEnumerator WaitBetweenFadeInOut()
         {
+
+            //mCharacter.SetActive(false);
+            yield return new WaitForSeconds(5f);
+
 
 
             Debug.Log("Switch Camera");
@@ -82,7 +87,7 @@ namespace Platformer
                 if (myUIGroup.alpha < 1)
                 {
                     myUIGroup.alpha += Time.deltaTime;
-                    //yield return null; // Wait for the next frame
+                    yield return null; // Wait for the next frame
                 }
                 else
                 {
@@ -90,12 +95,30 @@ namespace Platformer
                 }
             }
 
-            //mCharacter.SetActive(false);
+            //RESET PLAYER POSTION AND TURN OFF SLEEP HERE
+
+
 
             yield return new WaitForSeconds(fadeWaitTime);
 
-          //Switch scenes here to you win /credits!!!!!!!!!!!!!!!!!!!!!!!!!
-            
+            fadeOut = true;
+            while (fadeOut)
+            {
+                if (myUIGroup.alpha > 0)
+                {
+                    myUIGroup.alpha -= Time.deltaTime;
+                    yield return null; // Wait for the next frame
+
+                    //GetComponent<NavMeshAgent>().isStopped = false;
+
+                    //turn on bb moving here and turn off camera here   
+                }
+                else
+                {
+                    fadeOut = false;
+                }
+            }
+
 
         }
     }

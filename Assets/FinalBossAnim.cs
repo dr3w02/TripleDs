@@ -249,8 +249,7 @@ namespace Platformer
                 float distanceBB = Vector3.Distance(BB.transform.position, destination);
 
 
-                Debug.Log("Character Position: " + BB.transform.position);
-                Debug.Log("SleepPoint Position: " + destination);
+              
 
                
 

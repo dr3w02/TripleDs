@@ -68,6 +68,7 @@ namespace Platformer
             
             if (ShakedCount == 3)
             {
+                enemy.ChasingPlayer = false;
 
                 lampSway = true;
 

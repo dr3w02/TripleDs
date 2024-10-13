@@ -13,8 +13,9 @@ namespace Platformer
         //public AudioSource dingDong;
 
         [Header("CameraShake")]
-        [SerializeField] private float shakeIntensity = 20f;
-        [SerializeField] private float shakeTime = 5f;
+        [SerializeField] private float shakeIntensity = 5f;
+ 
+
         public CinemachineVirtualCamera VirtualCam;
         private CinemachineBasicMultiChannelPerlin perlinNoise;
         public bool CamShake;
@@ -26,40 +27,47 @@ namespace Platformer
 
         private void Awake()
         {
+
             perlinNoise = VirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-          
-            CamShake = false;
 
 
         }
         private void Start()
         {
+            CamShake = false;
+
             ClockAnim.SetBool("FallingClock", false);
+
+            if (VirtualCam != null)
+            {
+                perlinNoise = VirtualCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+            }
         }
 
         private void Update()
         {
-            ShakeCamera(shakeIntensity, shakeTime);
-        }
 
-        public void ShakeCamera(float intensity, float shakeTime)
-        {
-
-
-            if (CamShake == true)
+          
+            if (CamShake)
             {
-                perlinNoise.m_AmplitudeGain = intensity;
+                ShakeCamera(shakeIntensity);
             }
-
-
-
-            else if (CamShake == false)
+            else
             {
                 perlinNoise.m_AmplitudeGain = 0f;
             }
 
+        }
+
+        public void ShakeCamera(float intensity)
+        {
+
+            perlinNoise.m_AmplitudeGain = intensity;
+
 
         }
+     
 
         private void OnTriggerExit(Collider other)
         {
@@ -72,16 +80,21 @@ namespace Platformer
 
                 tickingClock.Stop();
 
+                CamShake = true;
+
+
                 StartCoroutine(ShakeWait());
+
+
                 //Destroy(ScriptableObject);
             }
         }
 
         private IEnumerator ShakeWait()
         {
-            CamShake = true;
-
-            yield return new WaitForSeconds(6f);
+           
+           Debug.Log("Shaking Cam");
+            yield return new WaitForSeconds(2f);
 
             CamShake = false;
 

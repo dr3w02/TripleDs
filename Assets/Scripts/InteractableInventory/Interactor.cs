@@ -14,7 +14,7 @@ interface IInteractable
 
 public class Interactor : MonoBehaviour
 {
-
+    
     //public Transform InteractorSource;
     //public float InteractRange;
     [SerializeField] private Transform _interactionPoint;
@@ -49,10 +49,12 @@ public class Interactor : MonoBehaviour
 
                 if (Keyboard.current.eKey.wasPressedThisFrame)
                 {
+
+                   
                     Debug.Log("Interacting");
 
                     currentlyInteracting = true;
-
+                    
                     if(currentInteractable.InteractionImagePrompt != null)
                         currentInteractable.InteractionImagePrompt.SetActive(false);
 
@@ -62,7 +64,8 @@ public class Interactor : MonoBehaviour
             }
             else
             {
-                if(currentInteractable != null && currentInteractable.InteractionImagePrompt != null)
+         
+                if (currentInteractable != null && currentInteractable.InteractionImagePrompt != null)
                     currentInteractable.InteractionImagePrompt.SetActive(false);
 
                 currentlyInteracting = false;

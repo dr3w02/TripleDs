@@ -18,7 +18,8 @@ namespace Platformer
         public bool isStopped;
         private Vector3 destination;
         public int currentWayPointIndex = 0;
-        
+
+        public bool ChasingPlayer;
 
         private List<Transform> wayPoints = new List<Transform>();
 
@@ -65,9 +66,9 @@ namespace Platformer
 
         }
 
-   
 
-     
+
+
 
         public void WalkingBB()
         {
@@ -99,26 +100,38 @@ namespace Platformer
                 agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
             }
 
-           
-           //else if (enemy.smashed)
-           //{
-           //     heardANoise();
-          // }
+            else
+            {
+
+                heardANoise();
+            }
+
+        
+             if (enemy.ChasingPlayer)
+                {
+
+                    agent.GetComponent<NavMeshAgent>().isStopped = false;
+
+                    agent.speed = 6;
+
+                    agent.SetDestination(enemy.mCharacter.transform.position);
+                }
+
         }
 
         private IEnumerator heardANoise()
         {
-            agent.SetDestination(enemy.transform.position);
+            
+            agent.GetComponent<NavMeshAgent>().isStopped = true;
 
             animator.SetBool("Looking",true);
 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(3f);
 
             animator.SetBool("Looking", false);
 
-            agent.speed = 6;
+            enemy.ChasingPlayer = true;
 
-            agent.SetDestination(enemy.mCharacter.transform.position);
         }
 
 

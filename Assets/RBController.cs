@@ -23,8 +23,8 @@ namespace Platformer
         public float speed, maxForce, jumpForce;
 
         // calls to the input manager
-      
-      
+
+
         //private float lookRotation;
         public bool CanMove = true;
 
@@ -35,6 +35,7 @@ namespace Platformer
         int isWalkingHash;
         int isRunningHash;
         int isPullingHash;
+        int isSelectedHash;
         public bool isPullPressed;
         int isCrouchingHash;
 
@@ -61,6 +62,12 @@ namespace Platformer
         public float normalHeight = 2;
         public float crouchHeight = 0.5f;
         public Vector3 offset;
+
+
+        [Header("Select")]
+
+        public bool isSelectPressed;
+
 
         public Animator animator;
 
@@ -89,7 +96,13 @@ namespace Platformer
 
         }
 
+        public void OnSelect(InputAction.CallbackContext context)
+        {
 
+            isSelectPressed = context.ReadValueAsButton();
+
+
+        }
 
         public void OnJump(InputAction.CallbackContext context)
         {
@@ -108,7 +121,7 @@ namespace Platformer
         {
 
             isPullPressed = context.ReadValueAsButton();
-           // Debug.Log("PullPressed");
+            // Debug.Log("PullPressed");
 
         }
 
@@ -117,18 +130,19 @@ namespace Platformer
         {
             playersCapsuleCollider = GetComponent<CapsuleCollider>();
 
-        
+
 
             isWalkingHash = Animator.StringToHash("isWalking");
             isRunningHash = Animator.StringToHash("isRunning");
             isJumpingHash = Animator.StringToHash("isJumping");
             isCrouchingHash = Animator.StringToHash("isCrouching");
             isPullingHash = Animator.StringToHash("isPulling");
+            isSelectedHash = Animator.StringToHash("isSelected");
             // isRopeHash = Animator.StringToHash("isRope");
             //isLadderHash = Animator.StringToHash("isLadder");
 
 
-         
+
         }
         public void FixedUpdate()
         {
@@ -137,7 +151,7 @@ namespace Platformer
                 Move();
                 handleRotation();
                 handleAnimation();
-                handleCrouch();
+                // handleCrouch();
 
             }
             else if (!CanMove)
@@ -150,8 +164,8 @@ namespace Platformer
 
         private void LateUpdate()
         {
-         
-            if ( grounded)
+
+            if (grounded)
             {
                 animator.SetBool(isJumpingHash, false);
                 HasJumped = false;
@@ -184,13 +198,13 @@ namespace Platformer
                     HasJumped = true;
                 }
             }
-            
+
             else if (!CanMove)
             {
                 return;
             }
-           
-         
+
+
 
         }
         public void OnNotHolding(InputAction.CallbackContext context)
@@ -268,10 +282,10 @@ namespace Platformer
             if (characterClimb.isClimbingLadder)
             {
                 characterClimb.HandleClimbingMovement();
-                    
+
 
             }
-            
+
         }
 
 
@@ -312,10 +326,10 @@ namespace Platformer
             positionToLookAt.z = currentMovement.z;
 
             Quaternion currentRotation = transform.rotation;
-            
+
             if (isMovementPressed)
             {
-                if(characterClimb.isClimbingLadder)
+                if (characterClimb.isClimbingLadder)
                 {
                     return;
                 }
@@ -337,6 +351,7 @@ namespace Platformer
             bool isWalking = animator.GetBool(isWalkingHash);
             bool isRunning = animator.GetBool(isRunningHash);
             bool isPulling = animator.GetBool(isPullingHash);
+            bool isSelected = animator.GetBool(isSelectedHash);
 
             //Walking Controls-------------------------------
             if (isMovementPressed && !isWalking)
@@ -370,7 +385,20 @@ namespace Platformer
             // ! means not
 
 
+            if ((isSelectPressed) && !isSelected)
+            {
 
+                animator.SetBool(isSelectedHash, true);
+
+                Debug.Log("E ANIMATED");
+
+            }
+
+            else if ((!isSelectPressed) && isSelected || isMovementPressed || isMovementPressed || isRunPressed || isPullPressed || isCrouchPressed)
+            {
+               Debug.Log("E NOMORE");
+               animator.SetBool(isSelectedHash, false);
+            }
 
             //Pulling Controls-------------------------------
             if ((isPullPressed) && !isPulling)
@@ -397,18 +425,20 @@ namespace Platformer
             {
                 if (!isRightMouseButtonPressed)
                 {
-                    isCrouching = false;
-                    isCrouchPressed = true;
-                    crouched = true;
-
+                    if (isCrouching)
+                    {
+                        StopCrouch();
+                    }
+                    else
+                    {
+                        StartCrouch();
+                    }
                 }
+
+
             }
-            else if (context.canceled)
-            {
-                isCrouching = false;
-                isCrouchPressed = false;
-                crouched = false;
-            }
+
+         
         }
 
 
@@ -427,45 +457,16 @@ namespace Platformer
         
         }
 
-
-        void handleCrouch()
+        private void StartCrouch()
         {
 
-            if (isCrouchPressed)
-            {
+            animator.SetBool(isCrouchingHash, true);
 
-                if (!isCrouching)
-                {
-
-                    isCrouching = true;
-
-                    animator.SetBool(isCrouchingHash, true);
-
-                }
-
-                else if (isCrouching)
-                {
-
-                    isCrouching = false;
-
-                    //Debug.Log("CROUCHEDAGAIN");
-
-                    animator.SetBool(isCrouchingHash, false);
-
-                    
-
-                }
-
-            }
-
-
-
-            if (crouched == true)
-            {
+           
 
                 if (isMovementPressed)
                 {
-                   // Debug.LogWarning("pepeppeepp");
+                    // Debug.LogWarning("pepeppeepp");
                     animator.SetFloat("crouchSpeed", 1);
                 }
                 else
@@ -474,7 +475,7 @@ namespace Platformer
                 }
 
 
-            ;
+          
 
                 // Debug.Log("CrouchAnimator");
 
@@ -485,10 +486,17 @@ namespace Platformer
                 playersCapsuleCollider.height = crouchHeight;
 
 
+            isCrouching = true;
 
 
-            }
 
+        }
+
+        private void StopCrouch()
+        {
+
+
+            animator.SetBool(isCrouchingHash, false);
 
             if (crouched == false)
             {
@@ -506,19 +514,7 @@ namespace Platformer
 
 
             }
-
-            // if (playersCapsuleCollider.height < normalHeight) // safe guard to keep the player from clipping into the ground
-            // {
-
-            //   player.localPosition = offset;
-            //}
-
-            // else
-            // {
-            //   player.localPosition = Vector3.zero;
-            // }
         }
-
         public void SetGrounded(bool state)
         {
             grounded = state;

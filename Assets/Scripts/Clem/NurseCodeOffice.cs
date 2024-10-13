@@ -42,7 +42,7 @@ namespace Platformer
         public Respawn respawn;
 
         public float speed;
-    
+        public bool ChasingPlayer;
 
         /// <summary>
         /// //Main Scripts
@@ -116,16 +116,9 @@ namespace Platformer
         }
 
 
-        public bool smashed = false;
-        public void OnPlayerSmashed()
-        {
-            smashed = true;
-        }
-
-        private void ResetSmashed()
-        {
-            smashed = false;
-        }
+        public bool smashed;
+       
+            
 
         void FixedUpdate()
         {
