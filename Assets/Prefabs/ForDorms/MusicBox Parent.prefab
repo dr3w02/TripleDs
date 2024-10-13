@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.13424397
+      value: 0.134244
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
@@ -21,17 +21,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.13424397
+      value: 0.134244
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.9027139
+      value: -0.9027141
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.1650345
+      value: -2.1650348
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.36728245
+      value: -0.36728242
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
@@ -86,7 +86,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e908940ec27a76f438855c0688f0c1a5,
         type: 3}
@@ -159,7 +159,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radialImage: {fileID: 0}
-  orphans: {fileID: 0}
   inputManager: {fileID: 0}
   timer: {fileID: 0}
   maxTime: 20

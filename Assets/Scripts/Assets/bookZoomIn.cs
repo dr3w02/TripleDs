@@ -1,4 +1,5 @@
 using Cinemachine;
+using Platformer;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -9,7 +10,7 @@ using UnityEngine.InputSystem;
 
 public class bookZoomIn : MonoBehaviour, IInteractable
 {
-    [SerializeField] characterMovement characterMove;
+    [SerializeField] RBController characterMove;
     public string InteractionPrompt => "LookAtBook";
 
     public GameObject InteractionImagePrompt => BookPromptCanvas;

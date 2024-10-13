@@ -29,7 +29,7 @@ namespace Platformer
       
         
         
-        public float speed = 0.5f;
+        public float speed = 1f;
 
         [Header("Fade")]
 

@@ -18,7 +18,7 @@ namespace Platformer
         public RBController characterMain;
 
         
-        NavMeshAgent navMeshAgent; 
+       
 
 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
@@ -58,14 +58,13 @@ namespace Platformer
         void Start()
         {
             attackTimer = new CountdownTimer(timeBetweenAttacks);
+
             stateMachine = new StateMachine();
 
             var wanderState = new EnemyWanderState(this, animator, agent, wanderRadius);
             var chaseState = new EnemyChaseState(this, animator, agent, playerDetector.Player);
             var attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
 
-
-            //Any(wanderState, new FuncPredicate (() => true)); // for testing PURPOSES setting it to always true!!!!!!!!!!!!!!!
 
 
             At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer()));
@@ -81,13 +80,39 @@ namespace Platformer
            
 
 
-            navMeshAgent = GetComponent<NavMeshAgent>();
 
             clemDeathCam.SetActive(false);
             BlackBeackDeathCam.SetActive(false);
             BlackBeackKillCam.SetActive(false);
 
 
+        }
+
+
+     
+
+
+        void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
+        void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
+
+
+
+
+
+        void Update()
+        {
+
+            stateMachine.Update();
+
+            attackTimer.Tick(Time.deltaTime);
+
+            //attackTimer = new CountdownTimer(timeBetweenAttacks);
+
+       
+            //Tried to make the animator speed fit with the speed of my gameobject
+            //float speed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
+            //animator.SetFloat("Speed", speed);
+            
         }
 
 
@@ -101,31 +126,6 @@ namespace Platformer
         {
             smashed = false;
         }
-
-
-        void At(IState from, IState to, IPredicate condition) => stateMachine.AddTransition(from, to, condition);
-        void Any(IState to, IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
-
-
-
-
-        void Update()
-        {
-
-            stateMachine.Update();
-
-           
-            attackTimer = new CountdownTimer(timeBetweenAttacks);
-
-       
-            //Tried to make the animator speed fit with the speed of my gameobject
-            //float speed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
-            //animator.SetFloat("Speed", speed);
-            
-        }
-
-
-
 
         void FixedUpdate()
         {

@@ -18,6 +18,7 @@ namespace Platformer
         {
             MusicPrefab.SetActive(true);
             MusicBoxParent.SetActive(true);
+            Debug.Log("IN MSUIC EAREA");
         }
         private void OnTriggerExit(Collider other)
         {

@@ -24,6 +24,8 @@ namespace Platformer
 
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
+            
+
             Debug.Log("Wander");
             if (enemy == null)
             {
@@ -38,13 +40,15 @@ namespace Platformer
 
 
             // Debug.Log("Enemy wander state initialized.");
-            animator.CrossFade(WalkHash, crossFadeDuration);
+            
         }
 
-
-        public void Start()
+        public override void OnEnter()
         {
+            Debug.Log("Chase");
 
+
+            animator.CrossFade(WalkHash, crossFadeDuration);
             Transform wayPointsObject = GameObject.FindGameObjectWithTag("Waypoint").transform;
 
             foreach (Transform t in wayPointsObject)
@@ -58,7 +62,10 @@ namespace Platformer
                 return;
             }
 
+
         }
+
+   
 
      
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8751544870472320042}
   - component: {fileID: 1118577538204451475}
   - component: {fileID: 6206762229227246566}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: MusicBoxTimerOn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2468644925212784493}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -22.72, y: -1.46, z: -39.09}
-  m_LocalScale: {x: 3.7046356, y: 6.6748924, z: 3.2097}
+  m_LocalScale: {x: 0.3030492, y: 0.5460243, z: 0.26256213}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &1086803766246297428
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -44,14 +44,14 @@ namespace Platformer
             // }
 
             enemy.characterMain.TurnOffMovement();
-
+            animator.CrossFade(AttackHash, crossFadeDuration);
 
             if (enemy.CompareTag("EnemyBB"))
             {
                 agent.GetComponent<NavMeshAgent>().isStopped = true;
                 enemy.BlackBeackDeathCam.SetActive(true);
 
-                animator.CrossFade(AttackHash, crossFadeDuration);
+            
 
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem());
 
@@ -69,7 +69,6 @@ namespace Platformer
                 enemy.clemDeathCam.SetActive(true);
 
 
-                animator.CrossFade(AttackHash, crossFadeDuration);
 
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem());
 
