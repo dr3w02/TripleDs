@@ -151,7 +151,7 @@ namespace Platformer
                 Move();
                 handleRotation();
                 handleAnimation();
-                // handleCrouch();
+                handleCrouch();
 
             }
             else if (!CanMove)
@@ -421,25 +421,51 @@ namespace Platformer
         public void OnCrouch(InputAction.CallbackContext context)
         {
 
+            isCrouchPressed = context.ReadValueAsButton();
+
             if (context.performed)
             {
-                if (!isRightMouseButtonPressed)
+                if (!isCrouching)
                 {
-                    if (isCrouching)
-                    {
-                        StopCrouch();
-                    }
-                    else
-                    {
-                        StartCrouch();
-                    }
+                    Debug.Log("Crouch started");
+                    isCrouchPressed = true;
+
+                    StartCrouch();
                 }
 
+                else
+                {
+                    StopCrouch();
+                }
+              
 
+              
             }
+           
 
-         
+
+
+
+            // Toggle crouch state based on whether the player is currently crouching
+            // if (!isCrouching)
+            //{
+            //    isCrouchPressed = true;
+            ////    StartCrouch();  // Start crouching
+            //   Debug.Log("Crouch started");
+            //   return;
+            // }
+            // else
+            // {
+            //     isCrouchPressed = false;
+            //    StopCrouch();   // Stop crouching (stand up)
+            //     Debug.Log("Crouch stopped");
+            //     return;
+            // }
+
+
+
         }
+
 
 
         public void Enabled()
@@ -459,23 +485,13 @@ namespace Platformer
 
         private void StartCrouch()
         {
+            if (isCrouchPressed)
+            {
+                animator.SetBool(isCrouchingHash, true);
 
-            animator.SetBool(isCrouchingHash, true);
-
-           
-
-                if (isMovementPressed)
-                {
-                    // Debug.LogWarning("pepeppeepp");
-                    animator.SetFloat("crouchSpeed", 1);
-                }
-                else
-                {
-                    animator.SetFloat("crouchSpeed", 0);
-                }
+                Debug.Log("Crouching");
 
 
-          
 
                 // Debug.Log("CrouchAnimator");
 
@@ -486,35 +502,72 @@ namespace Platformer
                 playersCapsuleCollider.height = crouchHeight;
 
 
-            isCrouching = true;
 
+                isCrouching = true;
+
+            }
+
+
+
+            //if (isCrouchPressed && isCrouching)
+           // {
+//
+             //   animator.SetBool(isCrouchingHash, false);
+            //    Debug.Log("Stop Crouching");
+
+
+
+
+
+             //   playersCapsuleCollider.height = playersCapsuleCollider.height + speed + crouchSpeed * Time.deltaTime;
+
+
+             //   playersCapsuleCollider.height = normalHeight;
+             //   isCrouching = false;
+            //}
 
 
         }
 
+        private void handleCrouch()
+        {
+            if (isCrouching)
+            {
+                if (isMovementPressed)
+                {
+                    // Debug.LogWarning("pepeppeepp");
+                    animator.SetFloat("crouchSpeed", 1);
+                }
+                else
+                {
+                    animator.SetFloat("crouchSpeed", 0);
+                }
+            }
+        }
         private void StopCrouch()
         {
-
-
-            animator.SetBool(isCrouchingHash, false);
-
-            if (crouched == false)
+            if (isCrouchPressed && isCrouching)
             {
 
                 animator.SetBool(isCrouchingHash, false);
-                // Debug.Log("CrouchAnimatoroff");
+                Debug.Log("Stop Crouching");
 
-                crouched = false;
+
+
+
 
                 playersCapsuleCollider.height = playersCapsuleCollider.height + speed + crouchSpeed * Time.deltaTime;
 
 
                 playersCapsuleCollider.height = normalHeight;
-
-
-
+                isCrouching = false;
             }
+
+
+
+
         }
+
         public void SetGrounded(bool state)
         {
             grounded = state;
