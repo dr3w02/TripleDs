@@ -14,14 +14,20 @@ namespace Platformer
     {
         [Header("Interactables")]
 
-        [SerializeField] private string _prompt;
-        public GameObject InteractionImagePrompt => null;
+            [SerializeField] RBController characterMove;
+            public string InteractionPrompt => "LookAtBook";
 
-        public string InteractionPrompt => _prompt;
+            public GameObject InteractionImagePrompt => BookPromptCanvas;
+
+            //public GameObject character;
+            public GameObject BookCam;
+            public GameObject BookPromptCanvas;
+            public GameObject Player;
+            public bool isZoomedIn;
 
 
 
-        [Header("Fade")]
+            [Header("Fade")]
 
         [SerializeField] private bool fadeIn = false;
         [SerializeField] private bool fadeOut = true;

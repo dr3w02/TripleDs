@@ -9,6 +9,9 @@ public class CameraManager : MonoBehaviour
 
     public List <CinemachineVirtualCamera> cameras = new List<CinemachineVirtualCamera> ();
     public CinemachineVirtualCamera ActiveCamera = null;
+    [Space]
+
+    public GameObject atticLights, bathroomLights, hallwaysLights, nurseLights, classroomLights, libraryLights, ventLights, kitchenLights; //add rest 
 
     private void Awake()
     {
@@ -32,6 +35,20 @@ public class CameraManager : MonoBehaviour
         }
 
         camera.Priority = 10;
+    }
+
+    public void TurnAllTheLightsOff()
+    {
+        atticLights.SetActive(false);
+        bathroomLights.SetActive(false);
+        hallwaysLights.SetActive(false);
+        nurseLights.SetActive(false);
+        classroomLights.SetActive(false);
+        libraryLights.SetActive(false);
+        ventLights.SetActive(false);
+        kitchenLights.SetActive(false);
+
+        //add all the others
     }
 
     //public void ResetCamera(CinemachineVirtualCamera camera)

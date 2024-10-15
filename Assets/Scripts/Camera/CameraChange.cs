@@ -23,6 +23,9 @@ public class CameraChange : MonoBehaviour
     public float exitPlayer = 1f;
     public float returnInvert = 0.2f;
 
+    //what room are we in?
+    public string room;
+
     private void Awake()
     {
         box = GetComponent<BoxCollider>();
@@ -42,11 +45,75 @@ public class CameraChange : MonoBehaviour
                     CameraManager.cameraInstance.SwitchCamera(cam);
                 }
 
+                HandleLightChange();
+
                 if (invertPlayerControls)
                     StartCoroutine(EnterPlayer(playerRb));
                 else
                     StartCoroutine(ExitPlayer(playerRb));
             }
+
+        }
+    }
+
+    void HandleLightChange()
+    {
+        CameraManager c = CameraManager.cameraInstance;
+        c.TurnAllTheLightsOff();
+
+        switch (room)
+        {
+            case "attic":
+
+               c.atticLights.SetActive(true);
+                //if there are other rooms you want to leave lights on add them here
+
+                break;
+
+
+            case "bathroom":
+
+                c.bathroomLights.SetActive(true);
+
+                break;
+
+            case "hallways":
+
+                c.hallwaysLights.SetActive(true);
+
+                break;
+
+            case "nurse":
+
+                c.nurseLights.SetActive(true);
+
+                break;
+
+            case "classroom":
+
+                c.classroomLights.SetActive(true);
+
+                break;
+
+            case "library":
+
+                c.libraryLights.SetActive(true);
+
+                break;
+
+            case "vent":
+
+                c.ventLights.SetActive(true);
+
+                break;
+
+            case "kitchen":
+
+                c.kitchenLights.SetActive(true);
+
+                break;
+
+                //add cases
         }
     }
 
