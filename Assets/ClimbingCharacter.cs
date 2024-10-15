@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using static UnityEngine.UI.Image;
 
 namespace Platformer
@@ -19,8 +20,15 @@ namespace Platformer
 
         public Animator animator;
 
+        int isPullingHash;
+
+        public bool isPullPressed;
 
         public float climbSpeed = 2f;
+
+
+        public PlayerInput input;
+
 
         //things for climb and swing
         public bool isClimbingLadder;
@@ -59,11 +67,13 @@ namespace Platformer
         private void CheckForLadder()
         {
             Debug.Log("LADDER - CHECKING FOR LADDER ");
-            if (playerScript.isPullPressed)
+            if (isPullPressed)
             {
                 //Called once
                 if (!isClimbingLadder)
                 {
+                    Debug.Log("Start Climbing");
+
                     Vector3 lastHitPosition = lastHit.transform.position;
                     Vector3 newPosition = lastHitPosition + ClimbOffset;
                     player.transform.position = newPosition;
@@ -77,6 +87,10 @@ namespace Platformer
                     isClimbingLadder = true;
                     HandleClimbingMovement();
 
+                }
+                else
+                {
+                    Debug.Log("Already Climbing");
                 }
 
 
@@ -93,17 +107,55 @@ namespace Platformer
 
         }
 
+        public void OnPull(InputAction.CallbackContext context)
+        {
+
+            isPullPressed = context.ReadValueAsButton();
+            // Debug.Log("PullPressed");
+
+        }
+
+        public void Awake()
+        {
+            isPullingHash = Animator.StringToHash("isPulling");
+
+        }
+
+        public void HandleAnimation()
+        {
+
+            bool isPulling = animator.GetBool(isPullingHash);
+
+            //Pulling Controls-------------------------------
+            if ((isPullPressed) && !isPulling)
+            {
+
+                animator.SetBool(isPullingHash, true);
+
+                //Debug.Log("Pull animator on");
+
+
+            }
+
+            else if ((!isPullPressed) && isPulling)
+            {
+                animator.SetBool(isPullingHash, false);
+                //Debug.Log("Pull Animator off");
+            }
+        }
 
 
         public void HandleClimbingMovement()
         {
+
+            animator.SetBool(isPullingHash, true);
             // Move up if input is -1 climbing up
             if (playerScript.currentMovementInput.y == -1)
             {
                 rb.velocity = orientation.up * climbSpeed;
             }
                 
-            if(!playerScript.isPullPressed)
+            if(!isPullPressed)
             {
                 DropLadder();
             }
@@ -111,7 +163,8 @@ namespace Platformer
 
         private void DropLadder()
         {
-           // Debug.Log("Drop");
+            animator.SetBool(isPullingHash, false);
+            // Debug.Log("Drop");
             isClimbingLadder = false;
             player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0);
 
@@ -132,6 +185,7 @@ namespace Platformer
         public Transform orientation;
         public Vector3 offset;
 
+
         void DetectClimbable()
         {
             if (Physics.SphereCast(orientation.transform.position + orientation.forward + offset, sphereRadius, orientation.forward, out hit, maxDistance, climbableLayer))
@@ -140,7 +194,7 @@ namespace Platformer
                 // Store the hit information
                 lastHitNormal = hit.normal;
                 lastHit = hit.transform;
-
+                ClimableFound = true;
                 CheckForLadder();
             }
             else
@@ -149,7 +203,7 @@ namespace Platformer
 
                 lastHitNormal = Vector3.zero;
                 lastHit = null;
-
+                ClimableFound = false;
             }
 
             //Draws the max distance
@@ -165,10 +219,16 @@ namespace Platformer
         // Update is called once per frame
         void FixedUpdate()
         {
-            DetectClimbable();
+
 
             if (isClimbingLadder)
+            {
                 HandleClimbingMovement();
+            }
+            else
+            {
+                DetectClimbable();
+            }
         }
     }
 }

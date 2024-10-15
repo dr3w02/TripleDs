@@ -26,27 +26,24 @@ namespace Platformer
         public void Start()
         {
             MusicBoxCollider = GameObject.FindGameObjectWithTag(Music);
-
             Player = GameObject.FindGameObjectWithTag("Player").transform;
+
+            radialImage.fillAmount = 1;
         }
 
         private void OnTriggerStay(Collider other)
         {
-
             if (other.CompareTag("Player")) 
             {
                 if (InputManager.Instance.GetHold())
                 {
                     timer.MusicBoxWindUp();
-                    radialImage.fillAmount += Time.deltaTime * fillSpeed;
-
+                    //radialImage.fillAmount += Time.deltaTime * fillSpeed;
                 }
 
             }
-
-
             // Clamp fillAmount between 0 and 1
-            radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
+            //radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
         }
 
         private void OnTriggerExit(Collider other)
@@ -60,10 +57,7 @@ namespace Platformer
 
         void Update()
         {
-
             timer.MusicBoxWindDown();
-
-
         }
 
 

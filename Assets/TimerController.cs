@@ -17,7 +17,7 @@ namespace Platformer
         public OrphanWaypointFollow orphan1;
         public OrphanWaypointFollow orphan2;
         public OrphanWaypointFollow orphan3;
-        public OrphanWaypointFollow orphan4;
+  
         
         
     
@@ -45,13 +45,13 @@ namespace Platformer
                 orphan1.Sleeping();
                 orphan2.Sleeping();
                 orphan3.Sleeping();
-                orphan4.Sleeping();
+              
 
                 orphan.MusicPlay = true;
                 orphan1.MusicPlay = true;
                 orphan2.MusicPlay = true;
                 orphan3.MusicPlay = true;
-                orphan4.MusicPlay = true;
+            
 
 
             }
@@ -63,14 +63,14 @@ namespace Platformer
                 orphan1.Running();
                 orphan2.Running();
                 orphan3.Running();
-                orphan4.Running();
+              
 
 
                 orphan.MusicPlay = false;
                 orphan1.MusicPlay = false;
                 orphan2.MusicPlay = false;
                 orphan3.MusicPlay = false;
-                orphan4.MusicPlay = false;
+               
 
                 timeRemaining = 0;
             }
@@ -79,14 +79,8 @@ namespace Platformer
         // Update is called once per frame
         public void MusicBoxWindDown()
         {
-            
-      
-              timeRemaining -= Time.deltaTime;
-
-             timerRadial.fillAmount = timeRemaining / maxTime;
-            
-
-
+            timeRemaining -= Time.deltaTime;
+            timerRadial.fillAmount = timeRemaining / maxTime;
         }
 
     

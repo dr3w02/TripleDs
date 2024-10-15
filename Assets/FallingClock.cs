@@ -47,47 +47,34 @@ namespace Platformer
 
         private void Update()
         {
-
-          
             if (CamShake)
             {
                 ShakeCamera(shakeIntensity);
             }
-            else
-            {
-                perlinNoise.m_AmplitudeGain = 0f;
-            }
-
         }
 
         public void ShakeCamera(float intensity)
         {
-
             perlinNoise.m_AmplitudeGain = intensity;
-
-
         }
      
-
         private void OnTriggerExit(Collider other)
         {
             Debug.Log("in trigger");
             if (other.CompareTag("Player"))
             {
-
-
                 ClockAnim.SetBool("FallingClock", true);
-
                 tickingClock.Stop();
-
                 CamShake = true;
 
-
-                StartCoroutine(ShakeWait());
-
-
+                //StartCoroutine(ShakeWait());
                 //Destroy(ScriptableObject);
             }
+        }
+
+        public void StopShake()
+        {
+            perlinNoise.m_AmplitudeGain = 0f;
         }
 
         private IEnumerator ShakeWait()

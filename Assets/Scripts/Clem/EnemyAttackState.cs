@@ -106,9 +106,14 @@ namespace Platformer
 
 
                 enemy.respawn.RespawnPlayer();
-
+                Debug.Log("RespawnPlayer");
                 // Wait for the specified amount of time
                 yield return new WaitForSeconds(fadeWaitTime);
+                enemy.mCharacter.SetActive(true);
+
+                enemy.BlackBeackDeathCam.SetActive(false);
+                enemy.clemDeathCam.SetActive(false);
+
 
                 fadeOut = true;
                 while (fadeOut)

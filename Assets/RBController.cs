@@ -34,9 +34,9 @@ namespace Platformer
         [Header("AnimHash")]
         int isWalkingHash;
         int isRunningHash;
-        int isPullingHash;
+       
         int isSelectedHash;
-        public bool isPullPressed;
+       
         int isCrouchingHash;
 
         [Header("Jump")]
@@ -117,13 +117,7 @@ namespace Platformer
             isRunPressed = context.ReadValueAsButton();
         }
 
-        public void OnPull(InputAction.CallbackContext context)
-        {
-
-            isPullPressed = context.ReadValueAsButton();
-            // Debug.Log("PullPressed");
-
-        }
+      
 
 
         private void Awake()
@@ -136,7 +130,7 @@ namespace Platformer
             isRunningHash = Animator.StringToHash("isRunning");
             isJumpingHash = Animator.StringToHash("isJumping");
             isCrouchingHash = Animator.StringToHash("isCrouching");
-            isPullingHash = Animator.StringToHash("isPulling");
+
             isSelectedHash = Animator.StringToHash("isSelected");
             // isRopeHash = Animator.StringToHash("isRope");
             //isLadderHash = Animator.StringToHash("isLadder");
@@ -222,6 +216,7 @@ namespace Platformer
 
 
         public Vector2 currentMovementInput;
+
         public void Move()
         {
             if (characterClimb.isClimbingLadder)
@@ -282,7 +277,6 @@ namespace Platformer
             if (characterClimb.isClimbingLadder)
             {
                 characterClimb.HandleClimbingMovement();
-
 
             }
 
@@ -350,7 +344,7 @@ namespace Platformer
         {
             bool isWalking = animator.GetBool(isWalkingHash);
             bool isRunning = animator.GetBool(isRunningHash);
-            bool isPulling = animator.GetBool(isPullingHash);
+           
             bool isSelected = animator.GetBool(isSelectedHash);
 
             //Walking Controls-------------------------------
@@ -394,76 +388,18 @@ namespace Platformer
 
             }
 
-            else if ((!isSelectPressed) && isSelected || isMovementPressed || isMovementPressed || isRunPressed || isPullPressed || isCrouchPressed)
+            else if ((!isSelectPressed) && isSelected || isMovementPressed || isMovementPressed || isRunPressed || isCrouchPressed)
             {
                Debug.Log("E NOMORE");
                animator.SetBool(isSelectedHash, false);
             }
 
-            //Pulling Controls-------------------------------
-            if ((isPullPressed) && !isPulling)
-            {
-
-                animator.SetBool(isPullingHash, true);
-
-                //Debug.Log("Pull animator on");
-
-
-            }
-
-            else if ((!isPullPressed) && isPulling)
-            {
-                animator.SetBool(isPullingHash, false);
-                //Debug.Log("Pull Animator off");
-            }
+           
         }
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
-
             isCrouchPressed = context.ReadValueAsButton();
-
-            if (context.performed)
-            {
-                if (!isCrouching)
-                {
-                    Debug.Log("Crouch started");
-                    isCrouchPressed = true;
-
-                    StartCrouch();
-                }
-
-                else
-                {
-                    StopCrouch();
-                }
-              
-
-              
-            }
-           
-
-
-
-
-            // Toggle crouch state based on whether the player is currently crouching
-            // if (!isCrouching)
-            //{
-            //    isCrouchPressed = true;
-            ////    StartCrouch();  // Start crouching
-            //   Debug.Log("Crouch started");
-            //   return;
-            // }
-            // else
-            // {
-            //     isCrouchPressed = false;
-            //    StopCrouch();   // Stop crouching (stand up)
-            //     Debug.Log("Crouch stopped");
-            //     return;
-            // }
-
-
-
         }
 
 
@@ -477,60 +413,43 @@ namespace Platformer
 
         public void TurnOffMovement()
         {
-
-            
             CanMove = false;
         
         }
 
         private void StartCrouch()
         {
-            if (isCrouchPressed)
-            {
-                animator.SetBool(isCrouchingHash, true);
+            animator.SetBool(isCrouchingHash, true);
+            Debug.Log("Crouching");
 
-                Debug.Log("Crouching");
+            // Debug.Log("CrouchAnimator");
 
+            playersCapsuleCollider.height = playersCapsuleCollider.height + speed - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching
 
+            // Debug.Log("Crouched");
 
-                // Debug.Log("CrouchAnimator");
-
-                playersCapsuleCollider.height = playersCapsuleCollider.height + speed - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching
-
-                // Debug.Log("Crouched");
-
-                playersCapsuleCollider.height = crouchHeight;
-
-
-
-                isCrouching = true;
-
-            }
-
-
-
-            //if (isCrouchPressed && isCrouching)
-           // {
-//
-             //   animator.SetBool(isCrouchingHash, false);
-            //    Debug.Log("Stop Crouching");
-
-
-
-
-
-             //   playersCapsuleCollider.height = playersCapsuleCollider.height + speed + crouchSpeed * Time.deltaTime;
-
-
-             //   playersCapsuleCollider.height = normalHeight;
-             //   isCrouching = false;
-            //}
-
-
+            playersCapsuleCollider.height = crouchHeight;
+            //isCrouching = true;
         }
 
         private void handleCrouch()
         {
+            if (isCrouchPressed)
+            {
+                isCrouching = !isCrouching;
+                Debug.Log("Swapping crouch");
+                if (isCrouching)
+                {
+                    StartCrouch();
+                }
+                else
+                {
+                    StopCrouch();
+                }
+
+                isCrouchPressed = false;
+            }
+
             if (isCrouching)
             {
                 if (isMovementPressed)
@@ -546,26 +465,12 @@ namespace Platformer
         }
         private void StopCrouch()
         {
-            if (isCrouchPressed && isCrouching)
-            {
+            animator.SetBool(isCrouchingHash, false);
+            Debug.Log("Stop Crouching");
+            playersCapsuleCollider.height = playersCapsuleCollider.height + speed + crouchSpeed * Time.deltaTime;
 
-                animator.SetBool(isCrouchingHash, false);
-                Debug.Log("Stop Crouching");
-
-
-
-
-
-                playersCapsuleCollider.height = playersCapsuleCollider.height + speed + crouchSpeed * Time.deltaTime;
-
-
-                playersCapsuleCollider.height = normalHeight;
-                isCrouching = false;
-            }
-
-
-
-
+            playersCapsuleCollider.height = normalHeight;
+            //isCrouching = false;
         }
 
         public void SetGrounded(bool state)
