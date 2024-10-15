@@ -38,7 +38,7 @@ namespace Platformer
         [SerializeField] private float fadeWaitTime = 4f;
 
 
-        public characterMovement characterMain;
+        public RBController characterMain;
 
        
         public GameObject VentDeathCam;
