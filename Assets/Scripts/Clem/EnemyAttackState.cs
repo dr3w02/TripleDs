@@ -49,7 +49,7 @@ namespace Platformer
             if (enemy.CompareTag("EnemyBB"))
             {
                 agent.GetComponent<NavMeshAgent>().isStopped = true;
-                enemy.BlackBeackDeathCam.SetActive(true);
+                enemy.BlackBeackKillCam.SetActive(true);
 
             
 
@@ -105,14 +105,14 @@ namespace Platformer
                 }
 
 
-                enemy.respawn.RespawnPlayer();
-                Debug.Log("RespawnPlayer");
-                // Wait for the specified amount of time
-                yield return new WaitForSeconds(fadeWaitTime);
-                enemy.mCharacter.SetActive(true);
+         
+                //Debug.Log("RespawnPlayer");
+               // // Wait for the specified amount of time
+               // yield return new WaitForSeconds(fadeWaitTime);
+                //enemy.mCharacter.SetActive(true);
 
-                enemy.BlackBeackDeathCam.SetActive(false);
-                enemy.clemDeathCam.SetActive(false);
+               // enemy.BlackBeackKillCam.SetActive(false);
+                //enemy.clemDeathCam.SetActive(false);
 
 
                 fadeOut = true;

@@ -45,7 +45,7 @@ namespace Platformer
         public Vector3 lastHitNormal;
         Transform lastHit;
 
-
+        
 
         public Vector3 collision = Vector3.zero;
 
@@ -64,7 +64,7 @@ namespace Platformer
             PlayerPrefs.SetFloat("PlayerZR", player.transform.rotation.z);
         }
 
-        private void CheckForLadder()
+        public void CheckForLadder(Climbable c)
         {
             Debug.Log("LADDER - CHECKING FOR LADDER ");
             if (isPullPressed)
@@ -72,19 +72,21 @@ namespace Platformer
                 //Called once
                 if (!isClimbingLadder)
                 {
+                    playerScript.TurnOffMovement();
                     Debug.Log("Start Climbing");
 
-                    Vector3 lastHitPosition = lastHit.transform.position;
-                    Vector3 newPosition = lastHitPosition + ClimbOffset;
-                    player.transform.position = newPosition;
+                    player.SetParent(c.attachPoint);
+                    player.transform.localPosition = Vector3.zero;
+                    player.transform.rotation = c.attachPoint.rotation;
 
-                    Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles.normalized;
-                    float ladderXRotation = -ladderRotation.x;
+                    //Vector3 ladderRotation = lastHit.transform.rotation.eulerAngles.normalized;
+                    //float ladderXRotation = -ladderRotation.x;
 
-                    Vector3 currentRotation = player.transform.rotation.eulerAngles;
-                    player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, currentRotation.z).normalized;
+                    //Vector3 currentRotation = player.transform.rotation.eulerAngles;
+                    //player.transform.rotation = Quaternion.Euler(ladderXRotation, currentRotation.y, currentRotation.z).normalized;
 
                     isClimbingLadder = true;
+
                     HandleClimbingMovement();
 
                 }
@@ -161,12 +163,13 @@ namespace Platformer
             }
         }
 
-        private void DropLadder()
+        public void DropLadder()
         {
+            playerScript.Enabled();
             animator.SetBool(isPullingHash, false);
             // Debug.Log("Drop");
             isClimbingLadder = false;
-            player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0);
+            //player.transform.rotation = Quaternion.Euler(0, player.transform.rotation.y, 0);
 
             //player.transform.position = new Vector3(PlayerPrefs.GetFloat("PlayerX"), PlayerPrefs.GetFloat("PlayerY"), PlayerPrefs.GetFloat("PlayerZ"));
 
@@ -176,6 +179,10 @@ namespace Platformer
 
             //Quaternion playerRotation = Quaternion.Euler(playerXRotation, playerYRotation, playerZRotation);
             //player.transform.rotation = playerRotation;
+
+            player.parent = null;
+           
+
         }
 
         public float sphereRadius = 1.1f;
@@ -195,7 +202,7 @@ namespace Platformer
                 lastHitNormal = hit.normal;
                 lastHit = hit.transform;
                 ClimableFound = true;
-                CheckForLadder();
+                //CheckForLadder();
             }
             else
             {
@@ -219,16 +226,14 @@ namespace Platformer
         // Update is called once per frame
         void FixedUpdate()
         {
-
-
             if (isClimbingLadder)
             {
                 HandleClimbingMovement();
             }
-            else
-            {
-                DetectClimbable();
-            }
+            //else
+            //{
+            //    DetectClimbable();
+            //}
         }
     }
 }
