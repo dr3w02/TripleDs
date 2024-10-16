@@ -113,6 +113,12 @@ public class CameraChange : MonoBehaviour
 
                 break;
 
+            case "dorm":
+
+                c.dormLights.SetActive(true);
+
+                break;
+
                 //add cases
         }
     }

@@ -14,7 +14,7 @@ namespace Platformer
 
         [Header("CameraShake")]
         [SerializeField] private float shakeIntensity = 5f;
- 
+        public BoxCollider boxCollider;
 
         public CinemachineVirtualCamera VirtualCam;
         private CinemachineBasicMultiChannelPerlin perlinNoise;
@@ -66,6 +66,8 @@ namespace Platformer
                 ClockAnim.SetBool("FallingClock", true);
                 tickingClock.Stop();
                 CamShake = true;
+             
+                boxCollider.enabled = !boxCollider.enabled;
 
                 //StartCoroutine(ShakeWait());
                 //Destroy(ScriptableObject);
