@@ -89,6 +89,15 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hold"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f4383a6-f71f-4f3b-8cb2-8aa0e6d51f05"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -267,6 +276,17 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Pull"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""87de95d5-c8d6-4ac5-b7e2-cc75b6590754"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -282,6 +302,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         m_CharacterControls_Pull = m_CharacterControls.FindAction("Pull", throwIfNotFound: true);
         m_CharacterControls_Select = m_CharacterControls.FindAction("Select", throwIfNotFound: true);
         m_CharacterControls_MenuOpenClose = m_CharacterControls.FindAction("MenuOpenClose", throwIfNotFound: true);
+        m_CharacterControls_Hold = m_CharacterControls.FindAction("Hold", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -350,6 +371,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Pull;
     private readonly InputAction m_CharacterControls_Select;
     private readonly InputAction m_CharacterControls_MenuOpenClose;
+    private readonly InputAction m_CharacterControls_Hold;
     public struct CharacterControlsActions
     {
         private @CustomInputs m_Wrapper;
@@ -361,6 +383,7 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         public InputAction @Pull => m_Wrapper.m_CharacterControls_Pull;
         public InputAction @Select => m_Wrapper.m_CharacterControls_Select;
         public InputAction @MenuOpenClose => m_Wrapper.m_CharacterControls_MenuOpenClose;
+        public InputAction @Hold => m_Wrapper.m_CharacterControls_Hold;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -391,6 +414,9 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @MenuOpenClose.started += instance.OnMenuOpenClose;
             @MenuOpenClose.performed += instance.OnMenuOpenClose;
             @MenuOpenClose.canceled += instance.OnMenuOpenClose;
+            @Hold.started += instance.OnHold;
+            @Hold.performed += instance.OnHold;
+            @Hold.canceled += instance.OnHold;
         }
 
         private void UnregisterCallbacks(ICharacterControlsActions instance)
@@ -416,6 +442,9 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
             @MenuOpenClose.started -= instance.OnMenuOpenClose;
             @MenuOpenClose.performed -= instance.OnMenuOpenClose;
             @MenuOpenClose.canceled -= instance.OnMenuOpenClose;
+            @Hold.started -= instance.OnHold;
+            @Hold.performed -= instance.OnHold;
+            @Hold.canceled -= instance.OnHold;
         }
 
         public void RemoveCallbacks(ICharacterControlsActions instance)
@@ -442,5 +471,6 @@ public partial class @CustomInputs: IInputActionCollection2, IDisposable
         void OnPull(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
         void OnMenuOpenClose(InputAction.CallbackContext context);
+        void OnHold(InputAction.CallbackContext context);
     }
 }

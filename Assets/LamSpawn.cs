@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 namespace Platformer
 {
@@ -24,7 +25,6 @@ namespace Platformer
         [SerializeField] public CanvasGroup myUIGroup;
         [SerializeField] private float fadeWaitTime = 4f;
 
-        [SerializeField] private float WaitTime = 2f;
 
 
         void Start()
@@ -63,11 +63,18 @@ namespace Platformer
 
                 DeathCamBB.SetActive(true);
 
+                StartCoroutine(WaitTime());
+
                 BlackBeakAnim.SetBool("Die", true);
 
-                StartCoroutine(WaitBetweenFadeInOut());
+               
             }
 
+        }
+
+        public IEnumerator WaitTime()
+        {
+            yield return new WaitForSeconds(3f);
         }
 
         public IEnumerator WaitBetweenFadeInOut()
@@ -98,6 +105,7 @@ namespace Platformer
             //RESET PLAYER POSTION AND TURN OFF SLEEP HERE
 
 
+            SceneManager.LoadScene("EndCredits");
 
             yield return new WaitForSeconds(fadeWaitTime);
 
