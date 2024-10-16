@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Platformer
 {
@@ -19,17 +20,26 @@ namespace Platformer
         public GameObject _startingPointGameobject;
 
 
+        public Animator AnimCharacter;
+
         private const string SAVE_CHECKPOINT_INDEX = "Last_checkpoint_index";
 
         public RBController playerscript;
         public Rigidbody _rigidbody;
 
-        
+        public bool wakeup;
+
         private void Awake()
         {
             loadCheckPoints();
             Debug.LogWarning("CheckpointScript");
+
+            if (Input.anyKeyDown)
+            {
+                wakeup = true;
+            }
         }
+    
 
 
         // Start is called before the first frame update
@@ -38,8 +48,17 @@ namespace Platformer
             savedCheckpointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
             if (savedCheckpointIndex != -1)
             {
+               // playerscript.TurnOffMovement();
                 _startingPoint = _checkPointsArray[savedCheckpointIndex].transform.position;
+
                 _startingPointGameobject = _checkPointsArray[savedCheckpointIndex];
+
+
+                AnimCharacter.SetBool("isWakeUp", true);
+
+                StartCoroutine(WaitTime());
+
+
             }
             else
             {
@@ -53,7 +72,14 @@ namespace Platformer
         }
 
 
-       
+        private IEnumerator WaitTime()
+        {
+            yield return new WaitForSeconds(6f);
+            AnimCharacter.SetBool("isWakeUp", false); 
+            playerscript.Enabled();
+            
+
+        }
 
         
         // Update is called once per frame
