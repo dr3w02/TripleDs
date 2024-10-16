@@ -21,12 +21,14 @@ namespace Platformer
 
         public ScrewDriver screw;
 
+        public GameObject ScrewDriverInHand;
         public Respawn respawn;
+        public RBController mainPlayerScript;
 
         public Collider ventOutskirts;
 
         public Collider VentColliderTrigger;
-       
+
 
 
         [SerializeField] private float WaitTime = 20f;
@@ -40,7 +42,7 @@ namespace Platformer
 
         public RBController characterMain;
 
-       
+
         public GameObject VentDeathCam;
 
         public AudioSource ventFan;
@@ -55,16 +57,16 @@ namespace Platformer
         {
             VentFixed.SetActive(true);
             VentAnim.SetBool("VentSpin", true);
-          
+
             VentAnim.SetBool("Dead", false);
 
             ventOutskirts.isTrigger = false;
-            
+
             VentBroken.SetActive(false);
             PlayerDead.SetActive(false);
             VentDeathCam.SetActive(false);
 
-           // ventOutskirts = GetComponent<Collider>();
+            // ventOutskirts = GetComponent<Collider>();
 
 
         }
@@ -84,7 +86,7 @@ namespace Platformer
                     VentDeathCam.SetActive(false);
                     screw.holdingScrew.gameObject.SetActive(true);
                     ventFan.Stop();
-
+                    ScrewDriverInHand.SetActive(false);
                     if (!hasVentBreak1Played)
                     {
                         ventBreak1.Play();
@@ -108,12 +110,17 @@ namespace Platformer
                     VentAnim.SetBool("Dead", true);
                     VentAnim.SetBool("VentSpin", true);
                     mCharacter.SetActive(false);
-
+                    mainPlayerScript.TurnOffMovement();
 
                     PlayerDead.SetActive(true);
 
-                    StartCoroutine(WaitBetweenFadeInOut());
                     playerVentDeath.Play();
+
+                    StartCoroutine(WaitBetweenFadeInOut());
+
+
+
+
                 }
 
             }
@@ -122,7 +129,7 @@ namespace Platformer
 
         }
 
-       
+
 
 
         public IEnumerator WaitBetweenFadeInOut()
@@ -151,6 +158,7 @@ namespace Platformer
             }
 
             respawn.RespawnPlayer();
+            Debug.Log("Respawn");
 
             //mCharacter.SetActive(false);
             // Wait for the specified amount of time
@@ -187,3 +195,4 @@ namespace Platformer
 
     }
 }
+

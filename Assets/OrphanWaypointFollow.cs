@@ -9,10 +9,11 @@ using UnityEngine.UIElements.Experimental;
 
 namespace Platformer
 {
+
     public class OrphanWaypointFollow : MonoBehaviour
     {
         public List<GameObject> waypointsOrphan;
-    
+        public GameObject FlashLightGround;
         public float speed = 2;
         int index = 0;
         public bool isLoop = true;
@@ -25,8 +26,8 @@ namespace Platformer
         public Transform player;
         // Physical GameObject
         public GameObject mCharacter;/// <summary>
-        /// //check you!!!!!!!!!!!!!!!!!!!!!!!!
-        /// </summary>
+                                     /// //check you!!!!!!!!!!!!!!!!!!!!!!!!
+                                     /// </summary>
         // Script
         public RBController characterMain;
         // Player
@@ -47,10 +48,11 @@ namespace Platformer
 
         public bool Chase;
 
+        public GameObject LightOn;
         public Respawn respawn;
         // Music Box Logic
         public bool MusicPlay;
-    
+
         bool alreadyAttacked;
 
         public void Start()
@@ -64,7 +66,7 @@ namespace Platformer
         void Update()
         {
 
-           
+
             if (MusicPlay)
             {
                 Sleeping();
@@ -80,11 +82,11 @@ namespace Platformer
 
             if (!MusicPlay && PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer())
             {
-                    running = false; // Stop running and start chasing
-                    Chase = true;
-                    Chasing();
-                    Debug.Log("CHASING");
-                   
+                running = false; // Stop running and start chasing
+                Chase = true;
+                Chasing();
+                Debug.Log("CHASING");
+
             }
 
 
@@ -94,14 +96,14 @@ namespace Platformer
                 running = false;
                 AttackPlayer();
                 Debug.Log("CATTACKINGHH");
-               
+
             }
 
             else if (!MusicPlay && !PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer())
             {
                 Debug.Log("Running");
                 running = true;
-                
+
             }
 
 
@@ -173,14 +175,14 @@ namespace Platformer
                 Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
                 orphan.transform.rotation = Quaternion.RotateTowards(orphan.transform.rotation, targetRotation, Time.deltaTime * 300f);
             }
-            
+
         }
 
-     
+
 
         public void Chasing()
         {
-            if  (Chase == true)
+            if (Chase == true)
             {
                 if (player == null || orphanAnim == null || orphan == null)
                 {
@@ -204,7 +206,7 @@ namespace Platformer
                 Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
                 orphan.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, Time.deltaTime * 300f);
             }
-           
+
 
 
             if (!alreadyAttacked)
@@ -220,24 +222,26 @@ namespace Platformer
         public void AttackPlayer()
         {
 
-                
-             OrphanDeathCam.SetActive(false);
+            LightOn.SetActive(true);
 
-             characterMain.TurnOffMovement();
+            OrphanDeathCam.SetActive(false);
 
-             orphanAnim.SetBool("Attack", true);
+            characterMain.TurnOffMovement();
 
-             orphanAnim.SetBool("RunFWD", false);
-                
-             OrphanDeathCam.SetActive(true);
+            orphanAnim.SetBool("Attack", true);
 
-             FourtySix.SetActive(true);
+            orphanAnim.SetBool("RunFWD", false);
 
-             StartCoroutine(WaitBetweenFadeInOut());
+            OrphanDeathCam.SetActive(true);
 
-             ///Debug.Log("Switch Camera");
-            
+            FourtySix.SetActive(true);
+
+            StartCoroutine(WaitBetweenFadeInOut());
+
+            ///Debug.Log("Switch Camera");
+
         }
+
 
         public IEnumerator WaitBetweenFadeInOut()
         {
@@ -245,9 +249,9 @@ namespace Platformer
             mCharacter.SetActive(false);
             yield return new WaitForSeconds(WaitTime);
 
-            
 
-           // Debug.Log("Switch Camera");
+
+            // Debug.Log("Switch Camera");
 
             fadeIn = true;
 
@@ -265,7 +269,9 @@ namespace Platformer
             }
 
             respawn.RespawnPlayer();
+            FlashLightGround.SetActive(true);
             FourtySix.SetActive(false);
+            LightOn.SetActive(false);
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
 
@@ -291,7 +297,7 @@ namespace Platformer
         private void ResetAttack()
         {
             alreadyAttacked = false;
-           
+
         }
     }
 }

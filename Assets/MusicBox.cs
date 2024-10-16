@@ -38,12 +38,12 @@ namespace Platformer
                 if (InputManager.Instance.GetHold())
                 {
                     timer.MusicBoxWindUp();
-                    //radialImage.fillAmount += Time.deltaTime * fillSpeed;
+                    radialImage.fillAmount += Time.deltaTime * fillSpeed;
                 }
 
             }
             // Clamp fillAmount between 0 and 1
-            //radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
+            radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
         }
 
         private void OnTriggerExit(Collider other)
