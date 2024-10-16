@@ -50,6 +50,15 @@ namespace Platformer
            
         }
 
+        private void OnHoldPerformed(InputAction.CallbackContext context)
+        {
+            isHolding = true;
+        }
+
+        private void OnHoldCanceled(InputAction.CallbackContext context)
+        {
+            isHolding = false;
+        }
 
         public bool Holding()
         {
@@ -60,20 +69,20 @@ namespace Platformer
         {
             if (other.CompareTag("Player"))
             {
-                if (RBController.Instance.GetHold())
-                {
-                    Debug.Log("Holding");
+               // //if (RBController.Instance.GetHold())
+                //{
+                 //   Debug.Log("Holding");
                     // Wind up the music box
-                    timer.MusicBoxWindUp();
-                    radialImage.fillAmount += Time.deltaTime * fillSpeed / maxTime;
-                }
+                 //   timer.MusicBoxWindUp();
+                 //   radialImage.fillAmount += Time.deltaTime * fillSpeed / maxTime;
+               // }
 
-                // If the player isn't holding then wind down music box 
-                else
-                {
-                    radialImage.fillAmount -= Time.deltaTime * fillSpeed / maxTime;
-                    radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
-                }
+               // // If the player isn't holding then wind down music box 
+                //else
+                //{
+                //    radialImage.fillAmount -= Time.deltaTime * fillSpeed / maxTime;
+                 //   radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
+               // }
             }
 
             // Clamp fillAmount between 0 and 1

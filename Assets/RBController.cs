@@ -479,15 +479,7 @@ namespace Platformer
         }
 
 
-        private void OnHoldPerformed(InputAction.CallbackContext context)
-        {
-            isHolding = true;
-        }
-
-        private void OnHoldCanceled(InputAction.CallbackContext context)
-        {
-            isHolding = false;
-        }
+    
 
 
 
