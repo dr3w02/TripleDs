@@ -102,7 +102,6 @@ namespace Platformer
             Bosscam.SetActive(false);
             BB.SetActive(false);
 
-
             CamShake = false;
 
             if (VirtualCam != null)
@@ -196,14 +195,19 @@ namespace Platformer
 
                 StartCoroutine(SleepWait());
                 StartCoroutine(WaitBetweenFadeInOut());
+                StartCoroutine(BossMusicStart());
 
                 movePlayer = false;
 
                
             }
+        }
 
+        private IEnumerator BossMusicStart()
+        {
+            yield return new WaitForSeconds(5f);
 
-
+            bossMusic.Play();
         }
 
         public bool Interact(Interactor interactor)
@@ -268,11 +272,7 @@ namespace Platformer
                     PlayingAnim = false;
 
                     BlackBeakAnim.SetBool("walking", false);
-
-                 
-
                     BlackBeakAnim.SetBool("Evil", true);
-
 
 
                     StartCoroutine(WaitForAnimationPlayShakeCam());
@@ -336,7 +336,6 @@ namespace Platformer
             yield return new WaitForSeconds(WaitTime);
 
 
-
             Debug.Log("Switch Camera");
 
             fadeIn = true;
@@ -385,7 +384,7 @@ namespace Platformer
 
         public IEnumerator ResetForFight()
         {
-            
+
             StartCoroutine(WaitBetweenFadeInOut());
 
 
@@ -408,7 +407,7 @@ namespace Platformer
 
             Reset = false;
 
- 
+
 
 
         }
