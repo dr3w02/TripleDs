@@ -91,6 +91,9 @@ namespace Platformer
 
         public bool Reset;
 
+        [Header("Audio")]
+        public AudioSource bossMusic;
+
         public void Start()
         {
 
