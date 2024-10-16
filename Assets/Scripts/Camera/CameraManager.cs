@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
     public CinemachineVirtualCamera ActiveCamera = null;
     [Space]
 
-    public GameObject atticLights, bathroomLights, hallwaysLights, nurseLights, classroomLights, libraryLights, ventLights, kitchenLights; //add rest 
+    public GameObject atticLights, bathroomLights, hallwaysLights, nurseLights, classroomLights, libraryLights, ventLights, kitchenLights, dormLights; //add rest 
 
     private void Awake()
     {
@@ -47,6 +47,7 @@ public class CameraManager : MonoBehaviour
         libraryLights.SetActive(false);
         ventLights.SetActive(false);
         kitchenLights.SetActive(false);
+        dormLights.SetActive(false);
 
         //add all the others
     }

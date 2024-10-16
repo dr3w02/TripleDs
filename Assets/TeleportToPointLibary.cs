@@ -15,9 +15,9 @@ namespace Platformer
         {
             climbable.canClimb = false;
             player.transform.position = PointAfterClimb.transform.position;
-                ladder.DropLadder();
-            
-        
+            ladder.DropLadder();
+
+
         }
         
 

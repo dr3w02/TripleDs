@@ -36,16 +36,14 @@ namespace Platformer
         private void OnEnable()
         {
 
-      
-
-            customInputs.CharacterControls.Hold.performed += OnHoldPerformed;
-            customInputs.CharacterControls.Hold.canceled += OnHoldCanceled;
+           // customInputs.CharacterControls.Hold.performed += OnHoldPerformed;
+            //customInputs.CharacterControls.Hold.canceled += OnHoldCanceled;
         }
         private void OnDisable()
         {
-            // Unsubscribe from the "Hold" action event and disable input actions
-            customInputs.CharacterControls.Hold.performed -= OnHoldPerformed;
-            customInputs.CharacterControls.Hold.canceled -= OnHoldCanceled;
+           // // Unsubscribe from the "Hold" action event and disable input actions
+           // customInputs.CharacterControls.Hold.performed -= OnHoldPerformed;
+           // customInputs.CharacterControls.Hold.canceled -= OnHoldCanceled;
 
            
         }
@@ -69,19 +67,19 @@ namespace Platformer
         {
             if (other.CompareTag("Player"))
             {
-               // //if (RBController.Instance.GetHold())
-                //{
-                 //   Debug.Log("Holding");
-                    // Wind up the music box
-                 //   timer.MusicBoxWindUp();
-                 //   radialImage.fillAmount += Time.deltaTime * fillSpeed / maxTime;
-               // }
+               // if (RBController.Instance.GetHold())
+              ///  {
+               //    Debug.Log("Holding");
+                  //Wind up the music box
+               //     timer.MusicBoxWindUp();
+               //     radialImage.fillAmount += Time.deltaTime * fillSpeed / maxTime;
+              //  }
 
-               // // If the player isn't holding then wind down music box 
-                //else
-                //{
+               // If the player isn't holding then wind down music box 
+              // else
+              //  {
                 //    radialImage.fillAmount -= Time.deltaTime * fillSpeed / maxTime;
-                 //   radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
+                //    radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
                // }
             }
 
