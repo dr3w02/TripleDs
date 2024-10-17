@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using static UnityEngine.InputSystem.Controls.AxisControl;
 
 namespace Platformer
 {
@@ -25,9 +26,10 @@ namespace Platformer
             public GameObject Player;
             public bool isZoomedIn;
 
+        public bool ResetBossFight;
+        public LamSpawn lampSpawn;
 
-
-            [Header("Fade")]
+        [Header("Fade")]
 
         [SerializeField] private bool fadeIn = false;
         [SerializeField] private bool fadeOut = true;
@@ -78,7 +80,7 @@ namespace Platformer
       
         public Transform B;
 
-
+        public BoxCollider BoxColliderForAnim;
 
 
         [Header("Animators")]
@@ -90,7 +92,7 @@ namespace Platformer
         public bool movePlayer;
 
         public bool Reset;
-
+       
         [Header("Audio")]
         public AudioSource bossMusic;
 
@@ -150,6 +152,11 @@ namespace Platformer
             if (Reset)
             {
                StartCoroutine(ResetForFight());
+            }
+
+            if (ResetBossFight)
+            {
+                ResetWholeBossFight();
             }
 
 
@@ -331,7 +338,7 @@ namespace Platformer
 
         public IEnumerator WaitBetweenFadeInOut()
         {
-
+            BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
             //mCharacter.SetActive(false);
             yield return new WaitForSeconds(WaitTime);
 
@@ -412,6 +419,15 @@ namespace Platformer
 
         }
 
+
+
+       
+        public void ResetWholeBossFight()
+        {
+            BoxColliderForAnim.enabled = BoxColliderForAnim.enabled;
+            lampSpawn.resetAllLamps = true;
+            BB.SetActive(false);
+        }
     }
 }
 

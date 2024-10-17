@@ -39,6 +39,7 @@ public class CameraManager : MonoBehaviour
 
     public void TurnAllTheLightsOff()
     {
+        Debug.Log("All Off");
         atticLights.SetActive(false);
         bathroomLights.SetActive(false);
         hallwaysLights.SetActive(false);
@@ -54,21 +55,21 @@ public class CameraManager : MonoBehaviour
 
     //public void ResetCamera(CinemachineVirtualCamera camera)
     //{
-        //foreach (CinemachineVirtualCamera c in cameras)
-        //{
-         //   if (c == camera)
-          //  {
+    //foreach (CinemachineVirtualCamera c in cameras)
+    //{
+    //   if (c == camera)
+    //  {
 
-               // c.Priority = 0;
+    // c.Priority = 0;
 
-           // }
-      
-       // }
-   
+    // }
 
-  //  }
+    // }
 
-        public void Register(CinemachineVirtualCamera camera)
+
+    //  }
+
+    public void Register(CinemachineVirtualCamera camera)
         {
 
         cameras.Add(camera);

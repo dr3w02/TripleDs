@@ -48,7 +48,7 @@ namespace Platformer
             savedCheckpointIndex = PlayerPrefs.GetInt(SAVE_CHECKPOINT_INDEX, -1);
             if (savedCheckpointIndex != -1)
             {
-               // playerscript.TurnOffMovement();
+               playerscript.TurnOffMovement();
                 _startingPoint = _checkPointsArray[savedCheckpointIndex].transform.position;
 
                 _startingPointGameobject = _checkPointsArray[savedCheckpointIndex];
@@ -74,7 +74,7 @@ namespace Platformer
 
         private IEnumerator WaitTime()
         {
-            yield return new WaitForSeconds(6f);
+            yield return new WaitForSeconds(4f);
             AnimCharacter.SetBool("isWakeUp", false); 
             playerscript.Enabled();
             

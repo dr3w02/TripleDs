@@ -13,9 +13,14 @@ namespace Platformer
         public Climbable climbable;
         public void OnTriggerEnter(Collider other)
         {
-            climbable.canClimb = false;
-            player.transform.position = PointAfterClimb.transform.position;
-            ladder.DropLadder();
+
+            if (ladder.isPullPressed)
+            {
+                climbable.canClimb = false;
+                player.transform.position = PointAfterClimb.transform.position;
+                ladder.DropLadder();
+            }
+           
 
 
         }

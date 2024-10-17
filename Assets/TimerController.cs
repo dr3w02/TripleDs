@@ -10,22 +10,24 @@ namespace Platformer
     {
         public UnityEngine.UI.Image timerRadial;
 
-        float timeRemaining;
+        public float timeRemaining;
        
 
         public OrphanWaypointFollow orphan;
         public OrphanWaypointFollow orphan1;
         public OrphanWaypointFollow orphan2;
         public OrphanWaypointFollow orphan3;
-  
-        
-        
+
+
+        public MusicBox musicbox;
     
 
-        public float maxTime = 20.0f;
+        public float maxTime;
 
-    
 
+        public MusicBoxMusic music;
+
+     
 
         void Start()
         {
@@ -73,29 +75,33 @@ namespace Platformer
                
 
                 timeRemaining = 0;
+
+               
             }
 
         }
         // Update is called once per frame
         public void MusicBoxWindDown()
         {
-            //timeRemaining -= Time.deltaTime;
-            //timerRadial.fillAmount = timeRemaining / maxTime;
+            music.audioDownPlay = false;
+            timeRemaining -= Time.deltaTime;
+            timerRadial.fillAmount = timeRemaining / maxTime;
         }
 
     
         public void MusicBoxWindUp()
         {
-   
-            //timeRemaining += Time.deltaTime;
+            music.audioDownPlay = true;
 
-            //if (timeRemaining > maxTime)
-            //{
-            //   timeRemaining = maxTime;
-            //}
+            timeRemaining += Time.deltaTime;
+
+           if (timeRemaining > maxTime)
+           {
+               timeRemaining = maxTime;
+           }
 
 
-            // timerRadial.fillAmount = timeRemaining / maxTime;
+             timerRadial.fillAmount = timeRemaining / maxTime;
          
           
         }

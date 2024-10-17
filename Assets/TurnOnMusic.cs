@@ -9,6 +9,7 @@ namespace Platformer
         public GameObject MusicPrefab;
         public GameObject MusicBoxParent;
         public GameObject TimerController;
+      
 
         private void OnTriggerEnter(Collider other)
         {
@@ -29,5 +30,10 @@ namespace Platformer
             MusicPrefab.SetActive(true);
             MusicBoxParent.SetActive(true);
         }
+
+        
+
+
+
     }
 }

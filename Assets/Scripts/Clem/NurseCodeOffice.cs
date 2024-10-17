@@ -19,7 +19,7 @@ namespace Platformer
 
         
        
-
+       public FinalBossAnim ResetBossFight;
 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 

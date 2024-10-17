@@ -44,6 +44,7 @@ namespace Platformer
         {
 
             character = other.GetComponent<ClimbingCharacter>();
+            character.DropLadder();
             canClimb = false;
             
         }

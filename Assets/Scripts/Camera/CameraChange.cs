@@ -58,6 +58,8 @@ public class CameraChange : MonoBehaviour
 
     void HandleLightChange()
     {
+
+
         CameraManager c = CameraManager.cameraInstance;
         c.TurnAllTheLightsOff();
 
@@ -65,7 +67,7 @@ public class CameraChange : MonoBehaviour
         {
             case "attic":
 
-               c.atticLights.SetActive(true);
+                c.atticLights.SetActive(true);
                 //if there are other rooms you want to leave lights on add them here
 
                 break;
@@ -98,7 +100,7 @@ public class CameraChange : MonoBehaviour
             case "library":
 
                 c.libraryLights.SetActive(true);
-
+                Debug.Log("Turn library on");
                 break;
 
             case "vent":

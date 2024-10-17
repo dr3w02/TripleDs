@@ -28,6 +28,8 @@ namespace Platformer
         public GameObject mCharacter;/// <summary>
                                      /// //check you!!!!!!!!!!!!!!!!!!!!!!!!
                                      /// </summary>
+                                     /// 
+        
         // Script
         public RBController characterMain;
         // Player
@@ -54,6 +56,10 @@ namespace Platformer
         public bool MusicPlay;
 
         bool alreadyAttacked;
+        public TimerController timer;
+        public TurnOnMusic music;
+        public bool DeadReset;
+
 
         public void Start()
         {
@@ -62,6 +68,22 @@ namespace Platformer
             FourtySix.SetActive(false);
         }
 
+        public void Reset()
+        {
+           // if (DeadReset)
+            //{
+              //  //Music Reset
+              //  music.MusicPrefab.SetActive(false);
+              //  music.MusicBoxParent.SetActive(false);
+              //  music.TimerController.SetActive(false);
+                //Timer Reset
+              //  timer.timeRemaining = timer.maxTime;
+
+             //   DeadReset = false;
+           // }
+
+    
+        }
         // Update is called once per frame
         void Update()
         {
@@ -92,10 +114,14 @@ namespace Platformer
 
             else if (!MusicPlay && PlayerDect.CanDetectPlayer() && PlayerDect.CanAttackPlayer())
             {
-                Chase = false;
-                running = false;
-                AttackPlayer();
-                Debug.Log("CATTACKINGHH");
+               
+                
+                    Chase = false;
+                    running = false;
+                    AttackPlayer();
+                    Debug.Log("CATTACKINGHH");
+           
+               
 
             }
 
@@ -218,9 +244,11 @@ namespace Platformer
                 ResetAttack();
             }
         }
+       
 
         public void AttackPlayer()
         {
+           
 
             LightOn.SetActive(true);
 
@@ -239,7 +267,7 @@ namespace Platformer
             StartCoroutine(WaitBetweenFadeInOut());
 
             ///Debug.Log("Switch Camera");
-
+            DeadReset = true;
         }
 
 
@@ -297,6 +325,7 @@ namespace Platformer
         private void ResetAttack()
         {
             alreadyAttacked = false;
+           
 
         }
     }

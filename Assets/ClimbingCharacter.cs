@@ -75,6 +75,9 @@ namespace Platformer
                     playerScript.TurnOffMovement();
                     Debug.Log("Start Climbing");
 
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+
                     player.SetParent(c.attachPoint);
                     player.transform.localPosition = Vector3.zero;
                     player.transform.rotation = c.attachPoint.rotation;
