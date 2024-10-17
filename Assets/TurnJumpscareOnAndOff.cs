@@ -4,9 +4,20 @@ using UnityEngine;
 
 namespace Platformer
 {
+  
     public class TurnJumpscareOnAndOff : MonoBehaviour
     {
+        public bool ClemsGone;
         public GameObject door;
+
+
+        private void Update()
+        {
+            if (ClemsGone)
+            {
+                door.SetActive(false);
+            }
+        }
         public void OnTriggerEnter(Collider other)
         {
             door.SetActive(false);  
@@ -14,7 +25,11 @@ namespace Platformer
 
         public void OnTriggerExit(Collider other)
         {
-            door.SetActive(true);
+            if (!ClemsGone)
+            {
+                door.SetActive(true);
+            }
+           
         }
     }
 }

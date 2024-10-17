@@ -1,3 +1,4 @@
+using Platformer;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.ReorderableList;
@@ -11,7 +12,7 @@ public class ClemFirstLook : MonoBehaviour
     public GameObject Clem;
     public GameObject DoorClose;
     [SerializeField] private Animator myAnimationController;
-
+    public TurnJumpscareOnAndOff doorOnOff;
     public Transform A;
     public Transform B;
 
@@ -33,15 +34,11 @@ public class ClemFirstLook : MonoBehaviour
         if (other.CompareTag("Player"))
         {
 
-           
-            DoorClose.SetActive(true);
-         
-
             Grone.Play();
 
             moving = true;
 
-
+            
 
         }
 
@@ -58,6 +55,9 @@ public class ClemFirstLook : MonoBehaviour
         {
             myAnimationController.SetBool("ClemMove", false);
             myAnimationController.SetBool("ClemIdel", true);
+
+
+           
         }
 
     }
@@ -80,6 +80,11 @@ public class ClemFirstLook : MonoBehaviour
             Clem.transform.position = Vector3.MoveTowards(Clem.transform.position, destination, speed * Time.deltaTime);
             Clem.transform.rotation = targetRotation;
 
+        }
+        if (Vector3.Distance(Clem.transform.position, destination) != 0f)
+        {
+            doorOnOff.ClemsGone = true;
+            DoorClose.SetActive(true);
         }
 
         else 

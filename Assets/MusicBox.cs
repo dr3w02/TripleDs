@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 namespace Platformer
 {
@@ -19,7 +20,7 @@ namespace Platformer
         public float maxTime = 30.0f; // change here u gotta change the other one on timer
 
         public GameObject MusicBoxCollider;
-
+        bool playerInRange;
         string Music = "MusicBox";
 
         public Transform Player { get; private set; }
@@ -31,29 +32,29 @@ namespace Platformer
             Player = GameObject.FindGameObjectWithTag("Player").transform;
 
             radialImage.fillAmount = 1;
+
+            customInputs = new CustomInputs();
+            customInputs.CharacterControls.Hold.performed += OnHoldPerformed;
+            customInputs.CharacterControls.Select.canceled += OnHoldCanceled;
+            customInputs.Enable();
         }
 
-        private void OnEnable()
-        {
 
-           // customInputs.CharacterControls.Hold.performed += OnHoldPerformed;
-            //customInputs.CharacterControls.Hold.canceled += OnHoldCanceled;
-        }
         private void OnDisable()
         {
            // // Unsubscribe from the "Hold" action event and disable input actions
-           // customInputs.CharacterControls.Hold.performed -= OnHoldPerformed;
-           // customInputs.CharacterControls.Hold.canceled -= OnHoldCanceled;
+           customInputs.CharacterControls.Hold.performed -= OnHoldPerformed;
+           customInputs.CharacterControls.Hold.canceled -= OnHoldCanceled;
 
            
         }
 
-        private void OnHoldPerformed(InputAction.CallbackContext context)
+        public void OnHoldPerformed(InputAction.CallbackContext context)
         {
             isHolding = true;
         }
 
-        private void OnHoldCanceled(InputAction.CallbackContext context)
+        public void OnHoldCanceled(InputAction.CallbackContext context)
         {
             isHolding = false;
         }
@@ -65,26 +66,15 @@ namespace Platformer
 
         private void OnTriggerStay(Collider other)
         {
+
+        }
+        private void OnTriggerEnter(Collider other)
+        {
             if (other.CompareTag("Player"))
             {
-               // if (RBController.Instance.GetHold())
-              ///  {
-               //    Debug.Log("Holding");
-                  //Wind up the music box
-               //     timer.MusicBoxWindUp();
-               //     radialImage.fillAmount += Time.deltaTime * fillSpeed / maxTime;
-              //  }
-
-               // If the player isn't holding then wind down music box 
-              // else
-              //  {
-                //    radialImage.fillAmount -= Time.deltaTime * fillSpeed / maxTime;
-                //    radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
-               // }
+                playerInRange = true;
             }
 
-            // Clamp fillAmount between 0 and 1
-            radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
         }
 
         private void OnTriggerExit(Collider other)
@@ -92,6 +82,7 @@ namespace Platformer
             if (other.CompareTag("Player"))
             {
                 timer.MusicBoxWindDown();
+                playerInRange = false;
             }
 
         }
@@ -99,8 +90,24 @@ namespace Platformer
         void Update()
         {
             timer.MusicBoxWindDown();
+            if (playerInRange && isHolding)
+            {
+                Debug.Log("Holding");
+                // Wind up the music box
+                timer.MusicBoxWindUp();
+                radialImage.fillAmount += Time.deltaTime * fillSpeed / maxTime;
+            }
+            else
+            {
+                // If the player isn't holding then wind down music box 
 
-           
+                radialImage.fillAmount -= Time.deltaTime * fillSpeed / maxTime;
+                radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
+
+            }
+            // Clamp fillAmount between 0 and 1
+            radialImage.fillAmount = Mathf.Clamp01(radialImage.fillAmount);
+
         }
 
      

@@ -79,23 +79,23 @@ namespace Platformer
         // Update is called once per frame
         public void MusicBoxWindDown()
         {
-            timeRemaining -= Time.deltaTime;
-            timerRadial.fillAmount = timeRemaining / maxTime;
+            //timeRemaining -= Time.deltaTime;
+            //timerRadial.fillAmount = timeRemaining / maxTime;
         }
 
     
         public void MusicBoxWindUp()
         {
    
-            timeRemaining += Time.deltaTime;
+            //timeRemaining += Time.deltaTime;
 
-            if (timeRemaining > maxTime)
-            {
-               timeRemaining = maxTime;
-            }
+            //if (timeRemaining > maxTime)
+            //{
+            //   timeRemaining = maxTime;
+            //}
 
 
-             timerRadial.fillAmount = timeRemaining / maxTime;
+            // timerRadial.fillAmount = timeRemaining / maxTime;
          
           
         }
