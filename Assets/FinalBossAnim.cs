@@ -334,7 +334,7 @@ namespace Platformer
             Debug.Log("RESET");
             StartCoroutine(WaitBetweenFadeInOut());
             yield return new WaitForSeconds(4);
-            
+
             Bosscam.SetActive(false);
             BB.SetActive(false);
             BossFight.SetActive(true);
@@ -362,6 +362,7 @@ namespace Platformer
             lampSpawn.resetAllLamps = true;
             BossFight.SetActive(false);
             Lamps.SetActive(false);
+            bossMusic.Stop();
         }
     }
 }
