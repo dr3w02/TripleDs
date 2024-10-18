@@ -40,6 +40,7 @@ namespace Platformer
         public GameObject Lamp9;
         public GameObject Lamp10;
 
+        public bool gameOver;
 
         void Start()
         {
@@ -77,11 +78,14 @@ namespace Platformer
 
                 DeathCamBB.SetActive(true);
 
-                StartCoroutine(WaitTime());
-
                 BlackBeakAnim.SetBool("Die", true);
 
-               
+                StartCoroutine(WaitBetweenFadeInOut());
+
+                gameOver = true;
+
+
+
             }
 
         }
@@ -126,10 +130,7 @@ namespace Platformer
                 resetAllLamps = false;
             
         }
-        public IEnumerator WaitTime()
-        {
-            yield return new WaitForSeconds(3f);
-        }
+     
         public IEnumerator WaitBetweenFadeInOut()
         {
 
@@ -152,26 +153,37 @@ namespace Platformer
 
             //RESET PLAYER POSTION AND TURN OFF SLEEP HERE
 
-
-            SceneManager.LoadScene("EndCredits");
-            yield return new WaitForSeconds(fadeWaitTime);
-
-            fadeOut = true;
-            while (fadeOut)
+            if (gameOver)
             {
-                if (myUIGroup.alpha > 0)
-                {
-                    myUIGroup.alpha -= Time.deltaTime;
-                    yield return null; // Wait for the next frame
 
-                    //GetComponent<NavMeshAgent>().isStopped = false;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
 
-                    //turn on bb moving here and turn off camera here   
-                }
-                else
+                gameOver = false;
+            }
+            else
+            {
+                yield return new WaitForSeconds(fadeWaitTime);
+
+                fadeOut = true;
+                while (fadeOut)
                 {
-                    fadeOut = false;
+                    if (myUIGroup.alpha > 0)
+                    {
+                        myUIGroup.alpha -= Time.deltaTime;
+                        yield return null; // Wait for the next frame
+
+                        //GetComponent<NavMeshAgent>().isStopped = false;
+                        Debug.Log("Startedlamspawn");
+
+                        //turn on bb moving here and turn off camera here
+                        BlackBeakAnim.SetBool("Die", false);
+                    }
+                    else
+                    {
+                        fadeOut = false;
+                    }
                 }
+            
             }
 
 

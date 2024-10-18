@@ -16,16 +16,15 @@ namespace Platformer
 
 
         public bool isStopped;
-        private Vector3 destination;
+        //private Vector3 destination;
         public int currentWayPointIndex = 0;
 
-        public bool ChasingPlayer;
+        
 
         private List<Transform> wayPoints = new List<Transform>();
 
         public EnemyWanderState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, float wanderRadius) : base(enemy, animator)
         {
-            
 
             Debug.Log("Wander");
             if (enemy == null)
@@ -77,8 +76,8 @@ namespace Platformer
       
             float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
 
-            if (!enemy.smashed)
-            {
+
+               
                 agent.speed = enemy.speed;
 
                 if (distanceToWayPoint <= 3f)
@@ -98,31 +97,23 @@ namespace Platformer
                 Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
 
                 agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
-            }
+           
 
-            else
+            if (enemy.smashed)
             {
 
-                heardANoise();
+               heardANoise();
             }
 
         
-             if (enemy.ChasingPlayer)
-                {
-
-                    agent.GetComponent<NavMeshAgent>().isStopped = false;
-
-                    agent.speed = 6;
-
-                    agent.SetDestination(enemy.mCharacter.transform.position);
-                }
-
+     
         }
 
-        private IEnumerator heardANoise()
+        public IEnumerator heardANoise()
         {
             
-            agent.GetComponent<NavMeshAgent>().isStopped = true;
+           // agent.GetComponent<NavMeshAgent>().isStopped = true;
+            Debug.Log("Stoppedheardanoise");
 
             animator.SetBool("Looking",true);
 
@@ -130,7 +121,18 @@ namespace Platformer
 
             animator.SetBool("Looking", false);
 
-            enemy.ChasingPlayer = true;
+            animator.CrossFade(WalkHash, crossFadeDuration);
+
+            agent.SetDestination(enemy.mCharacter.transform.position);
+
+            yield return new WaitForSeconds(3f);
+
+            enemy.smashed = false;
+            //agent.GetComponent<NavMeshAgent>().isStopped = false;
+            Debug.Log("hearda noise started");
+            agent.speed = 6;
+
+            
 
         }
 
@@ -138,7 +140,6 @@ namespace Platformer
         public override void Update()
         {
             
-
             if (enemy.CompareTag("EnemyBB"))
             {
                 WalkingBB();
@@ -150,8 +151,6 @@ namespace Platformer
                 WanderRandom();
             }
 
-
-        
         }
 
 
@@ -171,23 +170,7 @@ namespace Platformer
         }
 
 
-       // private IEnumerator WaitAtCheckpoint()
-       // {
-         //   Stop the enemys movement
-         //   agent.isStopped = true;
 
-         //   Wait for seconds
-         //  yield return new WaitForSeconds(2f);
-          //  Debug.Log("waiting");
-
-         //   Quaternion lookDir = Quaternion.LookRotation(wayPoints[currentWayPointIndex].position);
-
-
-         //   Resume the movement to the next waypoint
-         //   agent.isStopped = false;
-          //  currentWayPointIndex = (currentWayPointIndex + 1) % wayPoints.Count;
-          //  agent.SetDestination(wayPoints[currentWayPointIndex].position);
-        //}
 
 
         private bool HasReachedDestination()

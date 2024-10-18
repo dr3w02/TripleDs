@@ -44,11 +44,13 @@ namespace Platformer
             // }
 
             enemy.characterMain.TurnOffMovement();
+
             animator.CrossFade(AttackHash, crossFadeDuration);
 
             if (enemy.CompareTag("EnemyBB"))
             {
-                agent.GetComponent<NavMeshAgent>().isStopped = true;
+               // agent.GetComponent<NavMeshAgent>().isStopped = true;
+                Debug.Log("attackstatebbStopped");
 
 
                 enemy.BlackBeackKillCam.SetActive(true);
@@ -60,7 +62,8 @@ namespace Platformer
             else if (enemy.CompareTag("EnemyClem"))
             {
 
-                agent.GetComponent<NavMeshAgent>().isStopped = true;
+               // agent.GetComponent<NavMeshAgent>().isStopped = true;
+                Debug.Log("attackstateclemStopped");
                 enemy.clemDeathCam.SetActive(true);
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem());
 
@@ -114,8 +117,9 @@ namespace Platformer
                         yield return null;  // Wait for the next frame
 
                         enemy.characterMain.Enabled();
-                        agent.GetComponent<NavMeshAgent>().isStopped = false;
-                       
+                       //agent.GetComponent<NavMeshAgent>().isStopped = false;
+                        Debug.Log("Stoppedattackstate bb respawn");
+
                 }
                     else
                     {
@@ -176,7 +180,8 @@ namespace Platformer
                         enemy.myUIGroup.alpha -= Time.deltaTime;
                         yield return null;  // Wait for the next frame
                         enemy.characterMain.Enabled();
-                        agent.GetComponent<NavMeshAgent>().isStopped = false;
+                        //agent.GetComponent<NavMeshAgent>().isStopped = false;
+                    Debug.Log("Stoppedclemstarted");
                 }
                     else
                     {

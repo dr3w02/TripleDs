@@ -19,7 +19,9 @@ public class bookZoomIn : MonoBehaviour, IInteractable
     public GameObject BookCam;
     public GameObject BookPromptCanvas;
     public GameObject Player;
+   
     public bool isZoomedIn;
+ 
 
     private void OnValidate()
     {
@@ -42,13 +44,16 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
         if (!isZoomedIn)
         {
+            characterMove.TurnOffMovement();
             ZoomInOnBook();
             return true;
         }
         else
         {
+            characterMove.Enabled();
             ZoomOut();
             return true;
+
         }
     }
 
@@ -65,7 +70,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
         //isZoomedIn = true;
         BookCam.SetActive(true);
      
-        characterMove.TurnOffMovement();
+        
         StartCoroutine(wait());
         //change this to can move is false
 
@@ -75,7 +80,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
     {
         BookCam.SetActive(false);
         Player.SetActive(true);
-        characterMove.Enabled();
+       
     }
 }
 

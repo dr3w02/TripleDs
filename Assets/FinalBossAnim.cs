@@ -334,12 +334,12 @@ namespace Platformer
             Debug.Log("RESET");
             StartCoroutine(WaitBetweenFadeInOut());
             yield return new WaitForSeconds(4);
-            BB.SetActive(false);
+            
             Bosscam.SetActive(false);
             BossFight.SetActive(true);
             Lamps.SetActive(true);
             FourtySixAnims.SetBool("isWakeUp", true);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(5);
             FourtySixAnims.SetBool("isWakeUp", false);
 
             FourtySixAnims.SetBool("isSleeping", false);
@@ -357,6 +357,7 @@ namespace Platformer
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
             lampSpawn.resetAllLamps = true;
             BossFight.SetActive(false);
+            Lamps.SetActive(false);
         }
     }
 }

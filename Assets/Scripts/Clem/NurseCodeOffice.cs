@@ -19,7 +19,7 @@ namespace Platformer
 
         
        
-       public FinalBossAnim ResetBossFight;
+        public FinalBossAnim ResetBossFight;
 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
 
@@ -42,8 +42,9 @@ namespace Platformer
         public Respawn respawn;
 
         public float speed;
-        public bool ChasingPlayer;
 
+        public bool smashed;
+        
         /// <summary>
         /// //Main Scripts
         /// </summary>
@@ -66,7 +67,7 @@ namespace Platformer
             var attackState = new EnemyAttackState(this, animator, agent, playerDetector.Player);
 
 
-
+           
             At(wanderState, chaseState, new FuncPredicate(() => playerDetector.CanDetectPlayer()));
             At(chaseState, wanderState, new FuncPredicate(() => !playerDetector.CanDetectPlayer()));
             At(chaseState, attackState, new FuncPredicate(() => playerDetector.CanAttackPlayer()));
@@ -107,16 +108,16 @@ namespace Platformer
             attackTimer.Tick(Time.deltaTime);
 
             //attackTimer = new CountdownTimer(timeBetweenAttacks);
+            
 
-       
             //Tried to make the animator speed fit with the speed of my gameobject
             //float speed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
             //animator.SetFloat("Speed", speed);
-            
+
         }
 
 
-        public bool smashed;
+  
        
             
 

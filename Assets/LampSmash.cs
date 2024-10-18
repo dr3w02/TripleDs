@@ -68,9 +68,9 @@ namespace Platformer
             
             if (ShakedCount == 3)
             {
-                enemy.ChasingPlayer = false;
+                 enemy.smashed = true;
 
-                lampSway = true;
+                 lampSway = true;
 
                LampAnimator.SetBool("Rocking", false);
                LampAnimator.SetBool("Smashed", true);
@@ -112,6 +112,7 @@ namespace Platformer
     
             enemy.smashed = false;
 
+            StopCoroutine(Noisettack() );
         }
 
       
