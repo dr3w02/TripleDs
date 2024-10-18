@@ -7,11 +7,16 @@ namespace Platformer
     public class BlackbeakSounds : MonoBehaviour
     {
         public AudioSource stompSound;
-        //public AudioSource neckCrackSound;
+        public AudioSource bbDeadSound;
 
         public void Stomp()
         {
             stompSound.Play();
+        }
+
+        public void BBDead()
+        {
+            bbDeadSound.Play();
         }
     }
 }
