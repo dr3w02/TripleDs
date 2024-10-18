@@ -17,7 +17,7 @@ namespace Platformer
         [SerializeField] private bool fadeOut = true;
         [SerializeField] private float fadeWaitTime = 3f;
         [SerializeField] private float clemWaitTime = 3f;
-        [SerializeField] private float BBWaitTime = 3f;
+        [SerializeField] private float BBWaitTime = 2f;
 
         
 
@@ -52,16 +52,8 @@ namespace Platformer
 
 
                 enemy.BlackBeackKillCam.SetActive(true);
-
-            
-
-                enemy.StartCoroutine(WaitBetweenFadeInOutClem());
-
-             
-
+                enemy.StartCoroutine(WaitBetweenFadeInOutBB());
                 Debug.Log("Switch Camera");// Use the stored reference to set active
-
-                enemy.ResetBossFight.ResetBossFight = true;
 
             }
 
@@ -70,23 +62,18 @@ namespace Platformer
 
                 agent.GetComponent<NavMeshAgent>().isStopped = true;
                 enemy.clemDeathCam.SetActive(true);
-
-              
-
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem());
-
-
 
             }
 
 
         }
    
-        public IEnumerable WaitBetweenFadeInOutBB()
+        public IEnumerator WaitBetweenFadeInOutBB()
         {
            
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(2f);
             enemy.mCharacter.SetActive(false);
             yield return new WaitForSeconds(BBWaitTime);
 
@@ -99,43 +86,50 @@ namespace Platformer
                     {
                         enemy.myUIGroup.alpha += Time.deltaTime;
                         yield return null;  // Wait for the next frame
-
-                    }
+                        enemy.mCharacter.SetActive(true);
+                        enemy.respawn.RespawnPlayer();
+                }
                     else
                     {
                         fadeIn = false;
                     }
                 }
 
-            
+        
             //Debug.Log("RespawnPlayer");
             // // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
-            enemy.mCharacter.SetActive(true);
-            enemy.respawn.RespawnPlayer();
+         
             enemy.BlackBeackKillCam.SetActive(false);
             enemy.mCharacter.SetActive(true);
-            enemy.ResetBossFight.ResetWholeBossFight();
+           
 
 
-            fadeOut = true;
+                 fadeOut = true;
                 while (fadeOut)
                 {
                     if (enemy.myUIGroup.alpha > 0)
                     {
                         enemy.myUIGroup.alpha -= Time.deltaTime;
                         yield return null;  // Wait for the next frame
+
                         enemy.characterMain.Enabled();
                         agent.GetComponent<NavMeshAgent>().isStopped = false;
+                       
                 }
                     else
                     {
                         fadeOut = false;
                     }
+
+                    if (!fadeOut)
+                    {
+                        enemy.ResetBossFight.ResetWholeBossFight();
+                    }
                 }
 
 
-            
+
         }
     
         public IEnumerator WaitBetweenFadeInOutClem()

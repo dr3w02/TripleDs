@@ -424,8 +424,10 @@ namespace Platformer
 
             // Debug.Log("CrouchAnimator");
 
-            playersCapsuleCollider.height = playersCapsuleCollider.height + speed - crouchSpeed * Time.deltaTime; // settng the speed he can go whilst crouching
+            playersCapsuleCollider.height = playersCapsuleCollider.height; // settng the speed he can go whilst crouching
+                                             //+ speed - crouchSpeed * Time.deltaTime;
 
+            speed = crouchSpeed;
             // Debug.Log("Crouched");
 
             playersCapsuleCollider.height = crouchHeight;
@@ -467,8 +469,9 @@ namespace Platformer
         {
             animator.SetBool(isCrouchingHash, false);
             Debug.Log("Stop Crouching");
-            playersCapsuleCollider.height = playersCapsuleCollider.height + speed + crouchSpeed * Time.deltaTime;
-
+            playersCapsuleCollider.height = playersCapsuleCollider.height;
+            //+ speed + crouchSpeed + speed * Time.deltaTime;
+            speed = 2;
             playersCapsuleCollider.height = normalHeight;
             //isCrouching = false;
         }

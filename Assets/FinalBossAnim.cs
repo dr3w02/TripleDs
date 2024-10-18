@@ -149,16 +149,8 @@ namespace Platformer
                 MoveToCheckpoint();
             }
 
-            if (Reset)
-            {
-               StartCoroutine(ResetForFight());
-            }
 
-            if (ResetBossFight)
-            {
-                ResetWholeBossFight();
-            }
-
+     
 
         }
 
@@ -201,7 +193,7 @@ namespace Platformer
                 SleepCam.SetActive(true);
 
                 StartCoroutine(SleepWait());
-                StartCoroutine(WaitBetweenFadeInOut());
+               
                 StartCoroutine(BossMusicStart());
 
                 movePlayer = false;
@@ -224,14 +216,14 @@ namespace Platformer
 
             movePlayer = true;
 
-    
-
             return true;
 
         }
 
         private IEnumerator SleepWait()
         {
+            StartCoroutine(WaitBetweenFadeInOut());
+
             yield return new WaitForSeconds(5f);
 
             PlayingAnim = true;
@@ -240,7 +232,9 @@ namespace Platformer
             Bosscam.SetActive(true);
             SleepCam.SetActive(false);
 
+            BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
             Debug.LogWarning("StartingAgain!!!");
+          
             // SleepScript.enabled = false;
 
 
@@ -252,26 +246,11 @@ namespace Platformer
 
         private void MoveToCheckpoint()
         {
-           
-            if (PlayingAnim)
-            {
-
                 Debug.Log("bbMove");
                 Vector3 destination = B.position;
-
-
                 Vector3 newPos = Vector3.MoveTowards(BB.transform.position, destination, speedBB * Time.deltaTime);
-
-
                 BB.transform.position = newPos;
-
-
                 float distanceBB = Vector3.Distance(BB.transform.position, destination);
-
-
-              
-
-               
 
                 if (distanceBB == 0)
                 {
@@ -280,17 +259,8 @@ namespace Platformer
 
                     BlackBeakAnim.SetBool("walking", false);
                     BlackBeakAnim.SetBool("Evil", true);
-
-
                     StartCoroutine(WaitForAnimationPlayShakeCam());
-
                     MainCamShake = true;
-
-                
-
-
-               
-
                 }
 
                 else
@@ -298,55 +268,34 @@ namespace Platformer
                     BlackBeakAnim.SetBool("walking", true);
 
                 }
-            }
-            
-             
-
         }
-
-
-
 
         public void ShakeCamera(float intensity, float shakeTime)
         {
-
-          perlinNoise.m_AmplitudeGain = intensity;
-            
-
+            perlinNoise.m_AmplitudeGain = intensity;
         }
         public void MainShakeCamera(float intensity)
-        {
-
+        { 
             MainperlinNoise.m_AmplitudeGain = intensity;
-
-
         }
 
         public IEnumerator WaitForAnimationPlayShakeCam()
         {
             yield return new WaitForSeconds(2f);
-
             CamShake = true;
 
-            yield return new WaitForSeconds(3f);
-
-            Reset = true;
-
+            StartCoroutine(ResetForFight());
         }
        
 
 
         public IEnumerator WaitBetweenFadeInOut()
         {
-            BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
+           
             //mCharacter.SetActive(false);
             yield return new WaitForSeconds(WaitTime);
-
-
             Debug.Log("Switch Camera");
-
             fadeIn = true;
-
             while (fadeIn)
             {
                 if (myUIGroup.alpha < 1)
@@ -359,13 +308,7 @@ namespace Platformer
                     fadeIn = false;
                 }
             }
-
-            //RESET PLAYER POSTION AND TURN OFF SLEEP HERE
-
-
-
             yield return new WaitForSeconds(fadeWaitTime);
-
             fadeOut = true;
             while (fadeOut)
             {
@@ -374,9 +317,6 @@ namespace Platformer
                     myUIGroup.alpha -= Time.deltaTime;
                     yield return null; // Wait for the next frame
 
-                    //GetComponent<NavMeshAgent>().isStopped = false;
-
-                    //turn on bb moving here and turn off camera here   
                 }
                 else
                 {
@@ -384,28 +324,22 @@ namespace Platformer
                 }
             }
 
-
+            StopCoroutine(WaitBetweenFadeInOut());
         }
 
 
 
         public IEnumerator ResetForFight()
         {
-
+            Debug.Log("RESET");
             StartCoroutine(WaitBetweenFadeInOut());
-
-
             yield return new WaitForSeconds(4);
-
             BB.SetActive(false);
             Bosscam.SetActive(false);
             BossFight.SetActive(true);
             Lamps.SetActive(true);
-
             FourtySixAnims.SetBool("isWakeUp", true);
-
             yield return new WaitForSeconds(3);
-
             FourtySixAnims.SetBool("isWakeUp", false);
 
             FourtySixAnims.SetBool("isSleeping", false);
@@ -413,10 +347,6 @@ namespace Platformer
             mainScript.Enabled();
 
             Reset = false;
-
-
-
-
         }
 
 
@@ -424,9 +354,9 @@ namespace Platformer
        
         public void ResetWholeBossFight()
         {
-            BoxColliderForAnim.enabled = BoxColliderForAnim.enabled;
+            BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
             lampSpawn.resetAllLamps = true;
-            BB.SetActive(false);
+            BossFight.SetActive(false);
         }
     }
 }

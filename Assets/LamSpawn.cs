@@ -100,8 +100,18 @@ namespace Platformer
 
         public void ResetAllLamps(GameObject Lamp1, GameObject Lamp2, GameObject Lamp3, GameObject Lamp4, GameObject Lamp5, GameObject Lamp6, GameObject Lamp7, GameObject Lamp8, GameObject Lamp9, GameObject Lamp10)
         {
-            if (Lamps.Count == 0)
-            {
+
+            Lamps.Remove(Lamp1);
+            Lamps.Remove(Lamp2);
+            Lamps.Remove(Lamp3);
+            Lamps.Remove(Lamp4);
+            Lamps.Remove(Lamp5);
+            Lamps.Remove(Lamp6);
+            Lamps.Remove(Lamp7);
+            Lamps.Remove(Lamp8);
+            Lamps.Remove(Lamp9);
+            Lamps.Remove(Lamp10);
+                    
                 Lamps.Add(Lamp1);
                 Lamps.Add(Lamp2);
                 Lamps.Add(Lamp3);
@@ -114,7 +124,7 @@ namespace Platformer
                 Lamps.Add(Lamp10);
 
                 resetAllLamps = false;
-            }
+            
         }
         public IEnumerator WaitTime()
         {
