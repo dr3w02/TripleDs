@@ -28,8 +28,8 @@ namespace Platformer
             var angleToPlayer = Vector3.Angle(directionToPlayer, detector.forward);
 
             //if the player is not within the direction angle + outerradius, or is within the inner radius, return false
-            if((!(angleToPlayer < detectionAngle / 2f ) || !(directionToPlayer.magnitude < detectionRadius)) 
-                && !(directionToPlayer.magnitude < innerDetectionRadius)) 
+            if((!(angleToPlayer < detectionAngle / 2f ) || !(directionToPlayer.magnitude < detectionRadius))
+                && !(directionToPlayer.magnitude < innerDetectionRadius))
                 return false;
 
             timer.Start ();

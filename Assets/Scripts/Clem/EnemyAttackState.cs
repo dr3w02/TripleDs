@@ -49,7 +49,7 @@ namespace Platformer
 
             if (enemy.CompareTag("EnemyBB"))
             {
-               // agent.GetComponent<NavMeshAgent>().isStopped = true;
+                agent.GetComponent<NavMeshAgent>().isStopped = true;
                 Debug.Log("attackstatebbStopped");
 
 
@@ -62,7 +62,7 @@ namespace Platformer
             else if (enemy.CompareTag("EnemyClem"))
             {
 
-               // agent.GetComponent<NavMeshAgent>().isStopped = true;
+               agent.GetComponent<NavMeshAgent>().isStopped = true;
                 Debug.Log("attackstateclemStopped");
                 enemy.clemDeathCam.SetActive(true);
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem());
@@ -77,7 +77,7 @@ namespace Platformer
            
 
             yield return new WaitForSeconds(2f);
-            enemy.mCharacter.SetActive(false);
+           
             yield return new WaitForSeconds(BBWaitTime);
 
             Debug.Log("Switch Camera");// Use the stored reference to set active
@@ -98,7 +98,7 @@ namespace Platformer
                     }
                 }
 
-        
+            enemy.mCharacter.SetActive(false);
             //Debug.Log("RespawnPlayer");
             // // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
@@ -117,7 +117,7 @@ namespace Platformer
                         yield return null;  // Wait for the next frame
 
                         enemy.characterMain.Enabled();
-                       //agent.GetComponent<NavMeshAgent>().isStopped = false;
+                        agent.GetComponent<NavMeshAgent>().isStopped = false;
                         Debug.Log("Stoppedattackstate bb respawn");
 
                 }
@@ -180,7 +180,7 @@ namespace Platformer
                         enemy.myUIGroup.alpha -= Time.deltaTime;
                         yield return null;  // Wait for the next frame
                         enemy.characterMain.Enabled();
-                        //agent.GetComponent<NavMeshAgent>().isStopped = false;
+                        agent.GetComponent<NavMeshAgent>().isStopped = false;
                     Debug.Log("Stoppedclemstarted");
                 }
                     else

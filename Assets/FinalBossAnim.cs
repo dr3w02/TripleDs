@@ -77,7 +77,7 @@ namespace Platformer
 
         public GameObject Lamps;
 
-      
+        public Transform A;
         public Transform B;
 
         public BoxCollider BoxColliderForAnim;
@@ -336,10 +336,12 @@ namespace Platformer
             yield return new WaitForSeconds(4);
             
             Bosscam.SetActive(false);
+            BB.SetActive(false);
             BossFight.SetActive(true);
+            yield return new WaitForSeconds(2);
             Lamps.SetActive(true);
             FourtySixAnims.SetBool("isWakeUp", true);
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(2);
             FourtySixAnims.SetBool("isWakeUp", false);
 
             FourtySixAnims.SetBool("isSleeping", false);
@@ -347,6 +349,8 @@ namespace Platformer
             mainScript.Enabled();
 
             Reset = false;
+
+            BB.transform.position = A.transform.position;
         }
 
 

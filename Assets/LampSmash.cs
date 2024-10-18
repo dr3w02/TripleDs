@@ -27,19 +27,20 @@ namespace Platformer
         public Animator BBAnimator;
         public LamSpawn LampSpawn;
 
-    
+        public BoxCollider boxcollider;
       
         public NurseCodeOffice enemy;
 
         public bool lampSway;
-    
+
+        public Animator bbAnimator;
 
         private void OnValidate()
         {
             if (gameObject.layer != LayerMask.NameToLayer("Interactable"))
             {
                 gameObject.layer = LayerMask.NameToLayer("Interactable");
-                gameObject.AddComponent<BoxCollider>();
+               
             }
 
         }
@@ -68,13 +69,13 @@ namespace Platformer
             
             if (ShakedCount == 3)
             {
-                 enemy.smashed = true;
+              
 
                  lampSway = true;
-
+               boxcollider.isTrigger = false;
                LampAnimator.SetBool("Rocking", false);
                LampAnimator.SetBool("Smashed", true);
-
+                
                     
                LampSpawn.ActivateRandomObject();
 
@@ -87,10 +88,9 @@ namespace Platformer
                 if (enemy.CompareTag("EnemyBB"))
                 {
 
-                    enemy.smashed = true;
-
+                    StartCoroutine(heardANoise());
                     Debug.Log("MadeANoise") ;
-                    StartCoroutine(Noisettack());
+                   // StartCoroutine(Noisettack());
 
                 }
 
@@ -101,22 +101,45 @@ namespace Platformer
 
         }
 
-     
+        
 
-
-        private IEnumerator Noisettack()
+        public IEnumerator heardANoise()
         {
 
-      
-            yield return new WaitForSeconds(5f);
-    
-            enemy.smashed = false;
+            enemy.speed = 0f;
 
-            StopCoroutine(Noisettack() );
+            Debug.Log("Stoppedheardanoise");
+            enemy.smashed = true;
+            //bbAnimator.SetBool("Looking", true);
+
+            yield return new WaitForSeconds(8f);
+
+            //bbAnimator.SetBool("Looking", false);
+
+            enemy.smashed = false;
+         
+
+            Debug.Log("hearda noise started");
+            //agent.speed = 6;
+
+            //StopCoroutine(heardANoise());
+
         }
 
-      
-     
+
+        //private IEnumerator Noisettack()
+        //{
+
+
+        //    yield return new WaitForSeconds(5f);
+
+        //    enemy.smashed = false;
+
+        //    StopCoroutine(Noisettack() );
+        //}
+
+
+
 
 
     }

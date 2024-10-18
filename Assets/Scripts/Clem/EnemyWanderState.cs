@@ -19,7 +19,7 @@ namespace Platformer
         //private Vector3 destination;
         public int currentWayPointIndex = 0;
 
-        
+     
 
         private List<Transform> wayPoints = new List<Transform>();
 
@@ -48,7 +48,7 @@ namespace Platformer
             Debug.Log("Chase");
 
 
-            animator.CrossFade(WalkHash, crossFadeDuration);
+           
             Transform wayPointsObject = GameObject.FindGameObjectWithTag("Waypoint").transform;
 
             foreach (Transform t in wayPointsObject)
@@ -61,7 +61,7 @@ namespace Platformer
                 Debug.LogError("No waypoints found!");
                 return;
             }
-
+           
 
         }
 
@@ -72,12 +72,28 @@ namespace Platformer
         public void WalkingBB()
         {
             if (wayPoints.Count == 0) return;
+     
 
-      
-            float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
-
+            if (enemy.smashed)
+            {
+                enemy.speed = 7.33f;
 
                
+                agent.SetDestination(enemy.mCharacter.transform.position);
+
+            }
+            
+
+            else
+            {
+
+               
+                enemy.speed = 7.33f;
+
+                float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
+
+
+
                 agent.speed = enemy.speed;
 
                 if (distanceToWayPoint <= 3f)
@@ -97,44 +113,14 @@ namespace Platformer
                 Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
 
                 agent.transform.rotation = Quaternion.RotateTowards(agent.transform.rotation, targetRotation, Time.deltaTime * 300f);
-           
-
-            if (enemy.smashed)
-            {
-
-               heardANoise();
             }
+
 
         
      
         }
 
-        public IEnumerator heardANoise()
-        {
-            
-           // agent.GetComponent<NavMeshAgent>().isStopped = true;
-            Debug.Log("Stoppedheardanoise");
 
-            animator.SetBool("Looking",true);
-
-            yield return new WaitForSeconds(3f);
-
-            animator.SetBool("Looking", false);
-
-            animator.CrossFade(WalkHash, crossFadeDuration);
-
-            agent.SetDestination(enemy.mCharacter.transform.position);
-
-            yield return new WaitForSeconds(3f);
-
-            enemy.smashed = false;
-            //agent.GetComponent<NavMeshAgent>().isStopped = false;
-            Debug.Log("hearda noise started");
-            agent.speed = 6;
-
-            
-
-        }
 
 
         public override void Update()
@@ -142,12 +128,15 @@ namespace Platformer
             
             if (enemy.CompareTag("EnemyBB"))
             {
+                animator.CrossFade(WalkHash, crossFadeDuration);
+                agent.speed = enemy.speed;
                 WalkingBB();
             }
          
 
             else if (!enemy.CompareTag("EnemyBB"))
             {
+                animator.CrossFade(WalkHash, crossFadeDuration);
                 WanderRandom();
             }
 

@@ -17,8 +17,8 @@ namespace Platformer
         public GameObject DeathCamBB;
 
         public Animator BlackBeakAnim;
-
-        public NavMeshAgent agent;
+        public NurseCodeOffice agent;
+       
 
         [Header("Fade")]
 
@@ -44,20 +44,16 @@ namespace Platformer
 
         void Start()
         {
-       
-            ActivateRandomObject();
             resetAllLamps = true;
+
+         
         }
 
+        
         public void ActivateRandomObject()
         {
          
-            if (Lamps.Count == 0)
-            {
-                Debug.LogError("No GameObjects in list");
-                return;
-            }
-
+           
          
             foreach (GameObject obj in Lamps)
             {
@@ -74,8 +70,8 @@ namespace Platformer
 
             if (Lamps.Count == 0)
             {
-                agent.enabled = false;
 
+                agent.GetComponent<NavMeshAgent>().isStopped = true;
                 DeathCamBB.SetActive(true);
 
                 BlackBeakAnim.SetBool("Die", true);
@@ -98,6 +94,11 @@ namespace Platformer
             else
             {
                 return;
+            }
+
+            if (!resetAllLamps)
+            {
+                ActivateRandomObject();
             }
         }
 
@@ -135,7 +136,7 @@ namespace Platformer
         {
 
             //mCharacter.SetActive(false);
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(10f);
             Debug.Log("Switch Camera");
             fadeIn = true;
             while (fadeIn)
@@ -171,7 +172,7 @@ namespace Platformer
                     {
                         myUIGroup.alpha -= Time.deltaTime;
                         yield return null; // Wait for the next frame
-
+                        agent.GetComponent<NavMeshAgent>().isStopped = false;
                         //GetComponent<NavMeshAgent>().isStopped = false;
                         Debug.Log("Startedlamspawn");
 
