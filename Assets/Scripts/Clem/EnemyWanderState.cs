@@ -76,7 +76,7 @@ namespace Platformer
 
             if (enemy.smashed)
             {
-                enemy.speed = 7.33f;
+                enemy.speed = 6.5f;
 
                
                 agent.SetDestination(enemy.mCharacter.transform.position);
@@ -88,7 +88,7 @@ namespace Platformer
             {
 
                
-                enemy.speed = 7.33f;
+                enemy.speed = 6.5f;
 
                 float distanceToWayPoint = Vector3.Distance(wayPoints[currentWayPointIndex].position, agent.transform.position);
 

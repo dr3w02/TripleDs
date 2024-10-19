@@ -5,6 +5,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using static UnityEngine.InputSystem.Controls.AxisControl;
 
 
 namespace Platformer
@@ -27,13 +28,14 @@ namespace Platformer
         public Animator BBAnimator;
         public LamSpawn LampSpawn;
 
+      
         public BoxCollider boxcollider;
       
         public NurseCodeOffice enemy;
 
         public bool lampSway;
 
-        public Animator bbAnimator;
+        
 
         private void OnValidate()
         {
@@ -50,9 +52,8 @@ namespace Platformer
         {
             LampAnimator.SetBool("Idel", true);
 
-
         }
-      
+       
         public bool Interact(Interactor interactor)
         {
             if (lampSway == false)
@@ -61,23 +62,20 @@ namespace Platformer
 
                 Debug.Log("Interacted");
 
-
                 LampAnimator.SetBool("Rocking", true);
-
             }
 
             
             if (ShakedCount == 3)
             {
-              
-
-                 lampSway = true;
-               boxcollider.isTrigger = false;
+                
+                lampSway = true;
+               boxcollider.isTrigger = true;
                LampAnimator.SetBool("Rocking", false);
                LampAnimator.SetBool("Smashed", true);
+
                 
-                    
-               LampSpawn.ActivateRandomObject();
+                LampSpawn.ActivateRandomObject();
 
                 ShakedCount = 0;
             }
@@ -109,7 +107,9 @@ namespace Platformer
             enemy.speed = 0f;
 
             Debug.Log("Stoppedheardanoise");
+
             enemy.smashed = true;
+
             //bbAnimator.SetBool("Looking", true);
 
             yield return new WaitForSeconds(8f);

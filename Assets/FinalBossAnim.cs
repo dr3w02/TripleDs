@@ -96,6 +96,8 @@ namespace Platformer
         [Header("Audio")]
         public AudioSource bossMusic;
 
+
+
         public void Start()
         {
 
@@ -234,7 +236,11 @@ namespace Platformer
 
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
             Debug.LogWarning("StartingAgain!!!");
-          
+
+            interactable1.enabled = !interactable1.enabled;
+            interactable2.enabled = !interactable2.enabled;
+            interactable3.enabled = !interactable3.enabled;
+
             // SleepScript.enabled = false;
 
 
@@ -256,7 +262,7 @@ namespace Platformer
                 {
                     Debug.Log("Made it");
                     PlayingAnim = false;
-
+                    
                     BlackBeakAnim.SetBool("walking", false);
                     BlackBeakAnim.SetBool("Evil", true);
                     StartCoroutine(WaitForAnimationPlayShakeCam());
@@ -282,6 +288,7 @@ namespace Platformer
         public IEnumerator WaitForAnimationPlayShakeCam()
         {
             yield return new WaitForSeconds(2f);
+
             CamShake = true;
 
             StartCoroutine(ResetForFight());
@@ -334,7 +341,7 @@ namespace Platformer
             Debug.Log("RESET");
             StartCoroutine(WaitBetweenFadeInOut());
             yield return new WaitForSeconds(4);
-
+            CamShake = false;
             Bosscam.SetActive(false);
             BB.SetActive(false);
             BossFight.SetActive(true);
@@ -355,7 +362,10 @@ namespace Platformer
 
 
 
-       
+        public BoxCollider interactable1;
+        public BoxCollider interactable2;
+        public BoxCollider interactable3;
+
         public void ResetWholeBossFight()
         {
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
@@ -363,6 +373,11 @@ namespace Platformer
             BossFight.SetActive(false);
             Lamps.SetActive(false);
             bossMusic.Stop();
+            interactable1.enabled = !interactable1.enabled;
+            interactable2.enabled = !interactable2.enabled;
+            interactable3.enabled = !interactable3.enabled;
+
+
         }
     }
 }

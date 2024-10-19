@@ -28,6 +28,11 @@ namespace Platformer
         [SerializeField] private float fadeWaitTime = 4f;
 
         public bool resetAllLamps;
+     
+        public GameObject bb;
+        public GameObject DeathPoint;
+
+        public bool AnimationPlay;
 
         public GameObject Lamp1;
         public GameObject Lamp2;
@@ -35,18 +40,17 @@ namespace Platformer
         public GameObject Lamp4;
         public GameObject Lamp5;
         public GameObject Lamp6;
-        public GameObject Lamp7;
-        public GameObject Lamp8;
-        public GameObject Lamp9;
-        public GameObject Lamp10;
+
+        public GameObject player;
 
         public bool gameOver;
 
+        public GameObject Enemy;
         void Start()
         {
             resetAllLamps = true;
+           
 
-         
         }
 
         
@@ -67,29 +71,26 @@ namespace Platformer
 
 
             Lamps.RemoveAt(randomIndex);
+            
+         
 
             if (Lamps.Count == 0)
             {
 
-                agent.GetComponent<NavMeshAgent>().isStopped = true;
-                DeathCamBB.SetActive(true);
-
-                BlackBeakAnim.SetBool("Die", true);
-
                 StartCoroutine(WaitBetweenFadeInOut());
 
-                gameOver = true;
-
-
+                AnimationPlay = true;
 
             }
 
         }
+
+
         private void Update()
         {
             if (resetAllLamps)
             {
-                ResetAllLamps(Lamp1, Lamp2, Lamp3, Lamp4, Lamp5, Lamp6, Lamp7, Lamp8, Lamp9, Lamp10);
+                ResetAllLamps(Lamp1, Lamp2, Lamp3, Lamp4, Lamp5, Lamp6);
             }
             else
             {
@@ -100,10 +101,25 @@ namespace Platformer
             {
                 ActivateRandomObject();
             }
+
+            if (AnimationPlay)
+            {
+
+                bb.transform.position = DeathPoint.transform.position;
+                bb.SetActive(true);
+                Enemy.SetActive(false);
+                DeathCamBB.SetActive(true);
+                player.SetActive(false);
+                BlackBeakAnim.SetBool("Die", true);
+                Debug.Log("Animation Death Play");
+                StartCoroutine(WaitBetweenFadeInOut());
+
+                gameOver = true;
+            }
         }
 
 
-        public void ResetAllLamps(GameObject Lamp1, GameObject Lamp2, GameObject Lamp3, GameObject Lamp4, GameObject Lamp5, GameObject Lamp6, GameObject Lamp7, GameObject Lamp8, GameObject Lamp9, GameObject Lamp10)
+        public void ResetAllLamps(GameObject Lamp1, GameObject Lamp2, GameObject Lamp3, GameObject Lamp4, GameObject Lamp5, GameObject Lamp6)
         {
 
             Lamps.Remove(Lamp1);
@@ -112,10 +128,7 @@ namespace Platformer
             Lamps.Remove(Lamp4);
             Lamps.Remove(Lamp5);
             Lamps.Remove(Lamp6);
-            Lamps.Remove(Lamp7);
-            Lamps.Remove(Lamp8);
-            Lamps.Remove(Lamp9);
-            Lamps.Remove(Lamp10);
+      
                     
                 Lamps.Add(Lamp1);
                 Lamps.Add(Lamp2);
@@ -123,10 +136,7 @@ namespace Platformer
                 Lamps.Add(Lamp4);
                 Lamps.Add(Lamp5);
                 Lamps.Add(Lamp6);
-                Lamps.Add(Lamp7);
-                Lamps.Add(Lamp8);
-                Lamps.Add(Lamp9);
-                Lamps.Add(Lamp10);
+                
 
                 resetAllLamps = false;
             
@@ -157,9 +167,15 @@ namespace Platformer
             if (gameOver)
             {
 
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+                SceneManager.LoadScene(2);
 
                 gameOver = false;
+               
+
+             
+                DeathCamBB.SetActive(false);
+                player.SetActive(false);
+                BlackBeakAnim.SetBool("Die", false);
             }
             else
             {
@@ -170,14 +186,15 @@ namespace Platformer
                 {
                     if (myUIGroup.alpha > 0)
                     {
+                        bb.transform.position = DeathPoint.transform.position;
                         myUIGroup.alpha -= Time.deltaTime;
                         yield return null; // Wait for the next frame
-                        agent.GetComponent<NavMeshAgent>().isStopped = false;
+                        
                         //GetComponent<NavMeshAgent>().isStopped = false;
                         Debug.Log("Startedlamspawn");
-
+                        AnimationPlay = true;
                         //turn on bb moving here and turn off camera here
-                        BlackBeakAnim.SetBool("Die", false);
+                        //BlackBeakAnim.SetBool("Die", false);
                     }
                     else
                     {
@@ -187,7 +204,7 @@ namespace Platformer
             
             }
 
-
-        }
+             
+    }
     }
 }

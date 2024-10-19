@@ -34,10 +34,6 @@ namespace Platformer
             loadCheckPoints();
             Debug.LogWarning("CheckpointScript");
 
-            if (Input.anyKeyDown)
-            {
-                wakeup = true;
-            }
         }
     
 
@@ -108,12 +104,15 @@ namespace Platformer
             }
         }
 
+        public GameObject playerAnim;
         public void RespawnPlayer()
         {
             transform.position = _startingPoint;
 
-            //playerscript.Enabled();
-            playerscript.enabled = true;
+            playerAnim.transform.position = transform.position;
+
+            playerscript.Enabled();
+            playerscript.StopCrouch();
             _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
 

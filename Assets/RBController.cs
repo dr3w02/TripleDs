@@ -41,7 +41,7 @@ namespace Platformer
 
         [Header("Jump")]
         public bool HasJumped;
-        bool isJumping = false;
+
         int isJumpingHash;
         bool isJumpPressed;
 
@@ -70,16 +70,14 @@ namespace Platformer
 
 
         public Animator animator;
-
+        public GameObject PlayerAnim;
 
         public float rotationFactorPerFrame = 15.0f;
 
 
         public ClimbingCharacter characterClimb;
 
-        //Dylan
-        private bool isRightMouseButtonPressed;
-        //Dylan
+      
 
         public PlayerInput input;
 
@@ -417,8 +415,9 @@ namespace Platformer
         
         }
 
-        private void StartCrouch()
+        public void StartCrouch()
         {
+
             animator.SetBool(isCrouchingHash, true);
             Debug.Log("Crouching");
 
@@ -442,10 +441,12 @@ namespace Platformer
                 Debug.Log("Swapping crouch");
                 if (isCrouching)
                 {
+                   
                     StartCrouch();
                 }
                 else
                 {
+                    
                     StopCrouch();
                 }
 
@@ -465,11 +466,14 @@ namespace Platformer
                 }
             }
         }
-        private void StopCrouch()
+        public void StopCrouch()
         {
+            
             animator.SetBool(isCrouchingHash, false);
             Debug.Log("Stop Crouching");
             playersCapsuleCollider.height = playersCapsuleCollider.height;
+
+            PlayerAnim.transform.position = transform.position;
             //+ speed + crouchSpeed + speed * Time.deltaTime;
             speed = 2;
             playersCapsuleCollider.height = normalHeight;
