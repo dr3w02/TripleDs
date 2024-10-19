@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Die
+    m_ConditionEvent: Dying
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7686869090009108050}
@@ -62,7 +62,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: Die
+    m_ConditionEvent: Dying
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4453843913826372186}
@@ -112,7 +112,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: Die
+    m_ConditionEvent: Dying
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4270458458716263504}
@@ -149,7 +149,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Die
+  - m_Name: Dying
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -179,7 +179,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 4453843913826372186}
-    m_Position: {x: 300, y: 130, z: 0}
+    m_Position: {x: 320, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4270458458716263504}
     m_Position: {x: 310, y: -70, z: 0}
@@ -286,7 +286,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Die
+    m_ConditionEvent: Dying
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7686869090009108050}

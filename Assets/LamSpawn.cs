@@ -56,9 +56,9 @@ namespace Platformer
         
         public void ActivateRandomObject()
         {
-         
-           
-         
+
+            
+
             foreach (GameObject obj in Lamps)
             {
                 obj.SetActive(false);
@@ -67,10 +67,16 @@ namespace Platformer
             int randomIndex = Random.Range(0, Lamps.Count);
 
 
-            Lamps[randomIndex].SetActive(true);
+            if(Lamps.Count > 0)
+            {
+                Lamps[randomIndex].SetActive(true);
+                Lamps.RemoveAt(randomIndex);
+            }
+
+            //Lamps[randomIndex].SetActive(true);
 
 
-            Lamps.RemoveAt(randomIndex);
+            //Lamps.RemoveAt(randomIndex);
             
          
 
@@ -79,13 +85,32 @@ namespace Platformer
 
                 StartCoroutine(WaitBetweenFadeInOut());
 
-                AnimationPlay = true;
+                StartCoroutine(waitTime());
 
+                
             }
 
         }
 
+        public IEnumerator waitTime()
+        {
+            yield return new WaitForSeconds(5f);
 
+            Debug.Log("lampcount0");
+            Debug.Log("Animation Death Playingg");
+            bb.transform.position = DeathPoint.transform.position;
+            bb.SetActive(true);
+            Enemy.SetActive(false);
+            DeathCamBB.SetActive(true);
+            player.SetActive(false);
+            BlackBeakAnim.SetBool("Dying", true);
+            Debug.Log("Animation Death Play");
+            StartCoroutine(WaitBetweenFadeInOut());
+
+            gameOver = true;
+
+
+        }
         private void Update()
         {
             if (resetAllLamps)
@@ -104,17 +129,7 @@ namespace Platformer
 
             if (AnimationPlay)
             {
-
-                bb.transform.position = DeathPoint.transform.position;
-                bb.SetActive(true);
-                Enemy.SetActive(false);
-                DeathCamBB.SetActive(true);
-                player.SetActive(false);
-                BlackBeakAnim.SetBool("Die", true);
-                Debug.Log("Animation Death Play");
-                StartCoroutine(WaitBetweenFadeInOut());
-
-                gameOver = true;
+                
             }
         }
 
@@ -192,7 +207,7 @@ namespace Platformer
                         
                         //GetComponent<NavMeshAgent>().isStopped = false;
                         Debug.Log("Startedlamspawn");
-                        AnimationPlay = true;
+                       
                         //turn on bb moving here and turn off camera here
                         //BlackBeakAnim.SetBool("Die", false);
                     }

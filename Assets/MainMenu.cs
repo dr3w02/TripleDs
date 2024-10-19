@@ -9,7 +9,8 @@ namespace Platformer
 
         public void PlayGame ()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene(1);
+            Debug.Log("Start");
         }
 
         public void QuitGame ()

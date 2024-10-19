@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager.Requests;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,14 +29,14 @@ namespace Platformer
         public Animator BBAnimator;
         public LamSpawn LampSpawn;
 
-      
+        public FinalBossAnim reset;
         public BoxCollider boxcollider;
       
         public NurseCodeOffice enemy;
 
         public bool lampSway;
 
-        
+        public GameObject LampSmashed;
 
         private void OnValidate()
         {
@@ -80,7 +81,12 @@ namespace Platformer
                 ShakedCount = 0;
             }
 
-
+            if (reset.Reset)
+            {
+               
+                LampAnimator.SetBool("Idel", true);
+                LampSmashed.SetActive(false);
+            }
             if (ShakedCount > 1)
             {
                 if (enemy.CompareTag("EnemyBB"))

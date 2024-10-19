@@ -105,10 +105,10 @@ namespace Platformer
          
             enemy.BlackBeackKillCam.SetActive(false);
             enemy.mCharacter.SetActive(true);
-           
 
+            enemy.ResetBossFight.ResetWholeBossFight();
 
-                 fadeOut = true;
+            fadeOut = true;
                 while (fadeOut)
                 {
                     if (enemy.myUIGroup.alpha > 0)
@@ -126,10 +126,7 @@ namespace Platformer
                         fadeOut = false;
                     }
 
-                    if (!fadeOut)
-                    {
-                        enemy.ResetBossFight.ResetWholeBossFight();
-                    }
+                  
                 }
 
 

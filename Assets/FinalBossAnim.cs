@@ -73,6 +73,7 @@ namespace Platformer
         public GameObject Bosscam;
         public GameObject BB;
         public GameObject BossFight;
+       
         public float speedBB = 3f;
 
         public GameObject Lamps;
@@ -350,7 +351,7 @@ namespace Platformer
             FourtySixAnims.SetBool("isWakeUp", true);
             yield return new WaitForSeconds(2);
             FourtySixAnims.SetBool("isWakeUp", false);
-
+            
             FourtySixAnims.SetBool("isSleeping", false);
 
             mainScript.Enabled();
@@ -368,6 +369,7 @@ namespace Platformer
 
         public void ResetWholeBossFight()
         {
+            BossFight.transform.position = B.transform.position;
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
             lampSpawn.resetAllLamps = true;
             BossFight.SetActive(false);
@@ -377,7 +379,7 @@ namespace Platformer
             interactable2.enabled = !interactable2.enabled;
             interactable3.enabled = !interactable3.enabled;
 
-
+            
         }
     }
 }
