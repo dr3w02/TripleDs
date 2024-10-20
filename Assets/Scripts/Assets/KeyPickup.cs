@@ -19,6 +19,15 @@ public class KeyPickup : MonoBehaviour, IInteractable
 
     public GameObject InteractionImagePrompt => null;
 
+    public AudioSource audioSource;
+
+    [SerializeField] public AudioClip keyPickupSound;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public bool Interact(Interactor interactor)
     {
 
@@ -30,6 +39,11 @@ public class KeyPickup : MonoBehaviour, IInteractable
             keyHolder.keyAmount ++;
 
           Key.SetActive(false);
+
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
 
             Debug.Log("HasKey");
         }
