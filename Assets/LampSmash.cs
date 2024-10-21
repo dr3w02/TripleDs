@@ -71,7 +71,7 @@ namespace Platformer
             }
         }
 
-        public bool Interact(Interactor interactor)
+        public bool Interact(Interactor interactor, GameObject player)
         {
             if (lampSway == false)
             {

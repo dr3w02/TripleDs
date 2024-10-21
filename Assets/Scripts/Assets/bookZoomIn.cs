@@ -32,20 +32,31 @@ public class bookZoomIn : MonoBehaviour, IInteractable
         }
 
     }
+    
+    Respawn respawn;
 
     private void Start()
     {
         BookCam.SetActive(false);
     }
 
-    public bool Interact(Interactor interactor)
+    public bool Interact(Interactor interactor, GameObject player)
     {
+        if(respawn == null)
+            respawn = player.GetComponent<Respawn>();
+
+        if (Player == null)
+            Player = player;
+
         isZoomedIn = !isZoomedIn;
 
         if (!isZoomedIn)
         {
+            
             characterMove.TurnOffMovement();
             ZoomInOnBook();
+           
+         
             return true;
         }
         else
@@ -60,7 +71,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
     private IEnumerator wait()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
 
         Player.SetActive(false);
     }
@@ -81,6 +92,21 @@ public class bookZoomIn : MonoBehaviour, IInteractable
         BookCam.SetActive(false);
         Player.SetActive(true);
        
+    }
+
+    public void Update()
+    {
+        if (respawn != null)
+        {
+            if (respawn.resetbook)
+            {
+                characterMove.Enabled();
+                ZoomOut();
+                respawn.resetbook = false;
+            }
+        }
+      
+
     }
 }
 

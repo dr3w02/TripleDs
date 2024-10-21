@@ -32,7 +32,7 @@ public class Door : MonoBehaviour, IInteractable
 
     }
 
-    public bool Interact(Interactor interactor)
+    public bool Interact(Interactor interactor, GameObject player)
     {
 
         bool DoorOpen = animator.GetBool(DoorOpenedHash);

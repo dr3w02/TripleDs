@@ -10,7 +10,7 @@ namespace Platformer
     public class Respawn : MonoBehaviour
     {
         public bool respawnStart;
-
+        public GameObject Player;
         [SerializeField] private GameObject _checkpointsParent;
         public GameObject[] _checkPointsArray;
 
@@ -106,10 +106,13 @@ namespace Platformer
                 index++;
             }
         }
-       
-       
+
+        public bool resetbook;
+
         public void RespawnPlayer()
         {
+            resetbook = true;
+            Player.SetActive(true);
             transform.position = _startingPoint;
 
             playerAnim.transform.position = transform.position;

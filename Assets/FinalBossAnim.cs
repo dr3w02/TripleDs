@@ -39,7 +39,8 @@ namespace Platformer
         [SerializeField] private float fadeWaitTime = 4f;
 
         [SerializeField] private float WaitTime = 2f;
-      
+
+        public bool ResetButtonbool;
 
         [Header("CameraShake")]
         public CinemachineVirtualCamera VirtualCam;
@@ -167,11 +168,11 @@ namespace Platformer
      
             if(ResetButtonbool == true)
             {
-                ResetButton.SetActive(true);
+                ResetButton.SetActive(false);
             }
             else if (ResetButtonbool == false) 
             {
-                ResetButton.SetActive(false);
+                ResetButton.SetActive(true);
             }
 
         }
@@ -231,11 +232,11 @@ namespace Platformer
             bossMusic.Play();
         }
 
-        public bool Interact(Interactor interactor)
+        public bool Interact(Interactor interactor, GameObject player)
         {
 
             mainScript.TurnOffMovement();
-            ResetButtonbool = false;
+            ResetButtonbool = true;
             movePlayer = true;
 
             return true;
@@ -354,7 +355,7 @@ namespace Platformer
             StopCoroutine(WaitBetweenFadeInOut());
         }
 
-        public bool ResetButtonbool;
+      
 
         public IEnumerator ResetForFight()
         {
@@ -376,7 +377,7 @@ namespace Platformer
             FourtySixAnims.SetBool("isWakeUp", true);
             yield return new WaitForSeconds(3);
             FourtySixAnims.SetBool("isWakeUp", false);
-            ResetButtonbool = true;
+            ResetButtonbool = false;
             FourtySixAnims.SetBool("isSleeping", false);
 
             mainScript.Enabled();

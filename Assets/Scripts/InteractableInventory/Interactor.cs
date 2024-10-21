@@ -60,7 +60,7 @@ public class Interactor : MonoBehaviour
                     if(currentInteractable.InteractionImagePrompt != null)
                         currentInteractable.InteractionImagePrompt.SetActive(false);
 
-                    currentInteractable.Interact(this);
+                    currentInteractable.Interact(this, this.gameObject);
 
                 }
             }

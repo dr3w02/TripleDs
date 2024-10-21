@@ -17,7 +17,7 @@ namespace Platformer
 
         public string InteractionPrompt => _prompt;
 
-        public bool Interact(Interactor interactor)
+        public bool Interact(Interactor interactor, GameObject player)
         {
             Debug.Log("ScrewDriver");
 

@@ -22,7 +22,7 @@ public class KeyPickup : MonoBehaviour, IInteractable
 
     [SerializeField] public AudioClip keyPickupSound;
 
-    public bool Interact(Interactor interactor)
+    public bool Interact(Interactor interactor, GameObject player)
     {
 
         hasKey = true;

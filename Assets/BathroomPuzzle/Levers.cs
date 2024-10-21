@@ -31,7 +31,7 @@ namespace Platformer
             LeverUpHash = Animator.StringToHash("LeverUp");
         }
 
-        public bool Interact(Interactor interactor)
+        public bool Interact(Interactor interactor, GameObject player)
         {
             if (_isLeverDown)
             {
