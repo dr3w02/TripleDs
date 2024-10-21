@@ -2,6 +2,7 @@ using Platformer;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
 
@@ -164,6 +165,10 @@ public class MenuManager : MonoBehaviour
         
     }
 
+    public void OnStartScreen()
+    {
+        SceneManager.LoadScene(0);
+    }
     public void OnGamePadPress()
     {
         OpenGamePadHandle();

@@ -1,3 +1,4 @@
+using Platformer;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,7 @@ public class Interactor : MonoBehaviour
 
     public IInteractable currentInteractable;
 
+    //public RBController controller;
     private readonly Collider[] _colliders = new Collider[3];
 
     [SerializeField] private int _numFound;

@@ -31,6 +31,7 @@ public class ClemFirstLook : MonoBehaviour
     {
         
         Debug.Log("in trigger");
+
         if (other.CompareTag("Player"))
         {
 
@@ -53,11 +54,12 @@ public class ClemFirstLook : MonoBehaviour
         }
         if (!moving)
         {
+
             myAnimationController.SetBool("ClemMove", false);
             myAnimationController.SetBool("ClemIdel", true);
 
+            //DoorClose.SetActive(false);
 
-           
         }
 
     }
@@ -70,7 +72,7 @@ public class ClemFirstLook : MonoBehaviour
 
         var targetRotation = Quaternion.LookRotation(direction);
 
-        if (Vector3.Distance(Clem.transform.position, destination) != 0f)
+        if (Vector3.Distance(Clem.transform.position, destination) > 0f)
         {
 
             myAnimationController.SetBool("ClemMove", true);
@@ -79,24 +81,22 @@ public class ClemFirstLook : MonoBehaviour
 
             Clem.transform.position = Vector3.MoveTowards(Clem.transform.position, destination, speed * Time.deltaTime);
             Clem.transform.rotation = targetRotation;
-
-        }
-        if (Vector3.Distance(Clem.transform.position, destination) != 0f)
-        {
             doorOnOff.ClemsGone = true;
-            DoorClose.SetActive(true);
+            //DoorClose.SetActive(true);
+
         }
 
-        else 
-        {
 
+        else if (Vector3.Distance(Clem.transform.position, destination) <= 0)
+        {
+            Debug.Log("made it!");
             myAnimationController.SetBool("ClemMove", false);
             myAnimationController.SetBool("ClemIdel", true);
             Grone.Stop();
-
+            DoorClose.SetActive(true);
             Clem.SetActive(false);
             Debug.Log("ByeClem");
-            DoorClose.SetActive(false);
+           
 
             moving = false;
         }

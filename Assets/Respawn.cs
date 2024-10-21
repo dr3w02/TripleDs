@@ -29,6 +29,9 @@ namespace Platformer
 
         public bool wakeup;
 
+        public FinalBossAnim finalBossReset;
+        public GameObject playerAnim;
+
         private void Awake()
         {
             loadCheckPoints();
@@ -103,8 +106,8 @@ namespace Platformer
                 index++;
             }
         }
-
-        public GameObject playerAnim;
+       
+       
         public void RespawnPlayer()
         {
             transform.position = _startingPoint;
@@ -118,6 +121,11 @@ namespace Platformer
 
             Debug.Log("WorkingReset");
 
+            if (finalBossReset.bossReset)
+            {
+                finalBossReset.ResetWholeBossFight();
+
+            }
             
 
         }

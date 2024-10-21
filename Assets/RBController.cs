@@ -15,7 +15,7 @@ namespace Platformer
         public Rigidbody rb;
 
         public CapsuleCollider playersCapsuleCollider;
-
+        public ClimbingCharacter characterClimb;
         public Transform cam;
 
         public Transform player;
@@ -59,7 +59,7 @@ namespace Platformer
         public bool isCrouchPressed = false;
         public bool isCrouching = false;
         public bool crouched;
-        public float crouchSpeed = 1;
+        public float crouchSpeed =1 ;
         public float normalHeight = 2;
         public float crouchHeight = 0.5f;
         public Vector3 offset;
@@ -76,7 +76,7 @@ namespace Platformer
         public float rotationFactorPerFrame = 15.0f;
 
 
-        public ClimbingCharacter characterClimb;
+    
         bool frictionWait;
         public PhysicMaterial maxFriction;
         public PhysicMaterial noFriction;
@@ -147,6 +147,15 @@ namespace Platformer
                 handleRotation();
                 handleAnimation();
                 handleCrouch();
+
+                if(crouched == true)
+                {
+                    grounded = false;
+                }
+                else
+                {
+                    grounded = true;
+                }
 
             }
             else if (!CanMove)
@@ -370,7 +379,15 @@ namespace Platformer
             //Walking Controls-------------------------------
             if (isMovementPressed && !isWalking)
             {
-                animator.SetBool(isWalkingHash, true);
+                if (!characterClimb.isClimbingLadder)
+                {
+                    animator.SetBool(isWalkingHash, true);
+                }
+                else
+                {
+                    animator.SetBool(isWalkingHash, true);
+                }
+
                 //Debug.Log("WalkingAnimatorPressed");
 
             }
@@ -386,7 +403,15 @@ namespace Platformer
             //Running Controls-------------------------------
             if ((isMovementPressed && isRunPressed) && !isRunning)
             {
-                animator.SetBool(isRunningHash, true);
+                if(!characterClimb.isClimbingLadder)
+                {
+                    animator.SetBool(isRunningHash, true);
+                }
+                else
+                {
+                    animator.SetBool(isRunningHash, false);
+                }
+               
                 //Debug.Log("RunningAnimatorPressed");
             }
             else if ((!isMovementPressed || !isRunPressed) && isRunning)
@@ -404,6 +429,7 @@ namespace Platformer
 
                 animator.SetBool(isSelectedHash, true);
 
+               
                 Debug.Log("E ANIMATED");
 
             }
@@ -416,6 +442,7 @@ namespace Platformer
 
            
         }
+
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
@@ -439,7 +466,7 @@ namespace Platformer
 
         public void StartCrouch()
         {
-
+            crouched = true;
             animator.SetBool(isCrouchingHash, true);
             Debug.Log("Crouching");
 
@@ -463,7 +490,7 @@ namespace Platformer
                 Debug.Log("Swapping crouch");
                 if (isCrouching)
                 {
-                   
+                    
                     StartCrouch();
                 }
                 else
@@ -490,7 +517,7 @@ namespace Platformer
         }
         public void StopCrouch()
         {
-            
+            crouched = false;
             animator.SetBool(isCrouchingHash, false);
             Debug.Log("Stop Crouching");
             playersCapsuleCollider.height = playersCapsuleCollider.height;

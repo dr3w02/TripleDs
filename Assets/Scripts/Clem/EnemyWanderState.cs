@@ -47,8 +47,9 @@ namespace Platformer
         {
             Debug.Log("Chase");
 
+            animator.CrossFade(WalkHash, crossFadeDuration);
+            
 
-           
             Transform wayPointsObject = GameObject.FindGameObjectWithTag("Waypoint").transform;
 
             foreach (Transform t in wayPointsObject)
@@ -128,7 +129,7 @@ namespace Platformer
             
             if (enemy.CompareTag("EnemyBB"))
             {
-                animator.CrossFade(WalkHash, crossFadeDuration);
+                
                 agent.speed = enemy.speed;
                 WalkingBB();
             }
@@ -136,7 +137,7 @@ namespace Platformer
 
             else if (!enemy.CompareTag("EnemyBB"))
             {
-                animator.CrossFade(WalkHash, crossFadeDuration);
+               
                 WanderRandom();
             }
 

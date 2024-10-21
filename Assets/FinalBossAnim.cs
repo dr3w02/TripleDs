@@ -46,8 +46,8 @@ namespace Platformer
         private CinemachineBasicMultiChannelPerlin MainperlinNoise;
 
 
-        [SerializeField] private float shakeIntensity = 2f;
-        [SerializeField] private float shakeTime = 5f;
+        [SerializeField] private float shakeIntensity = 1f;
+       
         public bool CamShake;
 
         private bool MainCamShake;
@@ -98,10 +98,16 @@ namespace Platformer
         public AudioSource bossMusic;
 
 
+        public BoxCollider interactable1;
+        public BoxCollider interactable2;
+        public BoxCollider interactable3;
+
+        public bool bossReset;
+
 
         public void Start()
         {
-
+            
             BossFight.SetActive(false);
             Lamps.SetActive(false);
             Bosscam.SetActive(false);
@@ -134,15 +140,20 @@ namespace Platformer
             {
                 MainShakeCamera(shakeIntensity);
             }
-          
+            else if (!MainCamShake)
+            {
+                perlinNoise.m_AmplitudeGain = 0f;
+            }
+
+
 
 
 
             if (CamShake)
             {
-                ShakeCamera(shakeIntensity, shakeTime);
+                ShakeCamera(shakeIntensity);
             }
-            else
+            else if (!CamShake)
             {
                 perlinNoise.m_AmplitudeGain = 0f;
             }
@@ -186,7 +197,7 @@ namespace Platformer
             mCharacter.transform.rotation = Quaternion.RotateTowards(mCharacter.transform.rotation, targetRotation, Time.deltaTime * 300f);
 
 
-            if (distance <= 0.1f) 
+            if (distance <= 0.2f) 
             {
                 Debug.Log("sTOPMoving!");
                 FourtySixAnims.SetBool("isWalking", false);
@@ -277,7 +288,7 @@ namespace Platformer
                 }
         }
 
-        public void ShakeCamera(float intensity, float shakeTime)
+        public void ShakeCamera(float intensity)
         {
             perlinNoise.m_AmplitudeGain = intensity;
         }
@@ -339,6 +350,7 @@ namespace Platformer
 
         public IEnumerator ResetForFight()
         {
+            bossReset = true;
             Debug.Log("RESET");
             StartCoroutine(WaitBetweenFadeInOut());
             yield return new WaitForSeconds(4);
@@ -349,7 +361,7 @@ namespace Platformer
             yield return new WaitForSeconds(2);
             Lamps.SetActive(true);
             FourtySixAnims.SetBool("isWakeUp", true);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(3);
             FourtySixAnims.SetBool("isWakeUp", false);
             
             FourtySixAnims.SetBool("isSleeping", false);
@@ -363,12 +375,11 @@ namespace Platformer
 
 
 
-        public BoxCollider interactable1;
-        public BoxCollider interactable2;
-        public BoxCollider interactable3;
+     
 
         public void ResetWholeBossFight()
         {
+            MainCamShake = false;
             BossFight.transform.position = B.transform.position;
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
             lampSpawn.resetAllLamps = true;
@@ -378,8 +389,9 @@ namespace Platformer
             interactable1.enabled = !interactable1.enabled;
             interactable2.enabled = !interactable2.enabled;
             interactable3.enabled = !interactable3.enabled;
-
             
+
+
         }
     }
 }

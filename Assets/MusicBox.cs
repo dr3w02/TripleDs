@@ -68,6 +68,7 @@ namespace Platformer
             if (!isHolding)
             {
                 timer.MusicBoxWindDown();
+                isHolding = false;
             }
         }
         private void OnTriggerEnter(Collider other)
@@ -75,6 +76,7 @@ namespace Platformer
             if (other.CompareTag("Player"))
             {
                 playerInRange = true;
+                isHolding = false;
             }
 
         }

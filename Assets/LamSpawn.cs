@@ -18,7 +18,7 @@ namespace Platformer
 
         public Animator BlackBeakAnim;
         public NurseCodeOffice agent;
-       
+        public FinalBossAnim reset;
 
         [Header("Fade")]
 
@@ -185,9 +185,9 @@ namespace Platformer
                 SceneManager.LoadScene(2);
 
                 gameOver = false;
-               
+                reset.bossReset = false;
 
-             
+
                 DeathCamBB.SetActive(false);
                 player.SetActive(false);
                 BlackBeakAnim.SetBool("Die", false);
