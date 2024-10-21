@@ -48,13 +48,29 @@ namespace Platformer
 
         }
 
-
+ 
         public void Start()
         {
             LampAnimator.SetBool("Idel", true);
 
         }
-       
+
+        public void Update()
+        {
+            if (reset.Reset == true)
+            {
+                Debug.Log("ResetLamps");
+
+                lampSway = false;
+                LampAnimator.SetBool("Idel", true);
+                LampSmashed.SetActive(false);
+                LampSpawn.resetAllLamps = true;
+                reset.Reset = false;
+
+
+            }
+        }
+
         public bool Interact(Interactor interactor)
         {
             if (lampSway == false)
@@ -70,7 +86,7 @@ namespace Platformer
             if (ShakedCount == 3)
             {
                 
-                lampSway = true;
+               lampSway = true;
                boxcollider.isTrigger = true;
                LampAnimator.SetBool("Rocking", false);
                LampAnimator.SetBool("Smashed", true);
@@ -81,12 +97,7 @@ namespace Platformer
                 ShakedCount = 0;
             }
 
-            if (reset.Reset)
-            {
-               
-                LampAnimator.SetBool("Idel", true);
-                LampSmashed.SetActive(false);
-            }
+          
             if (ShakedCount > 1)
             {
                 if (enemy.CompareTag("EnemyBB"))
@@ -116,33 +127,20 @@ namespace Platformer
 
             enemy.smashed = true;
 
-            //bbAnimator.SetBool("Looking", true);
+            
 
             yield return new WaitForSeconds(8f);
 
-            //bbAnimator.SetBool("Looking", false);
 
             enemy.smashed = false;
          
 
             Debug.Log("hearda noise started");
-            //agent.speed = 6;
-
-            //StopCoroutine(heardANoise());
-
+            
         }
 
 
-        //private IEnumerator Noisettack()
-        //{
-
-
-        //    yield return new WaitForSeconds(5f);
-
-        //    enemy.smashed = false;
-
-        //    StopCoroutine(Noisettack() );
-        //}
+       
 
 
 

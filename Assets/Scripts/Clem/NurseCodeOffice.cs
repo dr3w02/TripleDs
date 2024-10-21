@@ -17,8 +17,9 @@ namespace Platformer
         [SerializeField, Child] Animator animator;
         public RBController characterMain;
 
-        
-       
+        [SerializeField] public bool fadeIn = false;
+        [SerializeField] public bool fadeOut = true;
+
         public FinalBossAnim ResetBossFight;
 
         [SerializeField] float wanderRadius = 10f; // changes how far enime is able to wander 
@@ -137,6 +138,8 @@ namespace Platformer
             Debug.Log("Attacking");
 
         }
+
+
 
 
     }

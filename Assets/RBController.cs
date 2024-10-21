@@ -108,10 +108,12 @@ namespace Platformer
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            isJumpPressed = context.ReadValueAsButton();
-
-
-            Jump();
+            if (!characterClimb.isClimbingLadder)
+            {
+                isJumpPressed = context.ReadValueAsButton();
+                Jump();
+            }
+           
         }
 
         public void OnRun(InputAction.CallbackContext context)

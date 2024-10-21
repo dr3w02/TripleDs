@@ -47,15 +47,21 @@ namespace Platformer
             if (Physics.Raycast(orentation.transform.position, -orentation.transform.up, out hit, groundCheckDistance))
             {//Where RayHitGround
 
-
-                rbController.SetGrounded(true);
-                // Debug.Log("Hit collider: " + hit.collider.name);
+              
+                    rbController.SetGrounded(true);
+                    // Debug.Log("Hit collider: " + hit.collider.name);
+                
+  
             }
 
             else// ray has not hit the ground
             {
+              
+                    rbController.SetGrounded(false);
+                    // Debug.Log("Hit collider: " + hit.collider.name);
+                
                 //isGrounded = false;
-                rbController.SetGrounded(false);
+                
                // Debug.Log("Raycast did not hit anything");
 
             }

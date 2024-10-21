@@ -7,6 +7,8 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.EventTrigger;
 using static UnityEngine.InputSystem.Controls.AxisControl;
 
 namespace Platformer
@@ -104,7 +106,7 @@ namespace Platformer
 
         public bool bossReset;
 
-
+        public GameObject ResetButton;
         public void Start()
         {
             
@@ -142,7 +144,7 @@ namespace Platformer
             }
             else if (!MainCamShake)
             {
-                perlinNoise.m_AmplitudeGain = 0f;
+                MainperlinNoise.m_AmplitudeGain = 0f;
             }
 
 
@@ -155,6 +157,7 @@ namespace Platformer
                 perlinNoise.m_AmplitudeGain = 0f;
             }
 
+
             if (PlayingAnim)
             {
                 MoveToCheckpoint();
@@ -162,6 +165,14 @@ namespace Platformer
 
 
      
+            if(ResetButtonbool == true)
+            {
+                ResetButton.SetActive(true);
+            }
+            else if (ResetButtonbool == false) 
+            {
+                ResetButton.SetActive(false);
+            }
 
         }
 
@@ -224,7 +235,7 @@ namespace Platformer
         {
 
             mainScript.TurnOffMovement();
-
+            ResetButtonbool = false;
             movePlayer = true;
 
             return true;
@@ -343,45 +354,58 @@ namespace Platformer
             StopCoroutine(WaitBetweenFadeInOut());
         }
 
-
+        public bool ResetButtonbool;
 
         public IEnumerator ResetForFight()
         {
             bossReset = true;
             Debug.Log("RESET");
             StartCoroutine(WaitBetweenFadeInOut());
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(5);
             CamShake = false;
+            MainCamShake = true;
             Bosscam.SetActive(false);
             BB.SetActive(false);
+
+           
+
             BossFight.SetActive(true);
+            BossFight.transform.GetChild(0).gameObject.SetActive(true);
             yield return new WaitForSeconds(2);
             Lamps.SetActive(true);
             FourtySixAnims.SetBool("isWakeUp", true);
             yield return new WaitForSeconds(3);
             FourtySixAnims.SetBool("isWakeUp", false);
-            
+            ResetButtonbool = true;
             FourtySixAnims.SetBool("isSleeping", false);
 
             mainScript.Enabled();
-
-            Reset = false;
+           
+           
 
             BB.transform.position = A.transform.position;
         }
 
 
-
+        
      
 
         public void ResetWholeBossFight()
         {
+            Reset = true;
             MainCamShake = false;
+
+
             BossFight.transform.position = B.transform.position;
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
-            lampSpawn.resetAllLamps = true;
-            BossFight.SetActive(false);
+
+
+            //lampSpawn.resetAllLamps = true;
+
+            //BossFight.SetActive(false);
+           
             Lamps.SetActive(false);
+
             bossMusic.Stop();
             interactable1.enabled = !interactable1.enabled;
             interactable2.enabled = !interactable2.enabled;
@@ -390,6 +414,7 @@ namespace Platformer
 
 
         }
+       
     }
 }
 

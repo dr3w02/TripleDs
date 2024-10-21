@@ -74,7 +74,7 @@ namespace Platformer
                 {
                     playerScript.TurnOffMovement();
                     Debug.Log("Start Climbing");
-
+                    playerScript.grounded = false;
                     rb.velocity = Vector3.zero;
                     rb.angularVelocity = Vector3.zero;
 
@@ -153,6 +153,7 @@ namespace Platformer
         public void HandleClimbingMovement()
         {
 
+            
             animator.SetBool(isPullingHash, true);
             // Move up if input is -1 climbing up
             if (playerScript.currentMovementInput.y == -1)
@@ -168,6 +169,7 @@ namespace Platformer
 
         public void DropLadder()
         {
+           
             playerScript.Enabled();
             animator.SetBool(isPullingHash, false);
             // Debug.Log("Drop");
