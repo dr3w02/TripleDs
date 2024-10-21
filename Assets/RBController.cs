@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
@@ -76,7 +77,9 @@ namespace Platformer
 
 
         public ClimbingCharacter characterClimb;
-
+        bool frictionWait;
+        public PhysicMaterial maxFriction;
+        public PhysicMaterial noFriction;
       
 
         public PlayerInput input;
@@ -159,11 +162,24 @@ namespace Platformer
 
             if (grounded)
             {
+                if (!frictionWait)
+                {
+                    playersCapsuleCollider.material = maxFriction;
+                }
                 animator.SetBool(isJumpingHash, false);
                 HasJumped = false;
             }
+            else
+            {
+                playersCapsuleCollider.material = noFriction;
+            }
 
 
+        }
+
+        void FrictionDelay()
+        {
+            frictionWait = false;
         }
 
         void Jump()
@@ -180,6 +196,12 @@ namespace Platformer
 
                     if (grounded)
                     {
+                        playersCapsuleCollider.material = noFriction;
+                        if (frictionWait == false)
+                        {
+                            frictionWait = true;
+                            Invoke("FrictionDelay", 0.1f);
+                        }
                         jumpForces = Vector3.up * jumpForce;
                         animator.SetBool(isJumpingHash, true);
                         grounded = false;

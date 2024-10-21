@@ -26,7 +26,7 @@ namespace Platformer
 
 
         public MusicBoxMusic music;
-
+        bool windUp = true;
      
 
         void Start()
@@ -83,7 +83,12 @@ namespace Platformer
         // Update is called once per frame
         public void MusicBoxWindDown()
         {
-            music.audioDownPlay = false;
+            //music.audioDownPlay = false;
+            if(windUp == true)
+            {
+                windUp = false;
+                music.PlayWindDown();
+            }
             timeRemaining -= Time.deltaTime;
             timerRadial.fillAmount = timeRemaining / maxTime;
         }
@@ -91,7 +96,12 @@ namespace Platformer
     
         public void MusicBoxWindUp()
         {
-            music.audioDownPlay = true;
+            //music.audioDownPlay = true;
+            if (windUp == false)
+            {
+                windUp = true;
+                music.PlayWindUp();
+            }
 
             timeRemaining += Time.deltaTime;
 

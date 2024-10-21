@@ -18,19 +18,12 @@ namespace Platformer
         private bool isHolding = false;
         public TimerController timer;
         private float fillSpeed = 5.0f;
-  
-
-        public GameObject MusicBoxCollider;
         bool playerInRange;
-        string Music = "MusicBox";
 
         public Transform Player { get; private set; }
-        
-        public MusicBoxMusic music;
-    
+
         public void Start()
         {
-            MusicBoxCollider = GameObject.FindGameObjectWithTag(Music);
             Player = GameObject.FindGameObjectWithTag("Player").transform;
 
 

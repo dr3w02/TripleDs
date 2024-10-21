@@ -48,25 +48,14 @@ namespace Platformer
             
         public bool CanDetectPlayer()
         {
-           
-
             return detectionTimer.IsRunning || detectionStrategy.Execute(Player, transform, detectionTimer);
-
-   
-
         }
 
         public bool CanAttackPlayer()
         {
             var directionToPlayer = Player.position - transform.position;
             return directionToPlayer.magnitude <= attackRange;
-
-
-
         }
-
-
-      
 
         public void SetDetectionStrategy(IDetectionStrategy detectionStrategy) => this.detectionStrategy = detectionStrategy;
 
@@ -79,7 +68,7 @@ namespace Platformer
             Gizmos.DrawWireSphere(transform.position, innerDetectionRadius);
 
             Vector3 fowardConeDirection = Quaternion.Euler(0, detectionAngle / 2, 0) * transform.forward * detectionRadius;
-            Vector3 backwardConeDirection = Quaternion.Euler(0, detectionAngle / 2, 0) * transform.forward * detectionRadius;
+            Vector3 backwardConeDirection = Quaternion.Euler(0, (detectionAngle / -2), 0) * transform.forward * detectionRadius;
 
             //Drawlines represent the cone
 
