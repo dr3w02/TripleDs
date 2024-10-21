@@ -11,16 +11,16 @@ namespace Platformer
         public GameObject Player;
         public void OnTriggerEnter(Collider other)
         {
-            playerScript.StartCrouch();
+            playerScript.ForceCrouch(true);
         }
-        public void OnTriggerStay(Collider other)
-        {
-            playerScript.StartCrouch();
-        }
+        //public void OnTriggerStay(Collider other)
+        //{
+        //    playerScript.StartCrouch();
+        //}
 
         public void OnTriggerExit(Collider other)
         {
-            playerScript.StopCrouch();
+            playerScript.ForceCrouch(false);
             PlayerAnim.transform.position = Player.transform.position;
 
         }

@@ -146,9 +146,6 @@ namespace Platformer
             }
 
 
-
-
-
             if (CamShake)
             {
                 ShakeCamera(shakeIntensity);

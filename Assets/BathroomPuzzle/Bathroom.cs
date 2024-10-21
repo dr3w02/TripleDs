@@ -73,7 +73,7 @@ namespace Platformer
                 {
                     characterMain.enabled = false;
                 }
-                
+
             }
         }
 
@@ -119,10 +119,18 @@ namespace Platformer
             // sequence is exactly Lever4 -> Lever1 -> Lever5
             if (firstLever == lever4Script && secondLever == lever1Script && thirdLever == lever5Script)
             {
+                StopStaticSound();
                 return true; // correct order
             }
 
+
             return false; // incorrect order
+        }
+
+        [ContextMenu("Static Debug")]
+        public void StopStaticSound()
+        {
+            staticElectricity.Stop();
         }
 
         private void ResetAllLevers()
