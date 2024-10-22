@@ -5,7 +5,11 @@ using UnityEngine.SceneManagement;
 
 namespace Platformer
 {
-    public class MainMenu : MonoBehaviour{
+    public class MainMenu : MonoBehaviour
+    {
+
+
+        public LoadingScript loadingScript;
 
         public void Update()
         {
@@ -14,16 +18,20 @@ namespace Platformer
             Time.timeScale = 1f;
 
         }
-        public void PlayGame ()
+        public void PlayGame()
         {
             SceneManager.LoadScene(1);
             Debug.Log("Start");
         }
 
-        public void QuitGame ()
+        public void QuitGame()
         {
-            Debug.Log ("QUIT!");
+            Debug.Log("QUIT!");
             Application.Quit();
         }
+
+
+       
     }
 }
+
