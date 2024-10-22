@@ -10,7 +10,7 @@ namespace Platformer
         [Header("menu Screens")]
         [SerializeField] private GameObject LoadingScreen;
         [SerializeField] private GameObject MainMenuCanvas;
-
+       
         public void LoadLevelBtn(string LevelToLoad)
         {
             MainMenuCanvas.SetActive(false);

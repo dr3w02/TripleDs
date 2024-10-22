@@ -104,8 +104,10 @@ namespace Platformer
            enemy.respawn.RespawnPlayer();
            cam.SetActive(false);
 
-           enemy.mCharacter.SetActive(true);
-            enemy.transform.GetChild(0).gameObject.SetActive(false);
+            enemy.mCharacter.SetActive(true);
+            enemy.BB.SetActive(false);
+
+           
            
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);

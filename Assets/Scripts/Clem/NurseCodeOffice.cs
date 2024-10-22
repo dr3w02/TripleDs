@@ -30,7 +30,8 @@ namespace Platformer
 
         //[SerializeField] float speed;
         public GameObject clemDeathCam;
-
+    
+        public GameObject BB;
         public GameObject BlackBeackKillCam;
 
         public bool attacking; 
