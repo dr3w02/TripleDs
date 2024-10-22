@@ -94,7 +94,7 @@ public class ClemFirstLook : MonoBehaviour
             myAnimationController.SetBool("ClemMove", false);
             myAnimationController.SetBool("ClemIdel", true);
             Grone.Stop();
-            //DoorClose.SetActive(true);
+            DoorClose.SetActive(false);
             Clem.SetActive(false);
             Debug.Log("ByeClem");
            
