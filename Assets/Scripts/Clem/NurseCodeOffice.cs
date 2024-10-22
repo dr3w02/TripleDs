@@ -38,6 +38,7 @@ namespace Platformer
         public bool attacking; 
 
         public GameObject mCharacter;
+        public GameObject mChild;
 
         StateMachine stateMachine;
 
@@ -45,16 +46,17 @@ namespace Platformer
 
         public Respawn respawn;
 
+   
         public float speed;
 
         public bool smashed;
-        
+
         /// <summary>
         /// //Main Scripts
         /// </summary>
         /// 
 
-
+     
 
         void OnValidate() => this.ValidateRefs();
 
@@ -111,8 +113,7 @@ namespace Platformer
 
             attackTimer.Tick(Time.deltaTime);
 
-            //attackTimer = new CountdownTimer(timeBetweenAttacks);
-            
+          
 
             //Tried to make the animator speed fit with the speed of my gameobject
             //float speed = navMeshAgent.velocity.magnitude / navMeshAgent.speed;
@@ -121,8 +122,8 @@ namespace Platformer
         }
 
 
-  
-       
+
+      
             
 
         void FixedUpdate()

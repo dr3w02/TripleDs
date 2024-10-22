@@ -399,12 +399,13 @@ namespace Platformer
 
         public void ResetWholeBossFight()
         {
-        
 
+            BossFight.SetActive(false);
+           
             Reset = true;
             MainCamShake = false;
 
-
+            mCharacter.SetActive(true);
             //BossFight.transform.position = B.transform.position;
 
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
@@ -445,7 +446,7 @@ namespace Platformer
 
         public IEnumerator waitForLamps()
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(0.2f);
             //lampSpawn.ResetAllLamps();
             lampSpawn.resetAllLamps = true;
             Lamp.SetActive(false);

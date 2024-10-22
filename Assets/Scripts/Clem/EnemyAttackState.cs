@@ -55,7 +55,7 @@ namespace Platformer
                 enemy.BlackBeackKillCam.SetActive(true);
 
                 animator.CrossFade(AttackHash, crossFadeDuration);
-
+                
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem(enemy.BlackBeackKillCam));
                 Debug.Log("Switch Camera");// Use the stored reference to set active
 
@@ -68,7 +68,7 @@ namespace Platformer
                 Debug.Log("attackstateclemStopped");
                 enemy.clemDeathCam.SetActive(true);
                 animator.CrossFade(AttackHash, crossFadeDuration);
-
+            
                 enemy.StartCoroutine(WaitBetweenFadeInOutClem(enemy.clemDeathCam));
 
             }
@@ -79,9 +79,11 @@ namespace Platformer
    
         public IEnumerator WaitBetweenFadeInOutClem(GameObject cam)
         {
-                yield return new WaitForSeconds(1f);
-                enemy.mCharacter.SetActive(false);
+               
+                
                 yield return new WaitForSeconds(clemWaitTime);
+
+                enemy.mChild.SetActive(false);
                 //agent.GetComponent<NavMeshAgent>().isStopped = true;
 
                 enemy.fadeIn = true;
@@ -99,21 +101,25 @@ namespace Platformer
                     }
                 }
 
-
+           
             agent.GetComponent<NavMeshAgent>().isStopped = false;
-            enemy.respawn.RespawnPlayer();
-           cam.SetActive(false);
+           
+            //cam.SetActive(false);
+            enemy.clemDeathCam.SetActive(false);
+            enemy.BlackBeackKillCam.SetActive(false);
 
             enemy.mCharacter.SetActive(true);
             enemy.BBChild.SetActive(false);
 
-           
-           
+          
+
+
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
+          
 
             enemy.fadeOut = true;
-
+           
             while (enemy.fadeOut)
             {
                 if (enemy.myUIGroup.alpha > 0)
@@ -127,13 +133,19 @@ namespace Platformer
                 }
                 else
                 {
+                 
                     enemy.BB.gameObject.SetActive(false);
                     enemy.fadeOut = false;
                     enemy.attacking = false;
+                    enemy.mCharacter.SetActive(false);
+                    enemy.mChild.SetActive(true);
+                    enemy.respawn.RespawnPlayer();
+
                     //enemy.StopCoroutine("WaitBetweenFadeInOutClem");
 
                 }
             }
+         
 
             enemy.characterMain.Enabled();
             

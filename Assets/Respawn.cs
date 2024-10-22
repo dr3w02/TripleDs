@@ -126,15 +126,15 @@ namespace Platformer
 
             if (finalBossReset.bossReset)
             {
-              
+               
                 finalBossReset.ResetWholeBossFight();
 
             }
-            
 
+        
         }
 
-
+        public bool RESET;
         //CheckPonts
         private void OnTriggerEnter(Collider other)
         {
