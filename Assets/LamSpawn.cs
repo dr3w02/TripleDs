@@ -1,8 +1,10 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 using static UnityEngine.InputSystem.Controls.AxisControl;
 
 namespace Platformer
@@ -19,7 +21,7 @@ namespace Platformer
         public Animator BlackBeakAnim;
         public NurseCodeOffice agent;
         public FinalBossAnim reset;
-
+    
         [Header("Fade")]
 
         [SerializeField] private bool fadeIn = false;
@@ -46,6 +48,9 @@ namespace Platformer
         public bool gameOver;
 
         public GameObject Enemy;
+        public List<GameObject> KeysList;
+
+
         void Start()
         {
             resetAllLamps = true;
@@ -156,7 +161,9 @@ namespace Platformer
                 resetAllLamps = false;
             
         }
-     
+
+        public GameObject startingPoint;
+
         public IEnumerator WaitBetweenFadeInOut()
         {
 
@@ -176,21 +183,31 @@ namespace Platformer
                     fadeIn = false;
                 }
             }
+          
 
             //RESET PLAYER POSTION AND TURN OFF SLEEP HERE
 
             if (gameOver)
             {
 
-                SceneManager.LoadScene(2);
-
-                gameOver = false;
                 reset.bossReset = false;
 
 
                 DeathCamBB.SetActive(false);
                 player.SetActive(false);
                 BlackBeakAnim.SetBool("Die", false);
+                player.transform.position = startingPoint.transform.position;
+
+                foreach (GameObject obj in KeysList)
+                {
+                    obj.SetActive(true);
+                }
+
+                gameOver = false;
+
+
+                SceneManager.LoadScene(2);
+
             }
             else
             {

@@ -15,7 +15,7 @@ namespace Platformer
         {
             if (ClemsGone)
             {
-                door.SetActive(false);
+               // door.SetActive(false);
             }
         }
         public void OnTriggerEnter(Collider other)

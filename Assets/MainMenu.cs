@@ -7,6 +7,13 @@ namespace Platformer
 {
     public class MainMenu : MonoBehaviour{
 
+        public void Update()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Time.timeScale = 1f;
+
+        }
         public void PlayGame ()
         {
             SceneManager.LoadScene(1);

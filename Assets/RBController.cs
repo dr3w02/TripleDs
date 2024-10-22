@@ -5,6 +5,7 @@ using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
+using UnityEngine.SceneManagement;
 
 
 namespace Platformer
@@ -115,7 +116,13 @@ namespace Platformer
                 
                 Jump();
             }
-       
+            if (characterClimb.isClimbingLadder)
+            {
+                return;
+            }
+
+
+
         }
 
         public void OnRun(InputAction.CallbackContext context)
@@ -127,8 +134,13 @@ namespace Platformer
            
         }
 
-      
 
+        [ContextMenu("reset")]
+        public void SceneReset()
+        {
+            SceneManager.LoadScene(0);
+
+        }
 
         private void Awake()
         {

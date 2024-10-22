@@ -14,18 +14,26 @@ namespace Platformer
        
         public EnemyChaseState(NurseCodeOffice enemy, Animator animator, NavMeshAgent agent, Transform player) : base(enemy, animator)
         {
-            this.agent = agent;
-            this.player = player;
-
+            if (!enemy.attacking)
+            {
+                this.agent = agent;
+                this.player = player;
+            }
+         
             
         }
 
         public override void OnEnter()
         {
-            Debug.Log("Chase");
+            if (!enemy.attacking)
+            {
+               
+                Debug.Log("Chase");
 
 
-            animator.CrossFade(RunHash, crossFadeDuration);
+                animator.CrossFade(RunHash, crossFadeDuration);
+            }
+   
         }
        
         public override void Update()

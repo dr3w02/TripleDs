@@ -10,7 +10,7 @@ public class ClemFirstLook : MonoBehaviour
 
     public AudioSource Grone;
     public GameObject Clem;
-    public GameObject DoorClose;
+   public GameObject DoorClose;
     [SerializeField] private Animator myAnimationController;
     public TurnJumpscareOnAndOff doorOnOff;
     public Transform A;
@@ -18,6 +18,7 @@ public class ClemFirstLook : MonoBehaviour
 
     public float speed;
     public float rotationSpeed;
+    public BoxCollider box;
     private void Start()
     {
 
@@ -35,11 +36,9 @@ public class ClemFirstLook : MonoBehaviour
         if (other.CompareTag("Player"))
         {
 
-            Grone.Play();
-
             moving = true;
-
-            
+            Grone.Play();
+            box.enabled = !box.enabled;
 
         }
 
@@ -50,11 +49,13 @@ public class ClemFirstLook : MonoBehaviour
     {
         if (moving)
         {
+           
             ClemMove();
+            
         }
         if (!moving)
         {
-
+           // Grone.Stop();
             myAnimationController.SetBool("ClemMove", false);
             myAnimationController.SetBool("ClemIdel", true);
 
@@ -65,7 +66,7 @@ public class ClemFirstLook : MonoBehaviour
     }
     public void ClemMove()
     {
-
+     
         Vector3 destination = B.position;
 
         var direction = (B.transform.position - Clem.transform.position).normalized;
@@ -82,7 +83,7 @@ public class ClemFirstLook : MonoBehaviour
             Clem.transform.position = Vector3.MoveTowards(Clem.transform.position, destination, speed * Time.deltaTime);
             Clem.transform.rotation = targetRotation;
             doorOnOff.ClemsGone = true;
-            //DoorClose.SetActive(true);
+            DoorClose.SetActive(true);
 
         }
 
@@ -93,7 +94,7 @@ public class ClemFirstLook : MonoBehaviour
             myAnimationController.SetBool("ClemMove", false);
             myAnimationController.SetBool("ClemIdel", true);
             Grone.Stop();
-            DoorClose.SetActive(true);
+            //DoorClose.SetActive(true);
             Clem.SetActive(false);
             Debug.Log("ByeClem");
            

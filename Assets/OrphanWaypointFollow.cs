@@ -300,6 +300,7 @@ namespace Platformer
             FlashLightGround.SetActive(true);
             FourtySix.SetActive(false);
             LightOn.SetActive(false);
+
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
 

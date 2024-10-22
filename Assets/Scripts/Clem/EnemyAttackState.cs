@@ -15,7 +15,7 @@ namespace Platformer
         private readonly Transform player;
 
 
-        [SerializeField] private float fadeWaitTime = 6f;
+        [SerializeField] private float fadeWaitTime = 3f;
         [SerializeField] private float clemWaitTime = 3f;
         [SerializeField] private float BBWaitTime = 2f;
 
@@ -32,7 +32,7 @@ namespace Platformer
        
         public override void OnEnter()
         {
-
+            enemy.attacking = true;
             //GameObject clemDeathCam = GameObject.FindGameObjectWithTag("EnemyClemCam");
             //Debug.Log("Found GameObject with tag 'EnemyClemCam': " + clemDeathCam.name);
             Debug.Log("Attackin in State");
@@ -76,70 +76,14 @@ namespace Platformer
 
         }
    
-        public IEnumerator WaitBetweenFadeInOutBB()
-        {
-            yield return new WaitForSeconds(2f);
-            enemy.mCharacter.SetActive(false);
-            yield return new WaitForSeconds(clemWaitTime);
-            Debug.Log("Switch Camera");// Use the stored reference to set active
-
-
-
-            enemy.fadeIn = true;
-            while (enemy.fadeIn)
-            {
-                if (enemy.myUIGroup.alpha < 1)
-                {
-                    enemy.myUIGroup.alpha += Time.deltaTime;
-                    yield return null;  // Wait for the next frame
-
-                }
-                else
-                {
-                    enemy.fadeIn = false;
-                }
-            }
-
-
-            enemy.respawn.RespawnPlayer();
-            enemy.BlackBeackKillCam.SetActive(false);
-
-            enemy.mCharacter.SetActive(true);
-
-            // Wait for the specified amount of time
-            yield return new WaitForSeconds(fadeWaitTime);
-
-            enemy.fadeOut = true;
-
-                while (enemy.fadeOut)
-                {
-                    if (enemy.myUIGroup.alpha > 0)
-                    {
-                        enemy.myUIGroup.alpha -= Time.deltaTime;
-                        // Wait for the next frame
-                        enemy.characterMain.Enabled();
-                        agent.GetComponent<NavMeshAgent>().isStopped = false;
-
-                        Debug.Log("Stoppedclemstarted");
-                        yield return null;
-                    }
-
-                    else
-                    {
-                        enemy.fadeOut = false;
-                    }
-                }
-
-
-
-        }
-    
+   
         public IEnumerator WaitBetweenFadeInOutClem(GameObject cam)
         {
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(1f);
                 enemy.mCharacter.SetActive(false);
                 yield return new WaitForSeconds(clemWaitTime);
                 //agent.GetComponent<NavMeshAgent>().isStopped = true;
+
                 enemy.fadeIn = true;
                 while (enemy.fadeIn)
                 {
@@ -183,8 +127,9 @@ namespace Platformer
                 {
                     enemy.gameObject.SetActive(false);
                     enemy.fadeOut = false;
+                    enemy.attacking = false;
                     //enemy.StopCoroutine("WaitBetweenFadeInOutClem");
-                    
+
                 }
             }
 

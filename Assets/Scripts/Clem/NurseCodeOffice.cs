@@ -32,7 +32,8 @@ namespace Platformer
         public GameObject clemDeathCam;
 
         public GameObject BlackBeackKillCam;
-    
+
+        public bool attacking; 
 
         public GameObject mCharacter;
 
