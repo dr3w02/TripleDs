@@ -21,7 +21,7 @@ namespace Platformer
         public Animator BlackBeakAnim;
         public NurseCodeOffice agent;
         public FinalBossAnim reset;
-    
+       
         [Header("Fade")]
 
         [SerializeField] private bool fadeIn = false;
@@ -90,9 +90,11 @@ namespace Platformer
             {
                 // LampLast = true;
 
+
+               
                 StartCoroutine(WaitBetweenFadeInOut());
 
-                StartCoroutine(waitTime());
+                //StartCoroutine(waitTime());
 
             }
           
@@ -109,21 +111,28 @@ namespace Platformer
         
         public IEnumerator waitTime()
         {
-           
 
-            yield return new WaitForSeconds(5f);
+            Lamp1.SetActive(false);
+            Lamp2.SetActive(false);
+            Lamp3.SetActive(false);
+            Lamp4.SetActive(false);
+            Lamp5.SetActive(false);
+            Lamp6.SetActive(false);
+
 
             Debug.Log("lampcount0");
             Debug.Log("Animation Death Playingg");
             bb.transform.position = DeathPoint.transform.position;
             bb.SetActive(true);
             Enemy.SetActive(false);
-            DeathCamBB.SetActive(true);
             player.SetActive(false);
             BlackBeakAnim.SetBool("Dying", true);
+            yield return new WaitForSeconds(5f);
+            
+           
             Debug.Log("Animation Death Play");
-            StartCoroutine(WaitBetweenFadeInOut());
 
+            StartCoroutine(WaitBetweenFadeInOut());
             gameOver = true;
 
 
@@ -193,7 +202,7 @@ namespace Platformer
         {
 
             //mCharacter.SetActive(false);
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(5f);
             Debug.Log("Switch Camera");
             fadeIn = true;
             while (fadeIn)
@@ -206,6 +215,7 @@ namespace Platformer
                 else
                 {
                     fadeIn = false;
+                    DeathCamBB.SetActive(true);
                 }
             }
           
@@ -232,6 +242,7 @@ namespace Platformer
             }
             else
             {
+               
                 yield return new WaitForSeconds(fadeWaitTime);
 
                 fadeOut = true;
@@ -245,6 +256,7 @@ namespace Platformer
                         
                         //GetComponent<NavMeshAgent>().isStopped = false;
                         Debug.Log("Startedlamspawn");
+                        StartCoroutine(waitTime());
                        
                         //turn on bb moving here and turn off camera here
                         //BlackBeakAnim.SetBool("Die", false);
@@ -252,7 +264,8 @@ namespace Platformer
                     else
                     {
                         fadeOut = false;
-                        //StopCoroutine(WaitBetweenFadeInOut());
+                      
+                        StopCoroutine(WaitBetweenFadeInOut());
                     }
                 }
 
