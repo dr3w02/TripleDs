@@ -30,6 +30,8 @@ namespace Platformer
         public LamSpawn LampSpawn;
 
         public FinalBossAnim reset;
+
+
         public BoxCollider boxcollider;
       
         public NurseCodeOffice enemy;
@@ -54,18 +56,19 @@ namespace Platformer
             LampAnimator.SetBool("Idel", true);
 
         }
-
+      
         public void Update()
         {
+           
             if (reset.Reset == true)
             {
+              
                 Debug.Log("ResetLamps");
-
+                
                 lampSway = false;
                 LampAnimator.SetBool("Idel", true);
-                LampSmashed.SetActive(false);
-                LampSpawn.resetAllLamps = true;
-                reset.Reset = false;
+
+
 
 
             }
@@ -86,7 +89,10 @@ namespace Platformer
             if (ShakedCount == 3)
             {
                 
-               lampSway = true;
+                lampSway = true;
+                
+              
+              
                boxcollider.isTrigger = true;
                LampAnimator.SetBool("Rocking", false);
                LampAnimator.SetBool("Smashed", true);
@@ -95,6 +101,8 @@ namespace Platformer
                 LampSpawn.ActivateRandomObject();
 
                 ShakedCount = 0;
+
+              
             }
 
           

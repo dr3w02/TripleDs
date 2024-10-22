@@ -1,4 +1,5 @@
 using Cinemachine;
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -359,6 +360,7 @@ namespace Platformer
 
         public IEnumerator ResetForFight()
         {
+            BossFight.transform.position = B.transform.position;
             bossReset = true;
             Debug.Log("RESET");
             StartCoroutine(WaitBetweenFadeInOut());
@@ -372,7 +374,7 @@ namespace Platformer
 
             BossFight.SetActive(true);
             BossFight.transform.GetChild(0).gameObject.SetActive(true);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             Lamps.SetActive(true);
             FourtySixAnims.SetBool("isWakeUp", true);
             yield return new WaitForSeconds(3);
@@ -381,31 +383,48 @@ namespace Platformer
             FourtySixAnims.SetBool("isSleeping", false);
 
             mainScript.Enabled();
-           
-           
+
+
 
             BB.transform.position = A.transform.position;
+
         }
 
 
-        
-     
+        public void FixedUpdate()
+        {
+           
+        }
+
 
         public void ResetWholeBossFight()
         {
+        
+
             Reset = true;
             MainCamShake = false;
 
 
-            BossFight.transform.position = B.transform.position;
+            //BossFight.transform.position = B.transform.position;
+
             BoxColliderForAnim.enabled = !BoxColliderForAnim.enabled;
+
+           
+                Lamp.SetActive(true);
+                Lamp1.SetActive(true);
+                Lamp2.SetActive(true);
+                Lamp3.SetActive(true);
+                Lamp4.SetActive(true);
+                Lamp5.SetActive(true);
+
+            
 
 
             //lampSpawn.resetAllLamps = true;
-
+            // Lamps.SetActive(false);
             //BossFight.SetActive(false);
-           
-            Lamps.SetActive(false);
+            StartCoroutine(waitForLamps());
+
 
             bossMusic.Stop();
             interactable1.enabled = !interactable1.enabled;
@@ -413,6 +432,35 @@ namespace Platformer
             interactable3.enabled = !interactable3.enabled;
             
 
+
+        }
+
+        public GameObject Lamp;
+        public GameObject Lamp1;
+        public GameObject Lamp2;
+        public GameObject Lamp3;
+        public GameObject Lamp4;
+        public GameObject Lamp5;
+    
+
+        public IEnumerator waitForLamps()
+        {
+            yield return new WaitForSeconds(3);
+            //lampSpawn.ResetAllLamps();
+            lampSpawn.resetAllLamps = true;
+            Lamp.SetActive(false);
+            Lamp1.SetActive(false);
+            Lamp2.SetActive(false);
+            Lamp3.SetActive(false);
+            Lamp4.SetActive(false);
+            Lamp5.SetActive(false);
+         
+
+            Lamps.SetActive(false);
+
+
+            Reset = false;
+            StopCoroutine(waitForLamps());
 
         }
        

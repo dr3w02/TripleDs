@@ -105,7 +105,7 @@ namespace Platformer
            cam.SetActive(false);
 
             enemy.mCharacter.SetActive(true);
-            enemy.BB.SetActive(false);
+            enemy.BBChild.SetActive(false);
 
            
            
@@ -127,7 +127,7 @@ namespace Platformer
                 }
                 else
                 {
-                    enemy.gameObject.SetActive(false);
+                    enemy.BB.gameObject.SetActive(false);
                     enemy.fadeOut = false;
                     enemy.attacking = false;
                     //enemy.StopCoroutine("WaitBetweenFadeInOutClem");

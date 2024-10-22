@@ -126,6 +126,7 @@ namespace Platformer
 
             if (finalBossReset.bossReset)
             {
+              
                 finalBossReset.ResetWholeBossFight();
 
             }

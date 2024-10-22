@@ -49,20 +49,20 @@ namespace Platformer
 
         public GameObject Enemy;
         public List<GameObject> KeysList;
-
+        
 
         void Start()
         {
+
             resetAllLamps = true;
            
 
         }
 
-        
+
         public void ActivateRandomObject()
         {
 
-            
 
             foreach (GameObject obj in Lamps)
             {
@@ -74,6 +74,7 @@ namespace Platformer
 
             if(Lamps.Count > 0)
             {
+
                 Lamps[randomIndex].SetActive(true);
                 Lamps.RemoveAt(randomIndex);
             }
@@ -87,18 +88,29 @@ namespace Platformer
 
             if (Lamps.Count == 0)
             {
+                // LampLast = true;
 
                 StartCoroutine(WaitBetweenFadeInOut());
 
                 StartCoroutine(waitTime());
 
-                
             }
+          
+           
 
         }
 
+        //public void ResetAllLamps()
+       // {
+        //    ResetAllLamps(Lamp1, Lamp2, Lamp3, Lamp4, Lamp5, Lamp6);
+
+
+       // }
+        
         public IEnumerator waitTime()
         {
+           
+
             yield return new WaitForSeconds(5f);
 
             Debug.Log("lampcount0");
@@ -118,15 +130,18 @@ namespace Platformer
         }
         private void Update()
         {
+
+
             if (resetAllLamps)
             {
                 ResetAllLamps(Lamp1, Lamp2, Lamp3, Lamp4, Lamp5, Lamp6);
+
+               
             }
             else
             {
                 return;
             }
-
             if (!resetAllLamps)
             {
                 ActivateRandomObject();
@@ -136,12 +151,21 @@ namespace Platformer
             {
                 
             }
+
+       
+         
+
+       
+       
+           
         }
+        
 
-
+        
         public void ResetAllLamps(GameObject Lamp1, GameObject Lamp2, GameObject Lamp3, GameObject Lamp4, GameObject Lamp5, GameObject Lamp6)
         {
-
+            
+             
             Lamps.Remove(Lamp1);
             Lamps.Remove(Lamp2);
             Lamps.Remove(Lamp3);
@@ -156,10 +180,11 @@ namespace Platformer
                 Lamps.Add(Lamp4);
                 Lamps.Add(Lamp5);
                 Lamps.Add(Lamp6);
-                
 
-                resetAllLamps = false;
+         
+            resetAllLamps = false;
             
+
         }
 
         public GameObject startingPoint;
@@ -196,12 +221,8 @@ namespace Platformer
                 DeathCamBB.SetActive(false);
                 player.SetActive(false);
                 BlackBeakAnim.SetBool("Die", false);
-                player.transform.position = startingPoint.transform.position;
+                
 
-                foreach (GameObject obj in KeysList)
-                {
-                    obj.SetActive(true);
-                }
 
                 gameOver = false;
 
@@ -231,9 +252,12 @@ namespace Platformer
                     else
                     {
                         fadeOut = false;
+                        //StopCoroutine(WaitBetweenFadeInOut());
                     }
                 }
-            
+
+              
+
             }
 
              
