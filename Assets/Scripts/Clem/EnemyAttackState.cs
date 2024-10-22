@@ -100,8 +100,8 @@ namespace Platformer
                 }
 
 
-
-           enemy.respawn.RespawnPlayer();
+            agent.GetComponent<NavMeshAgent>().isStopped = false;
+            enemy.respawn.RespawnPlayer();
            cam.SetActive(false);
 
             enemy.mCharacter.SetActive(true);

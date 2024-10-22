@@ -132,10 +132,11 @@ namespace Platformer
             bool isPulling = animator.GetBool(isPullingHash);
 
             //Pulling Controls-------------------------------
-            if ((isPullPressed) && !isPulling)
+            if ((isPullPressed) && !isPulling )
             {
-
+                
                 animator.SetBool(isPullingHash, true);
+
 
                 //Debug.Log("Pull animator on");
 

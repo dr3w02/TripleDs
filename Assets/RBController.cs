@@ -116,13 +116,11 @@ namespace Platformer
                 
                 Jump();
             }
-            if (characterClimb.isClimbingLadder)
-            {
-                return;
-            }
+
+            
 
 
-
+          
         }
 
         public void OnRun(InputAction.CallbackContext context)
@@ -131,7 +129,8 @@ namespace Platformer
             {
                 isRunPressed = context.ReadValueAsButton();
             }
-           
+
+
         }
 
 
@@ -184,6 +183,8 @@ namespace Platformer
                 return;
             }
 
+          
+            
 
         }
 
@@ -215,46 +216,50 @@ namespace Platformer
 
         void Jump()
         {
-            if (CanMove)
-            {
-                if (isJumpPressed)
+            
+                if (CanMove)
                 {
-                    Debug.Log("isjumppressed");
-                    if (!HasJumped)
+
+                    if (isJumpPressed)
                     {
-                        Debug.Log("nothasjumped");
-                        Vector3 jumpForces = Vector3.zero;
-                        if (grounded)
+                        Debug.Log("isjumppressed");
+                        if (!HasJumped)
                         {
-                            Debug.Log("grounded");
-                            jumpForces = Vector3.up * jumpForce;
-                            animator.SetBool(isJumpingHash, true);
-
-                            rb.AddForce(jumpForces, ForceMode.VelocityChange);
-
-                            playersCapsuleCollider.material = noFriction;
-                            if (frictionWait == false)
+                            Debug.Log("nothasjumped");
+                            Vector3 jumpForces = Vector3.zero;
+                            if (grounded)
                             {
-                                frictionWait = true;
-                                Invoke("FrictionDelay", 0.1f);
+
+                                Debug.Log("grounded");
+                                jumpForces = Vector3.up * jumpForce;
+                                animator.SetBool(isJumpingHash, true);
+
+                                rb.AddForce(jumpForces, ForceMode.VelocityChange);
+
+                                playersCapsuleCollider.material = noFriction;
+                                if (frictionWait == false)
+                                {
+                                    frictionWait = true;
+                                    Invoke("FrictionDelay", 0.1f);
+                                }
+
+                                grounded = false;
                             }
 
-                            grounded = false;
+                            HasJumped = true;
                         }
-
-                        HasJumped = true;
-                    }                 
+                    }
                 }
-            }
 
-            else if (!CanMove)
-            {
-                return;
-            }
-
-
+                else if (!CanMove)
+                {
+                    return;
+                }
+           
+         
 
         }
+
         public void OnNotHolding(InputAction.CallbackContext context)
         {
 
