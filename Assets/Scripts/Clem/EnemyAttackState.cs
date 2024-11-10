@@ -79,11 +79,11 @@ namespace Platformer
    
         public IEnumerator WaitBetweenFadeInOutClem(GameObject cam)
         {
-               
-                
-                yield return new WaitForSeconds(clemWaitTime);
+            yield return new WaitForSeconds(1f);
+            enemy.mChild.SetActive(false);
+            yield return new WaitForSeconds(clemWaitTime);
 
-                enemy.mChild.SetActive(false);
+               
                 //agent.GetComponent<NavMeshAgent>().isStopped = true;
 
                 enemy.fadeIn = true;
@@ -116,7 +116,12 @@ namespace Platformer
 
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
-          
+            enemy.respawn.RespawnPlayer();
+            enemy.BB.gameObject.SetActive(false);
+      
+            enemy.attacking = false;
+            enemy.mCharacter.SetActive(true);
+            enemy.mChild.SetActive(true);
 
             enemy.fadeOut = true;
            
@@ -134,12 +139,12 @@ namespace Platformer
                 else
                 {
                  
-                    enemy.BB.gameObject.SetActive(false);
-                    enemy.fadeOut = false;
-                    enemy.attacking = false;
-                    enemy.mCharacter.SetActive(false);
-                    enemy.mChild.SetActive(true);
-                    enemy.respawn.RespawnPlayer();
+                    //enemy.BB.gameObject.SetActive(false);
+                   enemy.fadeOut = false;
+                    //enemy.attacking = false;
+                    //enemy.mCharacter.SetActive(true);
+                    //enemy.mChild.SetActive(true);
+                    //enemy.respawn.RespawnPlayer();
 
                     //enemy.StopCoroutine("WaitBetweenFadeInOutClem");
 

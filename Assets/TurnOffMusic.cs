@@ -11,20 +11,16 @@ namespace Platformer
         public GameObject TimerController;
         public GameObject flashLightInHand;
 
-        private void OnTriggerEnter(Collider other)
-        {
-            MusicPrefab.SetActive(false);
-            MusicBoxParent.SetActive(false);
-            TimerController.SetActive(true);
-            flashLightInHand.SetActive(false);
-        }
+    
         private void OnTriggerStay(Collider other)
         {
-            MusicPrefab.SetActive(false);
-            MusicBoxParent.SetActive(false);
+            MusicPrefab.SetActive(true);
+            MusicBoxParent.SetActive(true);
+
             TimerController.SetActive(true);
-            flashLightInHand.SetActive(false);
+            flashLightInHand.SetActive(true);
         }
+
         private void OnTriggerExit(Collider other)
         {
             MusicPrefab.SetActive(false);
