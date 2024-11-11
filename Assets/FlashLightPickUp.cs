@@ -30,6 +30,7 @@ namespace Platformer
             if (hasLight == true)
             {
                pickedUpFlashLight.gameObject.SetActive(false);
+               this.gameObject.SetActive(false);
                inHandFlashLight.gameObject.SetActive(true);
             }
 
@@ -38,6 +39,7 @@ namespace Platformer
                 pickedUpFlashLight.gameObject.SetActive(true);
                 inHandFlashLight.gameObject.SetActive(false);
                 hasLight = false;
+                this.gameObject.SetActive(true);
             }
 
             return true;

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,7 +20,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
     public GameObject BookCam;
     public GameObject BookPromptCanvas;
     public GameObject Player;
-   
+    public RBController playerScript;
     public bool isZoomedIn;
  
 
@@ -49,6 +50,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
             Player = player;
 
         isZoomedIn = !isZoomedIn;
+        
 
         if (!isZoomedIn)
         {
@@ -59,13 +61,13 @@ public class bookZoomIn : MonoBehaviour, IInteractable
          
             return true;
         }
-        else
-        {
+        else        {
             characterMove.Enabled();
             ZoomOut();
             return true;
 
         }
+    
     }
 
 
@@ -80,7 +82,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
     {
         //isZoomedIn = true;
         BookCam.SetActive(true);
-     
+       
         
         StartCoroutine(wait());
         //change this to can move is false
@@ -89,6 +91,7 @@ public class bookZoomIn : MonoBehaviour, IInteractable
 
     private void ZoomOut()
     {
+      
         BookCam.SetActive(false);
         Player.SetActive(true);
        

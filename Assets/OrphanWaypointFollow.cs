@@ -300,6 +300,8 @@ namespace Platformer
             FlashLightGround.SetActive(true);
             FourtySix.SetActive(false);
             LightOn.SetActive(false);
+           
+            
 
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
@@ -314,6 +316,7 @@ namespace Platformer
                     OrphanDeathCam.SetActive(false);
                     mCharacter.SetActive(true);
                     characterMain.Enabled();
+                    timer.resetOrphans();
                     //GetComponent<NavMeshAgent>().isStopped = false;
                 }
                 else

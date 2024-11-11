@@ -29,6 +29,8 @@ namespace Platformer
             public GameObject Player;
             public bool isZoomedIn;
 
+        public Door BossFightDoor;
+
         public bool ResetBossFight;
         public LamSpawn lampSpawn;
 
@@ -370,7 +372,10 @@ namespace Platformer
             Bosscam.SetActive(false);
             BB.SetActive(false);
 
-           
+
+            BossFightDoor.m_ObjectCollider.isTrigger = false;
+            BossFightDoor.doorisopen = false;
+            //animator.SetBool(DoorOpenedHash, true);
 
             BossFight.SetActive(true);
             BossFight.transform.GetChild(0).gameObject.SetActive(true);
@@ -399,7 +404,8 @@ namespace Platformer
 
         public void ResetWholeBossFight()
         {
-
+            BossFightDoor.m_ObjectCollider.isTrigger = true;
+            BossFightDoor.doorisopen = true;
             BossFight.SetActive(false);
            
             Reset = true;

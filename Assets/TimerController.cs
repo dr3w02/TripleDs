@@ -20,7 +20,10 @@ namespace Platformer
 
 
         public MusicBox musicbox;
-    
+
+
+        public TurnOffMusic ResetTimer;
+
 
         public float maxTime;
 
@@ -115,6 +118,14 @@ namespace Platformer
              timerRadial.fillAmount = timeRemaining / maxTime;
          
           
+        }
+
+
+        public void resetOrphans()
+        {
+
+            timeRemaining = maxTime;
+            ResetTimer.Dead = true;
         }
     }
 }

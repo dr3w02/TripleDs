@@ -11,7 +11,22 @@ namespace Platformer
         public GameObject TimerController;
         public GameObject flashLightInHand;
 
-    
+        public bool Dead; 
+
+        public void Update()
+        {
+            if (Dead)
+            {
+                MusicPrefab.SetActive(false);
+                MusicBoxParent.SetActive(false);
+
+                TimerController.SetActive(false);
+
+                Dead = false;
+              
+            }
+        }
+
         private void OnTriggerStay(Collider other)
         {
             MusicPrefab.SetActive(true);

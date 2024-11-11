@@ -10,8 +10,8 @@ public class Door : MonoBehaviour, IInteractable
 
     [SerializeField] private string _prompt;
 
-    int DoorOpenedHash;
-    int DoorClosedHash;
+    public int DoorOpenedHash;
+    public int DoorClosedHash;
     KeyHolder keyHolder;
     public Collider m_ObjectCollider;
     public bool doorisopen;
@@ -24,7 +24,7 @@ public class Door : MonoBehaviour, IInteractable
     public AudioClip soundEffectDoor;
 
 
-    void Awake()
+    public void Awake()
     {
         DoorOpenedHash = Animator.StringToHash("DoorOpen");
         DoorClosedHash = Animator.StringToHash("DoorClosed");
@@ -57,6 +57,7 @@ public class Door : MonoBehaviour, IInteractable
 
             if (!doorisopen)
             {
+               
                 m_ObjectCollider.isTrigger = false;
             }
             else
@@ -91,7 +92,21 @@ public class Door : MonoBehaviour, IInteractable
         return false;
     }
 
+    public void Update()
+    {
 
+        if (!doorisopen)
+        {
+            m_ObjectCollider.isTrigger = false;
+            animator.SetBool(DoorOpenedHash, false);
+        }
+        else
+        {
+            animator.SetBool(DoorOpenedHash, true);
+            m_ObjectCollider.isTrigger = true;
+        }
+        
+    }
 
 
 
