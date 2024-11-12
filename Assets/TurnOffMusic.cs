@@ -12,7 +12,10 @@ namespace Platformer
         public GameObject flashLightInHand;
 
         public bool Dead; 
-
+        public void Start()
+        {
+            MusicBoxParent.SetActive(false);
+        }
         public void Update()
         {
             if (Dead)

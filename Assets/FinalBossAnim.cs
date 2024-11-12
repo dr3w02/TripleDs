@@ -406,7 +406,7 @@ namespace Platformer
         {
             BossFightDoor.m_ObjectCollider.isTrigger = true;
             BossFightDoor.doorisopen = true;
-            BossFight.SetActive(false);
+            //BossFight.SetActive(false);
            
             Reset = true;
             MainCamShake = false;

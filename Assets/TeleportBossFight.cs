@@ -4,6 +4,8 @@ using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using UnityEngine.UIElements;
 using System.Numerics;
+using static UnityEngine.InputSystem.Controls.AxisControl;
+using UnityEditor.ShaderGraph.Internal;
 
 namespace Platformer
 {
@@ -18,6 +20,8 @@ namespace Platformer
         public GameObject player;
         public RBController playerScript;
         // Start is called before the first frame update
+        public float speedofPause;
+      
         void Start()
         {
             TeleportIn.SetActive(true);
@@ -33,21 +37,26 @@ namespace Platformer
             if (teleport == true)
             {
                 player.transform.position = TeleportIn.transform.position;
-                playerScript.Enabled();
+                StartCoroutine(pauseBeforeMoving());
             }
 
             else if (teleport == false)
             {
                 player.transform.position = TeleportOut.transform.position;
                 playerScript.Enabled();
+                StartCoroutine(pauseBeforeMoving());
             }
-          
-    
-            
+
+
+
 
 
         }
+        public IEnumerator pauseBeforeMoving()
+        {
 
-
+            yield return new WaitForSeconds(speedofPause);
+            playerScript.Enabled();
+        }
     }
 }

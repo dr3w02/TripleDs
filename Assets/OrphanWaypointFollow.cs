@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using Cinemachine;
 using UnityEngine.UIElements.Experimental;
+using UnityEditor.Build;
+using UnityEditor.EditorTools;
 
 namespace Platformer
 {
@@ -40,6 +42,8 @@ namespace Platformer
         [SerializeField] public CanvasGroup myUIGroup;
         [SerializeField] private float fadeWaitTime = 4f;
 
+        private static bool isAnyOrphanAttacking = false;
+
         public GameObject OrphanDeathCam;
         public PlayerDetector PlayerDect;
         //readonly NavMeshAgent orphanNav;
@@ -59,7 +63,8 @@ namespace Platformer
         public TimerController timer;
         public TurnOnMusic music;
         public bool DeadReset;
-
+        public bool attacking;
+       
 
         public void Start()
         {
@@ -87,7 +92,11 @@ namespace Platformer
         // Update is called once per frame
         void Update()
         {
-
+            if (isAnyOrphanAttacking && !attacking)
+            {
+                // If another orphan is attacking, skip attacking behavior
+                return;
+            }
 
             if (MusicPlay)
             {
@@ -100,7 +109,7 @@ namespace Platformer
                 running = true;
                 Chase = false;
             }
-
+         
 
             if (!MusicPlay && PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer())
             {
@@ -114,15 +123,12 @@ namespace Platformer
 
             else if (!MusicPlay && PlayerDect.CanDetectPlayer() && PlayerDect.CanAttackPlayer())
             {
-               
-                
+                    attacking = true;
                     Chase = false;
                     running = false;
                     AttackPlayer();
                     Debug.Log("CATTACKINGHH");
            
-               
-
             }
 
             else if (!MusicPlay && !PlayerDect.CanDetectPlayer() && !PlayerDect.CanAttackPlayer())
@@ -208,6 +214,8 @@ namespace Platformer
 
         public void Chasing()
         {
+            if (attacking) return;
+
             if (Chase == true)
             {
                 if (player == null || orphanAnim == null || orphan == null)
@@ -244,30 +252,35 @@ namespace Platformer
                 ResetAttack();
             }
         }
-       
 
+       
         public void AttackPlayer()
         {
-           
+            if (isAnyOrphanAttacking) return;  // Prevent multiple attacks
+
+      
+            isAnyOrphanAttacking = true;
 
             LightOn.SetActive(true);
 
-            OrphanDeathCam.SetActive(false);
+                OrphanDeathCam.SetActive(false);
 
-            characterMain.TurnOffMovement();
+                characterMain.TurnOffMovement();
 
-            orphanAnim.SetBool("Attack", true);
+                orphanAnim.SetBool("Attack", true);
 
-            orphanAnim.SetBool("RunFWD", false);
+                orphanAnim.SetBool("RunFWD", false);
 
-            OrphanDeathCam.SetActive(true);
+                OrphanDeathCam.SetActive(true);
 
-            FourtySix.SetActive(true);
+                FourtySix.SetActive(true);
 
-            StartCoroutine(WaitBetweenFadeInOut());
+                StartCoroutine(WaitBetweenFadeInOut());
 
-            ///Debug.Log("Switch Camera");
-            DeadReset = true;
+                ///Debug.Log("Switch Camera");
+                DeadReset = true;
+           
+            
         }
 
 
@@ -300,8 +313,7 @@ namespace Platformer
             FlashLightGround.SetActive(true);
             FourtySix.SetActive(false);
             LightOn.SetActive(false);
-           
-            
+
 
             // Wait for the specified amount of time
             yield return new WaitForSeconds(fadeWaitTime);
@@ -322,6 +334,8 @@ namespace Platformer
                 else
                 {
                     fadeOut = false;
+                    isAnyOrphanAttacking = false;
+
                 }
             }
         }

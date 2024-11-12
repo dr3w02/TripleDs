@@ -13,7 +13,7 @@ namespace Platformer
         //public AudioSource dingDong;
 
         [Header("CameraShake")]
-        [SerializeField] private float shakeIntensity = 5f;
+        [SerializeField] private float shakeIntensity = 7f;
         public BoxCollider boxCollider;
 
         public CinemachineVirtualCamera VirtualCam;
@@ -45,6 +45,9 @@ namespace Platformer
             }
         }
 
+       
+     
+
         private void Update()
         {
             if (CamShake)
@@ -55,7 +58,7 @@ namespace Platformer
 
         public void ShakeCamera(float intensity)
         {
-            perlinNoise.m_AmplitudeGain = intensity;
+            perlinNoise.m_FrequencyGain = intensity;
         }
      
         private void OnTriggerExit(Collider other)
@@ -68,7 +71,7 @@ namespace Platformer
                 CamShake = true;
              
                 boxCollider.enabled = !boxCollider.enabled;
-
+              
                 //StartCoroutine(ShakeWait());
                 //Destroy(ScriptableObject);
             }
@@ -76,29 +79,29 @@ namespace Platformer
 
         public void StopShake()
         {
-            perlinNoise.m_AmplitudeGain = 0f;
+            perlinNoise.m_FrequencyGain = 0f;
         }
 
-        private IEnumerator ShakeWait()
-        {
+        //private IEnumerator ShakeWait()
+        //{
            
-           Debug.Log("Shaking Cam");
-            yield return new WaitForSeconds(2f);
+        //   Debug.Log("Shaking Cam");
+        //    yield return new WaitForSeconds(4f);
 
-            CamShake = false;
+        //    CamShake = false;
 
 
-        }
-        /*
-        public void clockBigHitFunction()
-        {
-            clockBigHit.Play();
-        }
+        //}
+        ///*
+        //public void clockBigHitFunction()
+        //{
+        //    clockBigHit.Play();
+        //}
 
-        public void clockDingDongFunction()
-        {
-            dingDong.Play();
-        }
-        */
+        //public void clockDingDongFunction()
+        //{
+        //    dingDong.Play();
+        //}
+        //*/
     }
 }
