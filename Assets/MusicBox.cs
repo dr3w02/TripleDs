@@ -6,7 +6,6 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem;
 using System.Linq;
-using UnityEditor.PackageManager.UI;
 
 namespace Platformer
 {

@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Cinemachine;
 using UnityEngine.UIElements.Experimental;
-using UnityEditor.Build;
-using UnityEditor.EditorTools;
 
 namespace Platformer
 {
